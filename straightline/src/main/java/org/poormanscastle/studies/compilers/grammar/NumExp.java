@@ -23,5 +23,6 @@ public class NumExp extends Exp {
     @Override
     public void accept(GrammarItemVisitor visitor) {
         visitor.visit(this);
+        visitor.leave(this);
     }
 }

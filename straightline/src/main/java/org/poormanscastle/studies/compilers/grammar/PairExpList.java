@@ -38,6 +38,7 @@ public class PairExpList extends ExpList {
         if (visitor.proceedWith(tail)) {
             tail.accept(visitor);
         }
+        visitor.leave(this);
     }
 }
 

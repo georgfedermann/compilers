@@ -24,5 +24,6 @@ public class LastExpList extends ExpList {
         if (visitor.proceedWith(head)) {
             head.accept(visitor);
         }
+        visitor.leave(this);
     }
 }

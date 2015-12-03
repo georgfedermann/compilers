@@ -56,4 +56,28 @@ public interface GrammarItemVisitor {
 
     void visit(LastExpList expList);
 
+    void leave(Stm stm);
+
+    void leave(AssignStm stm);
+
+    void leave(CompoundStm stm);
+
+    void leave(PrintStm stm);
+
+    void leave(Exp exp);
+
+    void leave(EseqExp exp);
+
+    void leave(IdExp exp);
+
+    void leave(NumExp exp);
+
+    void leave(OpExp exp);
+
+    void leave(ExpList expList);
+
+    void leave(PairExpList expList);
+
+    void leave(LastExpList expList);
+
 }

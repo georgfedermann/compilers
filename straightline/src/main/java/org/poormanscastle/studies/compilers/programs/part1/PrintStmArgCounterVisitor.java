@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.programs.part1;
 
+import java.util.Stack;
+
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.AssignStm;
 import org.poormanscastle.studies.compilers.grammar.CompoundStm;
@@ -18,11 +20,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * this type counts the args to print statements. it makes use of the fact that no other statements (can) make use of
+ * the ExpList type other than print statements. this results from the ways this straightline language's grammar is
+ * defined.
+ * <p>
  * Created by georg on 03.12.15.
  */
 public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     private final static Logger logger = LoggerFactory.getLogger(PrintStmArgCounterVisitor.class);
+
+    private Stack<PrintContext> printContexts = new Stack<>();
+
+    /**
+     * if the visitor finds a printer statement, it creates a printer and assigns it to this field, to increment its
+     * args number while finding ExpList entries below the printer.
+     */
+    private PrintContext currentPrintContext = null;
+
+    @Override
+    public void visit(PrintStm stm) {
+        currentPrintContext = new PrintContext();
+    }
+
+    @Override
+    public void leave(PrintStm stm) {
+        printContexts.push(currentPrintContext);
+        currentPrintContext = null;
+    }
 
     @Override
     public boolean proceedWith(Stm stm) {
@@ -102,11 +127,6 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void visit(PrintStm stm) {
-
-    }
-
-    @Override
     public void visit(Exp exp) {
         throw new RuntimeException(StringUtils.join("Add an implementation for the type ", exp.getClass().getName()));
     }
@@ -144,5 +164,68 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     @Override
     public void visit(LastExpList expList) {
 
+    }
+
+    @Override
+    public void leave(Stm stm) {
+        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", stm.getClass().getName()));
+    }
+
+    @Override
+    public void leave(AssignStm stm) {
+
+    }
+
+    @Override
+    public void leave(CompoundStm stm) {
+
+    }
+
+    @Override
+    public void leave(Exp exp) {
+        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", exp.getClass().getName()));
+    }
+
+    @Override
+    public void leave(EseqExp exp) {
+
+    }
+
+    @Override
+    public void leave(IdExp exp) {
+
+    }
+
+    @Override
+    public void leave(NumExp exp) {
+
+    }
+
+    @Override
+    public void leave(OpExp exp) {
+
+    }
+
+    @Override
+    public void leave(ExpList expList) {
+        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", expList.getClass().getName()));
+    }
+
+    @Override
+    public void leave(PairExpList expList) {
+
+    }
+
+    @Override
+    public void leave(LastExpList expList) {
+
+    }
+
+    public Stack<PrintContext> getPrintContexts() {
+        return printContexts;
+    }
+
+    public PrintContext getCurrentPrintContext() {
+        return currentPrintContext;
     }
 }

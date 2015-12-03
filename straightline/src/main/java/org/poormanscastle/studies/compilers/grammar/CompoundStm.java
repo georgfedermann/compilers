@@ -33,12 +33,13 @@ public class CompoundStm extends Stm {
     @Override
     public void accept(GrammarItemVisitor visitor) {
         visitor.visit(this);
-        if(visitor.proceedWith(stm1)){
+        if (visitor.proceedWith(stm1)) {
             stm1.accept(visitor);
         }
-        if(visitor.proceedWith(stm2)){
+        if (visitor.proceedWith(stm2)) {
             stm2.accept(visitor);
         }
+        visitor.leave(this);
     }
 
 }

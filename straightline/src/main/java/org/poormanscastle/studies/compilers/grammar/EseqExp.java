@@ -31,12 +31,13 @@ public class EseqExp extends Exp {
     @Override
     public void accept(GrammarItemVisitor visitor) {
         visitor.visit(this);
-        if(visitor.proceedWith(stm)){
+        if (visitor.proceedWith(stm)) {
             stm.accept(visitor);
         }
-        if(visitor.proceedWith(exp)){
+        if (visitor.proceedWith(exp)) {
             exp.accept(visitor);
         }
+        visitor.leave(this);
     }
 
 }

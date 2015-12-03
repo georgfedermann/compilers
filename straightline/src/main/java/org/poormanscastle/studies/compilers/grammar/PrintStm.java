@@ -25,5 +25,6 @@ public class PrintStm extends Stm {
         if (visitor.proceedWith(exps)) {
             exps.accept(visitor);
         }
+        visitor.leave(this);
     }
 }

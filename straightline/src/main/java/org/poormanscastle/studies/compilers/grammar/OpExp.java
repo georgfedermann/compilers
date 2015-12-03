@@ -26,5 +26,6 @@ public class OpExp extends Exp {
         if (visitor.proceedWith(right)) {
             right.accept(visitor);
         }
+        visitor.leave(this);
     }
 }

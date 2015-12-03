@@ -20,17 +20,6 @@ import org.poormanscastle.studies.compilers.grammar.Stm;
  */
 public class ProgramScanner {
 
-    public Stm getProgram() {
-        return new CompoundStm(
-                new AssignStm("a", new OpExp(new NumExp(5), OpExp.PLUS, new NumExp(3))),
-                new CompoundStm(
-                        new AssignStm("b",
-                                new EseqExp(new PrintStm(new PairExpList(new IdExp("a"),
-                                        new LastExpList(
-                                                new OpExp(new IdExp("a"), OpExp.MINUS, new NumExp(1))))),
-                                        new OpExp(new NumExp(10), OpExp.TIMES, new IdExp("a")))
-                        ), new PrintStm(new LastExpList(new IdExp("b")))));
-    }
 
     /**
      * calculates and returns the max number of arguments for any given
@@ -49,11 +38,6 @@ public class ProgramScanner {
         // child expression. voila.
 
         return 0;
-    }
-
-    public static void main(String[] args) {
-        ProgramScanner myApp = new ProgramScanner();
-        System.out.println(myApp.maxArgs(myApp.getProgram()));
     }
 
 }

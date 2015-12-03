@@ -38,6 +38,7 @@ public class AssignStm extends Stm {
         if (visitor.proceedWith(exp)) {
             exp.accept(visitor);
         }
+        visitor.leave(this);
     }
 
 }

@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammer;
+package org.poormanscastle.studies.compilers.grammar;
 
 /**
  * a num expression gives an integer to which evaluates.

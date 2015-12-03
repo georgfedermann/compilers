@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammer;
+package org.poormanscastle.studies.compilers.grammar;
 
 /**
  * the operator expression is kind of a compound expression consisting of two expressions which

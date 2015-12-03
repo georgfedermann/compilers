@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammer;
+package org.poormanscastle.studies.compilers.grammar;
 
 /**
  * a print statement prints all of the arguemnts that are given in a comma separated list.

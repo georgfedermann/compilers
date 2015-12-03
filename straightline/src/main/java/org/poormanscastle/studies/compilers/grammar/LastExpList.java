@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammer;
+package org.poormanscastle.studies.compilers.grammar;
 
 /**
  * Created by georg on 02.12.15.

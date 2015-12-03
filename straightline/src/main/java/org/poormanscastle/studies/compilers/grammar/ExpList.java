@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammer;
+package org.poormanscastle.studies.compilers.grammar;
 
 /**
  * represents a list of expressions

@@ -1,7 +1,7 @@
-package org.poormanscastle.studies.compilers.grammer;
+package org.poormanscastle.studies.compilers.grammar;
 
 /**
- * represents a Compound Statement in the grammer of the simple straight-line language.
+ * represents a Compound Statement in the grammar of the simple straight-line language.
  * a compound statement consists of two statements separated by a semicolon ; .
  *
  * Created by georg on 02.12.15.

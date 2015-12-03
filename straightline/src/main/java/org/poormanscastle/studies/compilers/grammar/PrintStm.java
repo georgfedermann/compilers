@@ -18,4 +18,12 @@ public class PrintStm extends Stm {
     public void setExps(ExpList exps) {
         this.exps = exps;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+        if (visitor.proceedWith(exps)) {
+            exps.accept(visitor);
+        }
+    }
 }

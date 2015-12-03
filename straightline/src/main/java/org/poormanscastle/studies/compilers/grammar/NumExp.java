@@ -19,4 +19,9 @@ public class NumExp extends Exp {
     public void setNum(int num) {
         this.num = num;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+    }
 }

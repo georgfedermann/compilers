@@ -10,7 +10,7 @@ public class AssignStm extends Stm {
     private String id;
     private Exp exp;
 
-    public AssignStm(String id, Exp exp){
+    public AssignStm(String id, Exp exp) {
         this.id = id;
         this.exp = exp;
         this.exp = exp;
@@ -31,4 +31,13 @@ public class AssignStm extends Stm {
     public void setExp(Exp exp) {
         this.exp = exp;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+        if (visitor.proceedWith(exp)) {
+            exp.accept(visitor);
+        }
+    }
+
 }

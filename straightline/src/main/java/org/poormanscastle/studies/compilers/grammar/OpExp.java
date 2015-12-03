@@ -16,4 +16,15 @@ public class OpExp extends Exp {
         this.right = right;
         this.operator = operator;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+        if (visitor.proceedWith(left)) {
+            left.accept(visitor);
+        }
+        if (visitor.proceedWith(right)) {
+            right.accept(visitor);
+        }
+    }
 }

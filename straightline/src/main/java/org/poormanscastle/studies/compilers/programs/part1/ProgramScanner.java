@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.programs;
+package org.poormanscastle.studies.compilers.programs.part1;
 
 import org.poormanscastle.studies.compilers.grammar.AssignStm;
 import org.poormanscastle.studies.compilers.grammar.CompoundStm;
@@ -12,9 +12,13 @@ import org.poormanscastle.studies.compilers.grammar.PrintStm;
 import org.poormanscastle.studies.compilers.grammar.Stm;
 
 /**
+ * Scans programs in the simple straight-line language for print Statements and decides how many
+ * arguments each print statement has to provide the max number of arguments to a print statement
+ * in the given program.
+ *
  * Created by georg on 03.12.15.
  */
-public class HelloWorld {
+public class ProgramScanner {
 
     public Stm getProgram() {
         return new CompoundStm(
@@ -48,7 +52,7 @@ public class HelloWorld {
     }
 
     public static void main(String[] args) {
-        HelloWorld myApp = new HelloWorld();
+        ProgramScanner myApp = new ProgramScanner();
         System.out.println(myApp.maxArgs(myApp.getProgram()));
     }
 

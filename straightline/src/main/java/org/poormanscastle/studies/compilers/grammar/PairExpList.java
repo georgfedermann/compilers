@@ -8,7 +8,7 @@ public class PairExpList extends ExpList {
     private Exp head;
     private ExpList tail;
 
-    public PairExpList(Exp h, ExpList t){
+    public PairExpList(Exp h, ExpList t) {
         head = h;
         tail = t;
     }
@@ -28,4 +28,17 @@ public class PairExpList extends ExpList {
     public void setTail(ExpList tail) {
         this.tail = tail;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+        if (visitor.proceedWith(head)) {
+            head.accept(visitor);
+        }
+        if (visitor.proceedWith(tail)) {
+            tail.accept(visitor);
+        }
+    }
 }
+
+

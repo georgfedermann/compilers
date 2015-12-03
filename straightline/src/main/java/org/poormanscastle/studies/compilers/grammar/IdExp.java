@@ -18,4 +18,9 @@ public class IdExp extends Exp {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+    }
 }

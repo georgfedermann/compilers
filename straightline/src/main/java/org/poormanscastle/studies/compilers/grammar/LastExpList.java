@@ -17,4 +17,12 @@ public class LastExpList extends ExpList {
     public void setHead(Exp head) {
         this.head = head;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+        if (visitor.proceedWith(head)) {
+            head.accept(visitor);
+        }
+    }
 }

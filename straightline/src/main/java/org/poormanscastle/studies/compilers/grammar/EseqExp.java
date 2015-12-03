@@ -27,4 +27,16 @@ public class EseqExp extends Exp {
     public void setExp(Exp exp) {
         this.exp = exp;
     }
+
+    @Override
+    public void accept(GrammarItemVisitor visitor) {
+        visitor.visit(this);
+        if(visitor.proceedWith(stm)){
+            stm.accept(visitor);
+        }
+        if(visitor.proceedWith(exp)){
+            exp.accept(visitor);
+        }
+    }
+
 }

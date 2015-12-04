@@ -32,6 +32,12 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     private Stack<PrintContext> printContexts = new Stack<>();
 
     /**
+     * in case of print stm nesting, outer print stms get pushed onto this stack when nested print stm are identified,
+     * so they can be popped later when the nested print stm is finished.
+     */
+    private Stack<PrintContext> activePrintContexts = new Stack<>();
+
+    /**
      * if the visitor finds a printer statement, it creates a printer and assigns it to this field, to increment its
      * args number while finding ExpList entries below the printer.
      */
@@ -39,13 +45,20 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public void visitPrintStm(PrintStm stm) {
+        if (currentPrintContext != null) {
+            activePrintContexts.push(currentPrintContext);
+        }
         currentPrintContext = new PrintContext();
     }
 
     @Override
     public void leavePrintStm(PrintStm stm) {
         printContexts.push(currentPrintContext);
-        currentPrintContext = null;
+        if (!activePrintContexts.isEmpty()) {
+            currentPrintContext = activePrintContexts.pop();
+        } else {
+            currentPrintContext = null;
+        }
     }
 
     @Override
@@ -77,7 +90,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     @Override
     public boolean proceedWithNumExp(NumExp exp) {
         logger.debug(StringUtils.join("Ignoring NumExp since it cannot hold print statements: ", exp.toString()));
-        return true;
+        return false;
     }
 
     @Override
@@ -115,14 +128,14 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     @Override
     public void visitEseqExp(EseqExp exp) {
         if (currentPrintContext != null) {
-            currentPrintContext.incrementNumberOfArguments();
+            currentPrintContext.incrementSourceLvl();
         }
     }
 
     @Override
     public void leaveEseqExp(EseqExp exp) {
         if (currentPrintContext != null) {
-            checkState(currentPrintContext.getSourceLvl() > 0);
+            checkState(currentPrintContext.getSourceLvl() > 0, "sourceLvl must be greater than 0 just before leaving an EseqExp within a print stm, but was %s.", String.valueOf(currentPrintContext.getSourceLvl()));
             currentPrintContext.decrementSourceLvl();
         }
     }

@@ -11,12 +11,6 @@ public class PrintContext {
      */
     private int numberOfArguments;
 
-    /**
-     * tracks how far below the given print statements args the scanner is wandering right now. this field gets
-     * incremented for each hierarchy below any of the print statement's expLists arguments.
-     */
-    private int sourceLvl;
-
     public int getNumberOfArguments() {
         return numberOfArguments;
     }
@@ -25,12 +19,29 @@ public class PrintContext {
         this.numberOfArguments = numberOfArguments;
     }
 
+    public void incrementNumberOfArguments() {
+        numberOfArguments++;
+    }
+
+    /**
+     * tracks how far below the given print statements args the scanner is wandering right now. this field gets
+     * incremented for each hierarchy below any of the print statement's expLists arguments.
+     */
+    private int sourceLvl = 0;
+
     public int getSourceLvl() {
         return sourceLvl;
     }
 
-    public void setSourceLvl(int sourceLvl) {
-        this.sourceLvl = sourceLvl;
+    public void incrementSourceLvl() {
+        sourceLvl++;
     }
 
+    public void decrementSourceLvl() {
+        sourceLvl--;
+    }
+
+    public boolean amIdirectlyBelowPrintStm() {
+        return sourceLvl == 0;
+    }
 }

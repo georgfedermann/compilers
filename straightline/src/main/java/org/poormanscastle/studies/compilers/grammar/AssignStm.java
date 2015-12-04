@@ -45,4 +45,5 @@ public class AssignStm extends Stm {
     public boolean handleProceedWith(GrammarItemVisitor visitor) {
         return visitor.proceedWithAssignStm(this);
     }
+
 }

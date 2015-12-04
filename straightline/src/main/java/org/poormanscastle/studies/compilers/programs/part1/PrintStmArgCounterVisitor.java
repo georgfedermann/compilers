@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.programs.part1;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
@@ -95,42 +97,6 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public void visitAssignStm(AssignStm stm) {
-
-    }
-
-    @Override
-    public void visitCompoundStm(CompoundStm stm) {
-
-    }
-
-    @Override
-    public void visitEseqExp(EseqExp exp) {
-
-    }
-
-    @Override
-    public void visitIdExp(IdExp exp) {
-
-    }
-
-    @Override
-    public void visitNumExp(NumExp exp) {
-
-    }
-
-    @Override
-    public void visitOpExp(OpExp exp) {
-
-    }
-
-    @Override
-    public void visitPairExpList(PairExpList expList) {
-
-    }
-
-    @Override
-    public void visitLastExpList(LastExpList expList) {
-
     }
 
     @Override
@@ -139,12 +105,30 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leaveCompoundStm(CompoundStm stm) {
+    public void visitCompoundStm(CompoundStm stm) {
+    }
 
+    @Override
+    public void leaveCompoundStm(CompoundStm stm) {
+    }
+
+    @Override
+    public void visitEseqExp(EseqExp exp) {
+        if (currentPrintContext != null) {
+            currentPrintContext.incrementNumberOfArguments();
+        }
     }
 
     @Override
     public void leaveEseqExp(EseqExp exp) {
+        if (currentPrintContext != null) {
+            checkState(currentPrintContext.getSourceLvl() > 0);
+            currentPrintContext.decrementSourceLvl();
+        }
+    }
+
+    @Override
+    public void visitIdExp(IdExp exp) {
 
     }
 
@@ -154,8 +138,17 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
+    public void visitNumExp(NumExp exp) {
+
+    }
+
+    @Override
     public void leaveNumExp(NumExp exp) {
 
+    }
+
+    @Override
+    public void visitOpExp(OpExp exp) {
     }
 
     @Override
@@ -164,8 +157,22 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
+    public void visitPairExpList(PairExpList expList) {
+        if (currentPrintContext != null && currentPrintContext.amIdirectlyBelowPrintStm()) {
+            currentPrintContext.incrementNumberOfArguments();
+        }
+    }
+
+    @Override
     public void leavePairExpList(PairExpList expList) {
 
+    }
+
+    @Override
+    public void visitLastExpList(LastExpList expList) {
+        if (currentPrintContext != null && currentPrintContext.amIdirectlyBelowPrintStm()) {
+            currentPrintContext.incrementNumberOfArguments();
+        }
     }
 
     @Override

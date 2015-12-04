@@ -17,7 +17,8 @@ import org.poormanscastle.studies.compilers.grammar.Stm;
  */
 public class ProgramProvider {
 
-    public static Stm getProgram() {
+    public static Stm getProgramA() {
+        // a := 5 + 3; b := (print(a, a-1), 10 * a); print(b);
         return new CompoundStm(
                 new AssignStm("a", new OpExp(new NumExp(5), OpExp.PLUS, new NumExp(3))),
                 new CompoundStm(
@@ -27,6 +28,13 @@ public class ProgramProvider {
                                                 new OpExp(new IdExp("a"), OpExp.MINUS, new NumExp(1))))),
                                         new OpExp(new NumExp(10), OpExp.TIMES, new IdExp("a")))
                         ), new PrintStm(new LastExpList(new IdExp("b")))));
+    }
+
+    public static Stm getProgramB() {
+        // print((print(0)), 3, 5);
+        return new PrintStm(new PairExpList(
+                new EseqExp(new PrintStm(new LastExpList(new NumExp(0))), new NumExp(3)),
+                new LastExpList(new NumExp(5))));
     }
 
 }

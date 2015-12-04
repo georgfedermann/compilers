@@ -30,14 +30,19 @@ public class EseqExp extends Exp {
 
     @Override
     public void accept(GrammarItemVisitor visitor) {
-        visitor.visit(this);
-        if (visitor.proceedWith(stm)) {
+        visitor.visitEseqExp(this);
+        if (stm.handleProceedWith(visitor)) {
             stm.accept(visitor);
         }
-        if (visitor.proceedWith(exp)) {
+        if (exp.handleProceedWith(visitor)) {
             exp.accept(visitor);
         }
-        visitor.leave(this);
+        visitor.leaveEseqExp(this);
+    }
+
+    @Override
+    public boolean handleProceedWith(GrammarItemVisitor visitor) {
+        return visitor.proceedWithEseqExp(this);
     }
 
 }

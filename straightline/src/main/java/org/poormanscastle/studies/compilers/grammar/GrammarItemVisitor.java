@@ -8,76 +8,58 @@ package org.poormanscastle.studies.compilers.grammar;
  */
 public interface GrammarItemVisitor {
 
-    boolean proceedWith(Stm stm);
+    boolean proceedWithAssignStm(AssignStm stm);
 
-    boolean proceedWith(AssignStm stm);
+    boolean proceedWithCompoundStm(CompoundStm stm);
 
-    boolean proceedWith(CompoundStm stm);
+    boolean proceedWithPrintStm(PrintStm stm);
 
-    boolean proceedWith(PrintStm stm);
+    boolean proceedWithEseqExp(EseqExp exp);
 
-    boolean proceedWith(Exp exp);
+    boolean proceedWithIdExp(IdExp exp);
 
-    boolean proceedWith(EseqExp exp);
+    boolean proceedWithNumExp(NumExp numExp);
 
-    boolean proceedWith(IdExp exp);
+    boolean proceedWithOpExp(OpExp opExp);
 
-    boolean proceedWith(NumExp numExp);
+    boolean proceedWithPairExpList(PairExpList expList);
 
-    boolean proceedWith(OpExp opExp);
+    boolean proceedWithLastExpList(LastExpList expList);
 
-    boolean proceedWith(ExpList expList);
+    void visitAssignStm(AssignStm stm);
 
-    boolean proceedWith(PairExpList expList);
+    void visitCompoundStm(CompoundStm stm);
 
-    boolean proceedWith(LastExpList expList);
+    void visitPrintStm(PrintStm stm);
 
-    void visit(Stm stm);
+    void visitEseqExp(EseqExp exp);
 
-    void visit(AssignStm stm);
+    void visitIdExp(IdExp exp);
 
-    void visit(CompoundStm stm);
+    void visitNumExp(NumExp exp);
 
-    void visit(PrintStm stm);
+    void visitOpExp(OpExp exp);
 
-    void visit(Exp exp);
+    void visitPairExpList(PairExpList expList);
 
-    void visit(EseqExp exp);
+    void visitLastExpList(LastExpList expList);
 
-    void visit(IdExp exp);
+    void leaveAssignStm(AssignStm stm);
 
-    void visit(NumExp exp);
+    void leaveCompoundStm(CompoundStm stm);
 
-    void visit(OpExp exp);
+    void leavePrintStm(PrintStm stm);
 
-    void visit(ExpList expList);
+    void leaveEseqExp(EseqExp exp);
 
-    void visit(PairExpList expList);
+    void leaveIdExp(IdExp exp);
 
-    void visit(LastExpList expList);
+    void leaveNumExp(NumExp exp);
 
-    void leave(Stm stm);
+    void leaveOpExp(OpExp exp);
 
-    void leave(AssignStm stm);
+    void leavePairExpList(PairExpList expList);
 
-    void leave(CompoundStm stm);
-
-    void leave(PrintStm stm);
-
-    void leave(Exp exp);
-
-    void leave(EseqExp exp);
-
-    void leave(IdExp exp);
-
-    void leave(NumExp exp);
-
-    void leave(OpExp exp);
-
-    void leave(ExpList expList);
-
-    void leave(PairExpList expList);
-
-    void leave(LastExpList expList);
+    void leaveLastExpList(LastExpList expList);
 
 }

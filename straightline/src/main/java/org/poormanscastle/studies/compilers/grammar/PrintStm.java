@@ -21,10 +21,16 @@ public class PrintStm extends Stm {
 
     @Override
     public void accept(GrammarItemVisitor visitor) {
-        visitor.visit(this);
-        if (visitor.proceedWith(exps)) {
+        visitor.visitPrintStm(this);
+        if (exps.handleProceedWith(visitor)) {
             exps.accept(visitor);
         }
-        visitor.leave(this);
+        visitor.leavePrintStm(this);
     }
+
+    @Override
+    public boolean handleProceedWith(GrammarItemVisitor visitor) {
+        return visitor.proceedWithPrintStm(this);
+    }
+
 }

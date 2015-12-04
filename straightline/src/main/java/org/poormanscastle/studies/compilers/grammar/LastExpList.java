@@ -20,10 +20,16 @@ public class LastExpList extends ExpList {
 
     @Override
     public void accept(GrammarItemVisitor visitor) {
-        visitor.visit(this);
-        if (visitor.proceedWith(head)) {
+        visitor.visitLastExpList(this);
+        if (head.handleProceedWith(visitor)) {
             head.accept(visitor);
         }
-        visitor.leave(this);
+        visitor.leaveLastExpList(this);
     }
+
+    @Override
+    public boolean handleProceedWith(GrammarItemVisitor visitor) {
+        return visitor.proceedWithLastExpList(this);
+    }
+
 }

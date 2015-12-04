@@ -19,13 +19,19 @@ public class OpExp extends Exp {
 
     @Override
     public void accept(GrammarItemVisitor visitor) {
-        visitor.visit(this);
-        if (visitor.proceedWith(left)) {
+        visitor.visitOpExp(this);
+        if (left.handleProceedWith(visitor)) {
             left.accept(visitor);
         }
-        if (visitor.proceedWith(right)) {
+        if (right.handleProceedWith(visitor)) {
             right.accept(visitor);
         }
-        visitor.leave(this);
+        visitor.leaveOpExp(this);
     }
+
+    @Override
+    public boolean handleProceedWith(GrammarItemVisitor visitor) {
+        return visitor.proceedWithOpExp(this);
+    }
+
 }

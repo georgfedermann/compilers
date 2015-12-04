@@ -21,7 +21,13 @@ public class IdExp extends Exp {
 
     @Override
     public void accept(GrammarItemVisitor visitor) {
-        visitor.visit(this);
-        visitor.leave(this);
+        visitor.visitIdExp(this);
+        visitor.leaveIdExp(this);
     }
+
+    @Override
+    public boolean handleProceedWith(GrammarItemVisitor visitor) {
+        return visitor.proceedWithIdExp(this);
+    }
+
 }

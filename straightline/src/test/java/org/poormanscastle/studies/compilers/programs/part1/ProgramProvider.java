@@ -12,6 +12,7 @@ import org.poormanscastle.studies.compilers.grammar.PrintStm;
 import org.poormanscastle.studies.compilers.grammar.Stm;
 
 /**
+ * Provides programs implemented in the simple straight-line language.
  * Created by georg on 03.12.15.
  */
 public class ProgramProvider {

@@ -6,8 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.AssignStm;
 import org.poormanscastle.studies.compilers.grammar.CompoundStm;
 import org.poormanscastle.studies.compilers.grammar.EseqExp;
-import org.poormanscastle.studies.compilers.grammar.Exp;
-import org.poormanscastle.studies.compilers.grammar.ExpList;
 import org.poormanscastle.studies.compilers.grammar.GrammarItemVisitor;
 import org.poormanscastle.studies.compilers.grammar.IdExp;
 import org.poormanscastle.studies.compilers.grammar.LastExpList;
@@ -15,7 +13,6 @@ import org.poormanscastle.studies.compilers.grammar.NumExp;
 import org.poormanscastle.studies.compilers.grammar.OpExp;
 import org.poormanscastle.studies.compilers.grammar.PairExpList;
 import org.poormanscastle.studies.compilers.grammar.PrintStm;
-import org.poormanscastle.studies.compilers.grammar.Stm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,185 +36,140 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     private PrintContext currentPrintContext = null;
 
     @Override
-    public void visit(PrintStm stm) {
+    public void visitPrintStm(PrintStm stm) {
         currentPrintContext = new PrintContext();
     }
 
     @Override
-    public void leave(PrintStm stm) {
+    public void leavePrintStm(PrintStm stm) {
         printContexts.push(currentPrintContext);
         currentPrintContext = null;
     }
 
     @Override
-    public boolean proceedWith(Stm stm) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", stm.getClass().getName()));
-    }
-
-    @Override
-    public boolean proceedWith(AssignStm stm) {
+    public boolean proceedWithAssignStm(AssignStm stm) {
         return true;
     }
 
     @Override
-    public boolean proceedWith(CompoundStm stm) {
+    public boolean proceedWithCompoundStm(CompoundStm stm) {
         return true;
     }
 
     @Override
-    public boolean proceedWith(PrintStm stm) {
+    public boolean proceedWithPrintStm(PrintStm stm) {
         return true;
     }
 
     @Override
-    public boolean proceedWith(Exp exp) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", exp.getClass().getName()));
-    }
-
-    @Override
-    public boolean proceedWith(EseqExp exp) {
+    public boolean proceedWithEseqExp(EseqExp exp) {
         return true;
     }
 
     @Override
-    public boolean proceedWith(IdExp exp) {
+    public boolean proceedWithIdExp(IdExp exp) {
         logger.debug(StringUtils.join("Ignoring IdExp since it cannot hold print statements: ", exp.toString()));
         return false;
     }
 
     @Override
-    public boolean proceedWith(NumExp exp) {
+    public boolean proceedWithNumExp(NumExp exp) {
         logger.debug(StringUtils.join("Ignoring NumExp since it cannot hold print statements: ", exp.toString()));
         return true;
     }
 
     @Override
-    public boolean proceedWith(OpExp exp) {
+    public boolean proceedWithOpExp(OpExp exp) {
         return true;
     }
 
     @Override
-    public boolean proceedWith(ExpList expList) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", expList.getClass().getName()));
-    }
-
-    @Override
-    public boolean proceedWith(PairExpList expList) {
+    public boolean proceedWithPairExpList(PairExpList expList) {
         return true;
     }
 
     @Override
-    public boolean proceedWith(LastExpList expList) {
+    public boolean proceedWithLastExpList(LastExpList expList) {
         return true;
     }
 
     @Override
-    public void visit(Stm stm) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", stm.getClass().getName()));
-    }
-
-    @Override
-    public void visit(AssignStm stm) {
+    public void visitAssignStm(AssignStm stm) {
 
     }
 
     @Override
-    public void visit(CompoundStm stm) {
+    public void visitCompoundStm(CompoundStm stm) {
 
     }
 
     @Override
-    public void visit(Exp exp) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", exp.getClass().getName()));
-    }
-
-    @Override
-    public void visit(EseqExp exp) {
+    public void visitEseqExp(EseqExp exp) {
 
     }
 
     @Override
-    public void visit(IdExp exp) {
+    public void visitIdExp(IdExp exp) {
 
     }
 
     @Override
-    public void visit(NumExp exp) {
+    public void visitNumExp(NumExp exp) {
 
     }
 
     @Override
-    public void visit(OpExp exp) {
+    public void visitOpExp(OpExp exp) {
 
     }
 
     @Override
-    public void visit(ExpList expList) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", expList.getClass().getName()));
-    }
-
-    @Override
-    public void visit(PairExpList expList) {
+    public void visitPairExpList(PairExpList expList) {
 
     }
 
     @Override
-    public void visit(LastExpList expList) {
+    public void visitLastExpList(LastExpList expList) {
 
     }
 
     @Override
-    public void leave(Stm stm) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", stm.getClass().getName()));
-    }
-
-    @Override
-    public void leave(AssignStm stm) {
+    public void leaveAssignStm(AssignStm stm) {
 
     }
 
     @Override
-    public void leave(CompoundStm stm) {
+    public void leaveCompoundStm(CompoundStm stm) {
 
     }
 
     @Override
-    public void leave(Exp exp) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", exp.getClass().getName()));
-    }
-
-    @Override
-    public void leave(EseqExp exp) {
+    public void leaveEseqExp(EseqExp exp) {
 
     }
 
     @Override
-    public void leave(IdExp exp) {
+    public void leaveIdExp(IdExp exp) {
 
     }
 
     @Override
-    public void leave(NumExp exp) {
+    public void leaveNumExp(NumExp exp) {
 
     }
 
     @Override
-    public void leave(OpExp exp) {
+    public void leaveOpExp(OpExp exp) {
 
     }
 
     @Override
-    public void leave(ExpList expList) {
-        throw new RuntimeException(StringUtils.join("Add an implementation for the type ", expList.getClass().getName()));
-    }
-
-    @Override
-    public void leave(PairExpList expList) {
+    public void leavePairExpList(PairExpList expList) {
 
     }
 
     @Override
-    public void leave(LastExpList expList) {
+    public void leaveLastExpList(LastExpList expList) {
 
     }
 

@@ -31,15 +31,21 @@ public class PairExpList extends ExpList {
 
     @Override
     public void accept(GrammarItemVisitor visitor) {
-        visitor.visit(this);
-        if (visitor.proceedWith(head)) {
+        visitor.visitPairExpList(this);
+        if (head.handleProceedWith(visitor)) {
             head.accept(visitor);
         }
-        if (visitor.proceedWith(tail)) {
+        if (tail.handleProceedWith(visitor)) {
             tail.accept(visitor);
         }
-        visitor.leave(this);
+        visitor.leavePairExpList(this);
     }
+
+    @Override
+    public boolean handleProceedWith(GrammarItemVisitor visitor) {
+        return visitor.proceedWithPairExpList(this);
+    }
+
 }
 
 

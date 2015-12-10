@@ -42,4 +42,17 @@ public class PrintStmArgCounterVisitorTest {
         assertEquals(1, visitor.getPrintContexts().get(0).getNumberOfArguments());
         assertEquals(2, visitor.getPrintContexts().get(1).getNumberOfArguments());
     }
+
+    @Test
+    public void testOnProgramC() throws Exception {
+        Stm program = ProgramProvider.getProgramC();
+        if(program.handleProceedWith(visitor)){
+            program.accept(visitor);
+        }
+        assertNull(visitor.getCurrentPrintContext());
+        assertEquals(3, visitor.getPrintContexts().size());
+        assertEquals(6, visitor.getPrintContexts().get(0).getNumberOfArguments());
+        assertEquals(3, visitor.getPrintContexts().get(1).getNumberOfArguments());
+        assertEquals(5, visitor.getPrintContexts().get(2).getNumberOfArguments());
+    }
 }

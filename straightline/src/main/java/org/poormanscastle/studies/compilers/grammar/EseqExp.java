@@ -12,22 +12,6 @@ public class EseqExp extends AbstractExp {
         this.exp = exp;
     }
 
-    public Stm getStm() {
-        return stm;
-    }
-
-    public void setStm(Stm stm) {
-        this.stm = stm;
-    }
-
-    public Exp getExp() {
-        return exp;
-    }
-
-    public void setExp(Exp exp) {
-        this.exp = exp;
-    }
-
     @Override
     public void accept(GrammarItemVisitor visitor) {
         visitor.visitEseqExp(this);

@@ -27,22 +27,6 @@ public class Table {
         this.next = nextEntry;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public Table getNext() {
-        return next;
-    }
-
     /**
      * add a new variable to this memory table or update the value of an existing memory item.
      *

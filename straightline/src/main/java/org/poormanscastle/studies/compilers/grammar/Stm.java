@@ -1,17 +1,13 @@
 package org.poormanscastle.studies.compilers.grammar;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-
 /**
- * represents a Statement in the grammar of the straight-line language.
- * <p>
- * Created by georg on 02.12.15.
+ * Created by georg on 11.12.15.
  */
-public abstract class Stm implements GrammarItem {
+public interface Stm extends GrammarItem{
 
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this);
-    }
+    /**
+     * implements the Stm specific execution logic.
+     */
+    Table execute(Table table);
 
 }

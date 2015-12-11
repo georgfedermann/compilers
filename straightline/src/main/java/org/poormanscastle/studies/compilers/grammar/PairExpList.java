@@ -3,7 +3,7 @@ package org.poormanscastle.studies.compilers.grammar;
 /**
  * Created by georg on 02.12.15.
  */
-public class PairExpList extends ExpList {
+public class PairExpList extends AbstractExpList {
 
     private Exp head;
     private ExpList tail;
@@ -11,22 +11,6 @@ public class PairExpList extends ExpList {
     public PairExpList(Exp h, ExpList t) {
         head = h;
         tail = t;
-    }
-
-    public Exp getHead() {
-        return head;
-    }
-
-    public void setHead(Exp head) {
-        this.head = head;
-    }
-
-    public ExpList getTail() {
-        return tail;
-    }
-
-    public void setTail(ExpList tail) {
-        this.tail = tail;
     }
 
     @Override
@@ -46,6 +30,14 @@ public class PairExpList extends ExpList {
         return visitor.proceedWithPairExpList(this);
     }
 
+    @Override
+    public ValuesAndTable evaluate(ValuesAndTable vats) {
+        ValueAndTable vat = head.evaluate(vats.getTable());
+        vats.appendValue(vat.getValue());
+        vats.setTable(vat.getTable());
+
+        return tail.evaluate(vats);
+    }
 }
 
 

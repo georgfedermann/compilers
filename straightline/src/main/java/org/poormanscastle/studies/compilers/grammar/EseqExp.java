@@ -3,7 +3,7 @@ package org.poormanscastle.studies.compilers.grammar;
 /**
  * Created by georg on 02.12.15.
  */
-public class EseqExp extends Exp {
+public class EseqExp extends AbstractExp {
     private Stm stm;
     private Exp exp;
 
@@ -45,4 +45,9 @@ public class EseqExp extends Exp {
         return visitor.proceedWithEseqExp(this);
     }
 
+    @Override
+    public ValueAndTable evaluate(Table table) {
+        table = stm.execute(table);
+        return exp.evaluate(table);
+    }
 }

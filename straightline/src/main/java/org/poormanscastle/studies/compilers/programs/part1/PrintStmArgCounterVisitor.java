@@ -1,26 +1,17 @@
 package org.poormanscastle.studies.compilers.programs.part1;
 
-import static com.google.common.base.Preconditions.checkState;
-
-import java.util.Stack;
-
 import org.apache.commons.lang3.StringUtils;
-import org.poormanscastle.studies.compilers.grammar.AssignStm;
-import org.poormanscastle.studies.compilers.grammar.CompoundStm;
-import org.poormanscastle.studies.compilers.grammar.EseqExp;
-import org.poormanscastle.studies.compilers.grammar.GrammarItemVisitor;
-import org.poormanscastle.studies.compilers.grammar.IdExp;
-import org.poormanscastle.studies.compilers.grammar.LastExpList;
-import org.poormanscastle.studies.compilers.grammar.NumExp;
-import org.poormanscastle.studies.compilers.grammar.OpExp;
-import org.poormanscastle.studies.compilers.grammar.PairExpList;
-import org.poormanscastle.studies.compilers.grammar.PrintStm;
+import org.poormanscastle.studies.compilers.grammar.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Stack;
+
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * this type counts the args to print statements. it makes use of the fact that no other statements (can) make use of
- * the ExpList type other than print statements. this results from the ways this straightline language's grammar is
+ * the AbstractExpList type other than print statements. this results from the ways this straightline language's grammar is
  * defined.
  * <p>
  * Created by georg on 03.12.15.
@@ -39,7 +30,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     /**
      * if the visitor finds a printer statement, it creates a printer and assigns it to this field, to increment its
-     * args number while finding ExpList entries below the printer.
+     * args number while finding AbstractExpList entries below the printer.
      */
     private PrintContext currentPrintContext = null;
 
@@ -83,13 +74,17 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public boolean proceedWithIdExp(IdExp exp) {
-        logger.debug(StringUtils.join("Ignoring IdExp since it cannot hold print statements: ", exp.toString()));
+        if (logger.isDebugEnabled()) {
+            logger.debug(StringUtils.join("Ignoring IdExp since it cannot hold print statements: ", exp.toString()));
+        }
         return false;
     }
 
     @Override
     public boolean proceedWithNumExp(NumExp exp) {
-        logger.debug(StringUtils.join("Ignoring NumExp since it cannot hold print statements: ", exp.toString()));
+        if (logger.isDebugEnabled()) {
+            logger.debug(StringUtils.join("Ignoring NumExp since it cannot hold print statements: ", exp.toString()));
+        }
         return false;
     }
 
@@ -142,7 +137,9 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public void visitIdExp(IdExp exp) {
-
+        if (logger.isDebugEnabled()) {
+            logger.debug("IdExp is not relevant for PrintStm argument counting.");
+        }
     }
 
     @Override
@@ -152,7 +149,9 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public void visitNumExp(NumExp exp) {
-
+        if (logger.isDebugEnabled()) {
+            logger.debug("NumExp is not relevant for PrintStm argument counting.");
+        }
     }
 
     @Override
@@ -172,6 +171,9 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     @Override
     public void visitPairExpList(PairExpList expList) {
         if (currentPrintContext != null && currentPrintContext.amIdirectlyBelowPrintStm()) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(StringUtils.join("Found PairExpList which is relevant for PrintStm", currentPrintContext));
+            }
             currentPrintContext.incrementNumberOfArguments();
         }
     }
@@ -184,6 +186,9 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     @Override
     public void visitLastExpList(LastExpList expList) {
         if (currentPrintContext != null && currentPrintContext.amIdirectlyBelowPrintStm()) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(StringUtils.join("Found LastExpList which is relevant for PrintStm", currentPrintContext));
+            }
             currentPrintContext.incrementNumberOfArguments();
         }
     }

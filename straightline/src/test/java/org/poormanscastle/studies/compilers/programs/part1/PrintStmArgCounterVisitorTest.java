@@ -5,7 +5,8 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.poormanscastle.studies.compilers.grammar.Stm;
+import org.poormanscastle.studies.compilers.grammar.AbstractStm;
+import org.poormanscastle.studies.compilers.programs.ProgramProvider;
 
 /**
  * Created by georg on 03.12.15.
@@ -21,7 +22,7 @@ public class PrintStmArgCounterVisitorTest {
 
     @Test
     public void testOnProgramA() throws Exception {
-        Stm program = ProgramProvider.getProgramA();
+        AbstractStm program = ProgramProvider.getProgramA();
         if (program.handleProceedWith(visitor)) {
             program.accept(visitor);
         }
@@ -33,7 +34,7 @@ public class PrintStmArgCounterVisitorTest {
 
     @Test
     public void testOnProgramB() throws Exception {
-        Stm program = ProgramProvider.getProgramB();
+        AbstractStm program = ProgramProvider.getProgramB();
         if (program.handleProceedWith(visitor)) {
             program.accept(visitor);
         }
@@ -45,7 +46,7 @@ public class PrintStmArgCounterVisitorTest {
 
     @Test
     public void testOnProgramC() throws Exception {
-        Stm program = ProgramProvider.getProgramC();
+        AbstractStm program = ProgramProvider.getProgramC();
         if(program.handleProceedWith(visitor)){
             program.accept(visitor);
         }

@@ -6,7 +6,7 @@ package org.poormanscastle.studies.compilers.grammar;
  * <p>
  * Created by georg on 02.12.15.
  */
-public class CompoundStm extends Stm {
+public class CompoundStm extends AbstractStm {
     private Stm stm1, stm2;
 
     public CompoundStm(Stm s1, Stm s2) {
@@ -47,4 +47,8 @@ public class CompoundStm extends Stm {
         return visitor.proceedWithCompoundStm(this);
     }
 
+    @Override
+    public Table execute(Table table) {
+        return stm2.execute(stm1.execute(table));
+    }
 }

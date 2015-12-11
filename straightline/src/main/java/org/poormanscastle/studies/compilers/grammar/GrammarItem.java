@@ -19,6 +19,19 @@ public interface GrammarItem {
      */
     void accept(GrammarItemVisitor visitor);
 
+    /**
+     * method overloading in the GrammarItemVisitor interface does not support dynamic polymorphism.
+     * Thus one cannot call visitor.proceedWith(AbstractExp) with subtypes of AbstractExp. Static binding will always
+     * call the method for the supertype AbstractExp. So, for each implementation of AbstractExp a different version
+     * of the overloaded method has to be called explicitely, which is inefficient and results in
+     * convoluted code.
+     * to avoid application of if/else and instanceof each type implements handleProceedWith(Visitor),
+     * which will be resolved using dynamic polymorphism, thus relieving the system from most of the
+     * decision logic.
+     *
+     * @param visitor
+     * @return
+     */
     boolean handleProceedWith(GrammarItemVisitor visitor);
 
 }

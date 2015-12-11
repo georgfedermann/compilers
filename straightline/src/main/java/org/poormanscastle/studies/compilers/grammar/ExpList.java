@@ -1,18 +1,15 @@
 package org.poormanscastle.studies.compilers.grammar;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-
 /**
- * represents a list of expressions.
- * the way this straightline language is defined, no other statements make use of ExpLists than print statements.
- *
- * Created by georg on 02.12.15.
+ * Created by georg on 11.12.15.
  */
-public abstract class ExpList implements GrammarItem {
+public interface ExpList extends GrammarItem {
 
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this);
-    }
+    /**
+     * implements type specific evaluation logic.
+     *
+     * @return
+     */
+    ValuesAndTable evaluate(ValuesAndTable vats);
 
 }

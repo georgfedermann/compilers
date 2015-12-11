@@ -4,19 +4,11 @@ package org.poormanscastle.studies.compilers.grammar;
  * a num expression gives an integer to which evaluates.
  * Created by georg on 02.12.15.
  */
-public class NumExp extends Exp {
+public class NumExp extends AbstractExp {
 
     private int num;
 
     public NumExp(int num) {
-        this.num = num;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
         this.num = num;
     }
 
@@ -31,4 +23,8 @@ public class NumExp extends Exp {
         return visitor.proceedWithNumExp(this);
     }
 
+    @Override
+    public ValueAndTable evaluate(Table table) {
+        return new ValueAndTable(num, table);
+    }
 }

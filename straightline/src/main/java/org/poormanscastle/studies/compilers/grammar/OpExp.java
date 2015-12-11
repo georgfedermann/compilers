@@ -6,12 +6,12 @@ package org.poormanscastle.studies.compilers.grammar;
  * <p>
  * Created by georg on 02.12.15.
  */
-public class OpExp extends Exp {
-    private Exp left, right;
-    private int operator;
+public class OpExp extends AbstractExp {
+    private AbstractExp left, right;
+    private Operator operator;
     public final static int PLUS = 1, MINUS = 3, TIMES = 3, DIV = 4;
 
-    public OpExp(Exp left, int operator, Exp right) {
+    public OpExp(AbstractExp left, Operator operator, AbstractExp right) {
         this.left = left;
         this.right = right;
         this.operator = operator;
@@ -34,4 +34,10 @@ public class OpExp extends Exp {
         return visitor.proceedWithOpExp(this);
     }
 
+    @Override
+    public ValueAndTable evaluate(Table table) {
+        ValueAndTable vatLeft = left.evaluate(table);
+        ValueAndTable vatRight = right.evaluate(vatLeft.getTable());
+        return new ValueAndTable(operator.operate(vatLeft.getValue(), vatRight.getValue()), vatRight.getTable());
+    }
 }

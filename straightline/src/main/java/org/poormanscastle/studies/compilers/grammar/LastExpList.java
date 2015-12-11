@@ -3,19 +3,11 @@ package org.poormanscastle.studies.compilers.grammar;
 /**
  * Created by georg on 02.12.15.
  */
-public class LastExpList extends ExpList {
+public class LastExpList extends AbstractExpList {
     public Exp head;
 
-    public LastExpList(Exp h) {
+    public LastExpList(AbstractExp h) {
         head = h;
-    }
-
-    public Exp getHead() {
-        return head;
-    }
-
-    public void setHead(Exp head) {
-        this.head = head;
     }
 
     @Override
@@ -32,4 +24,11 @@ public class LastExpList extends ExpList {
         return visitor.proceedWithLastExpList(this);
     }
 
+    @Override
+    public ValuesAndTable evaluate(ValuesAndTable vats) {
+        ValueAndTable vat = head.evaluate(vats.getTable());
+        vats.appendValue(vat.getValue());
+        vats.setTable(vat.getTable());
+        return vats;
+    }
 }

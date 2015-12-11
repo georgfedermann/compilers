@@ -6,7 +6,7 @@ package org.poormanscastle.studies.compilers.grammar;
  * evaluated and whose value gets assigned to the given variable.
  * Created by georg on 02.12.15.
  */
-public class AssignStm extends Stm {
+public class AssignStm extends AbstractStm {
     private String id;
     private Exp exp;
 
@@ -46,4 +46,10 @@ public class AssignStm extends Stm {
         return visitor.proceedWithAssignStm(this);
     }
 
+    @Override
+    public Table execute(Table table) {
+        ValueAndTable vat = exp.evaluate(table);
+        table = vat.getTable();
+        return table.update(id, vat.getValue());
+    }
 }

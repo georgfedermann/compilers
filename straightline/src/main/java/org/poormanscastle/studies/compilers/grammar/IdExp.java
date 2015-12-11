@@ -4,7 +4,7 @@ package org.poormanscastle.studies.compilers.grammar;
  * An id expression gives the name of a variable to whose value it evalutes.
  * Created by georg on 02.12.15.
  */
-public class IdExp extends Exp {
+public class IdExp extends AbstractExp {
     private String id;
 
     public IdExp(String id) {
@@ -30,4 +30,8 @@ public class IdExp extends Exp {
         return visitor.proceedWithIdExp(this);
     }
 
+    @Override
+    public ValueAndTable evaluate(Table table) {
+        return new ValueAndTable(table.lookup(id), table);
+    }
 }

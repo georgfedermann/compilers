@@ -104,21 +104,16 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void visitAssignStm(AssignStm stm) {
-    }
+    public void visitAssignStm(AssignStm stm) {}
 
     @Override
-    public void leaveAssignStm(AssignStm stm) {
-
-    }
+    public void leaveAssignStm(AssignStm stm) {}
 
     @Override
-    public void visitCompoundStm(CompoundStm stm) {
-    }
+    public void visitCompoundStm(CompoundStm stm) {}
 
     @Override
-    public void leaveCompoundStm(CompoundStm stm) {
-    }
+    public void leaveCompoundStm(CompoundStm stm) {}
 
     @Override
     public void visitEseqExp(EseqExp exp) {
@@ -137,36 +132,29 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public void visitIdExp(IdExp exp) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("IdExp is not relevant for PrintStm argument counting.");
-        }
+        throw new IllegalStateException("This method must never be executed!");
     }
 
     @Override
     public void leaveIdExp(IdExp exp) {
-
+        throw new IllegalStateException("This method must never be executed!");
     }
 
     @Override
     public void visitNumExp(NumExp exp) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("NumExp is not relevant for PrintStm argument counting.");
-        }
+        throw new IllegalStateException("This method must never be executed!");
     }
 
     @Override
     public void leaveNumExp(NumExp exp) {
-
+        throw new IllegalStateException("This method must never be executed!");
     }
 
     @Override
-    public void visitOpExp(OpExp exp) {
-    }
+    public void visitOpExp(OpExp exp) {}
 
     @Override
-    public void leaveOpExp(OpExp exp) {
-
-    }
+    public void leaveOpExp(OpExp exp) {}
 
     @Override
     public void visitPairExpList(PairExpList expList) {
@@ -179,9 +167,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leavePairExpList(PairExpList expList) {
-
-    }
+    public void leavePairExpList(PairExpList expList) {}
 
     @Override
     public void visitLastExpList(LastExpList expList) {
@@ -194,9 +180,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leaveLastExpList(LastExpList expList) {
-
-    }
+    public void leaveLastExpList(LastExpList expList) {}
 
     public Stack<PrintContext> getPrintContexts() {
         return printContexts;

@@ -15,10 +15,6 @@ public class PrintContext {
         return numberOfArguments;
     }
 
-    public void setNumberOfArguments(int numberOfArguments) {
-        this.numberOfArguments = numberOfArguments;
-    }
-
     public void incrementNumberOfArguments() {
         numberOfArguments++;
     }

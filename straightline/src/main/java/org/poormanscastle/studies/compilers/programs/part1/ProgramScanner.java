@@ -1,6 +1,6 @@
 package org.poormanscastle.studies.compilers.programs.part1;
 
-import org.poormanscastle.studies.compilers.grammar.AbstractStm;
+import org.poormanscastle.studies.compilers.grammar.Stm;
 
 /**
  * Scans programs in the simple straight-line language for print Statements and decides how many
@@ -19,7 +19,7 @@ public class ProgramScanner {
      * @return the maximum number of arguments to any print statement contained within
      * the program wrapped inside the stm input parameter.
      */
-    public int maxArgs(AbstractStm stm) {
+    public int maxArgs(Stm stm) {
         PrintStmArgCounterVisitor visitor = new PrintStmArgCounterVisitor();
         if (stm.handleProceedWith(visitor)) {
             stm.accept(visitor);

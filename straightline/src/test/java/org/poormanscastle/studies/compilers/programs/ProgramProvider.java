@@ -8,7 +8,7 @@ import org.poormanscastle.studies.compilers.grammar.*;
  */
 public class ProgramProvider {
 
-    public static AbstractStm getProgramA() {
+    public static Stm getProgramA() {
         // a := 5 + 3; b := (print(a, a-1), 10 * a); print(b);
         // expected output: 8 7 80
         return new CompoundStm(
@@ -22,7 +22,7 @@ public class ProgramProvider {
                         ), new PrintStm(new LastExpList(new IdExp("b")))));
     }
 
-    public static AbstractStm getProgramB() {
+    public static Stm getProgramB() {
         // print((print(0), 3), 5);
         // expected output: 0 3 5
         return new PrintStm(new PairExpList(
@@ -30,7 +30,7 @@ public class ProgramProvider {
                 new LastExpList(new NumExp(5))));
     }
 
-    public static AbstractStm getProgramC() {
+    public static Stm getProgramC() {
         // g := 17 * 4; h := 11 + (print( g, (i := g - 1, (print(1, 2, 3, 4, 5, 6), 8 + g)), g ), g - g); print(g, h, 5, g - h, i);
         // expected output: 1 2 3 4 5 6 68 76 68 68 11 5 57 67
         // g 68

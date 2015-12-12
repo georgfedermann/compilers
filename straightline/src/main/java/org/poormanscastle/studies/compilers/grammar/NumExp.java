@@ -24,7 +24,7 @@ public class NumExp extends AbstractExp {
     }
 
     @Override
-    public ValueAndTable evaluate(Table table) {
-        return new ValueAndTable(num, table);
+    public int evaluate(MemoryTable table) {
+        return num;
     }
 }

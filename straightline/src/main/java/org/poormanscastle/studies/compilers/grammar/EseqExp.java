@@ -30,8 +30,8 @@ public class EseqExp extends AbstractExp {
     }
 
     @Override
-    public ValueAndTable evaluate(Table table) {
-        table = stm.execute(table);
+    public int evaluate(MemoryTable table) {
+        stm.execute(table);
         return exp.evaluate(table);
     }
 }

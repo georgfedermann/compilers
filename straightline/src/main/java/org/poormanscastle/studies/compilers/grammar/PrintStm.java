@@ -28,11 +28,11 @@ public class PrintStm extends AbstractStm {
     }
 
     @Override
-    public Table execute(Table table) {
-        ValuesAndTable vats = exps.evaluate(new ValuesAndTable(table));
+    public void execute(MemoryTable memoryTable) {
+        Values vats = new Values();
+        exps.evaluate(vats, memoryTable);
         for (Integer integer : vats.getValues()) {
             System.out.print(StringUtils.join(integer, " "));
         }
-        return vats.getTable();
     }
 }

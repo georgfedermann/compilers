@@ -48,7 +48,8 @@ public class CompoundStm extends AbstractStm {
     }
 
     @Override
-    public Table execute(Table table) {
-        return stm2.execute(stm1.execute(table));
+    public void execute(MemoryTable table) {
+        stm1.execute(table);
+        stm2.execute(table);
     }
 }

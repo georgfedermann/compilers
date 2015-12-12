@@ -8,6 +8,6 @@ public interface Stm extends GrammarItem{
     /**
      * implements the Stm specific execution logic.
      */
-    Table execute(Table table);
+    void execute(MemoryTable table);
 
 }

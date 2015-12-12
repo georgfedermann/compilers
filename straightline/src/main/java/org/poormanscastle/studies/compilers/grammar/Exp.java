@@ -10,6 +10,6 @@ public interface Exp extends GrammarItem {
      *
      * @return
      */
-    ValueAndTable evaluate(Table table);
+    int evaluate(MemoryTable table);
 
 }

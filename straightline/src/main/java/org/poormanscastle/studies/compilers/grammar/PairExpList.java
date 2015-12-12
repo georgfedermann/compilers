@@ -31,12 +31,11 @@ public class PairExpList extends AbstractExpList {
     }
 
     @Override
-    public ValuesAndTable evaluate(ValuesAndTable vats) {
-        ValueAndTable vat = head.evaluate(vats.getTable());
-        vats.appendValue(vat.getValue());
-        vats.setTable(vat.getTable());
+    public Values evaluate(Values vats, MemoryTable memoryTable) {
+        int value = head.evaluate(memoryTable);
+        vats.appendValue(value);
 
-        return tail.evaluate(vats);
+        return tail.evaluate(vats, memoryTable);
     }
 }
 

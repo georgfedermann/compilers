@@ -23,7 +23,7 @@ public class IdExp extends AbstractExp {
     }
 
     @Override
-    public ValueAndTable evaluate(Table table) {
-        return new ValueAndTable(table.lookup(id), table);
+    public int evaluate(MemoryTable table) {
+        return table.lookup(id);
     }
 }

@@ -47,9 +47,7 @@ public class AssignStm extends AbstractStm {
     }
 
     @Override
-    public Table execute(Table table) {
-        ValueAndTable vat = exp.evaluate(table);
-        table = vat.getTable();
-        return table.update(id, vat.getValue());
+    public void execute(MemoryTable table) {
+        table.put(id, exp.evaluate(table));
     }
 }

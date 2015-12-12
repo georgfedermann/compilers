@@ -9,7 +9,7 @@ package org.poormanscastle.studies.compilers.grammar;
 public class OpExp extends AbstractExp {
     private AbstractExp left, right;
     private Operator operator;
-    public final static int PLUS = 1, MINUS = 3, TIMES = 3, DIV = 4;
+    public final static int PLUS = 1, MINUS = 3, TIMES = 3, DIV = 4; // TODO delete this obsolete line
 
     public OpExp(AbstractExp left, Operator operator, AbstractExp right) {
         this.left = left;
@@ -35,9 +35,9 @@ public class OpExp extends AbstractExp {
     }
 
     @Override
-    public ValueAndTable evaluate(Table table) {
-        ValueAndTable vatLeft = left.evaluate(table);
-        ValueAndTable vatRight = right.evaluate(vatLeft.getTable());
-        return new ValueAndTable(operator.operate(vatLeft.getValue(), vatRight.getValue()), vatRight.getTable());
+    public int evaluate(MemoryTable table) {
+        int valueLeft = left.evaluate(table);
+        int valueRight = right.evaluate(table);
+        return operator.operate(valueLeft, valueRight);
     }
 }

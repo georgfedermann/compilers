@@ -37,6 +37,7 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
+        <!-- support for testing System.out stream in unit tests -->
         <dependency>
             <groupId>com.github.stefanbirkner</groupId>
             <artifactId>system-rules</artifactId>

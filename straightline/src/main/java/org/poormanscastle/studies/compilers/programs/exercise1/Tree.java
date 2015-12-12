@@ -20,12 +20,12 @@ public class Tree {
     }
 
     /**
-     * start with a new Tree.
+     * no-args constructor to start with a new Tree.
      *
      * @param key
      */
     public Tree(String key) {
-
+        this.key = key;
     }
 
     public Tree insert(String key) {

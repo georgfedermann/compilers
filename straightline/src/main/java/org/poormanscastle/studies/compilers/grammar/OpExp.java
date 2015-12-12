@@ -7,11 +7,10 @@ package org.poormanscastle.studies.compilers.grammar;
  * Created by georg on 02.12.15.
  */
 public class OpExp extends AbstractExp {
-    private AbstractExp left, right;
+    private Exp left, right;
     private Operator operator;
-    public final static int PLUS = 1, MINUS = 3, TIMES = 3, DIV = 4; // TODO delete this obsolete line
 
-    public OpExp(AbstractExp left, Operator operator, AbstractExp right) {
+    public OpExp(Exp left, Operator operator, Exp right) {
         this.left = left;
         this.right = right;
         this.operator = operator;

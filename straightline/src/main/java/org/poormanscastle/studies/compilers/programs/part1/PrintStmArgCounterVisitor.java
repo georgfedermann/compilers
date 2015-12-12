@@ -1,17 +1,26 @@
 package org.poormanscastle.studies.compilers.programs.part1;
 
-import org.apache.commons.lang3.StringUtils;
-import org.poormanscastle.studies.compilers.grammar.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.Stack;
 
-import static com.google.common.base.Preconditions.checkState;
+import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.grammar.AssignStm;
+import org.poormanscastle.studies.compilers.grammar.CompoundStm;
+import org.poormanscastle.studies.compilers.grammar.EseqExp;
+import org.poormanscastle.studies.compilers.grammar.GrammarItemVisitor;
+import org.poormanscastle.studies.compilers.grammar.IdExp;
+import org.poormanscastle.studies.compilers.grammar.LastExpList;
+import org.poormanscastle.studies.compilers.grammar.NumExp;
+import org.poormanscastle.studies.compilers.grammar.OpExp;
+import org.poormanscastle.studies.compilers.grammar.PairExpList;
+import org.poormanscastle.studies.compilers.grammar.PrintStm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * this type counts the args to print statements. it makes use of the fact that no other statements (can) make use of
- * the AbstractExpList type other than print statements. this results from the ways this straightline language's grammar is
+ * the ExpList type other than print statements. this results from the ways this straightline language's grammar is
  * defined.
  * <p>
  * Created by georg on 03.12.15.
@@ -30,7 +39,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     /**
      * if the visitor finds a printer statement, it creates a printer and assigns it to this field, to increment its
-     * args number while finding AbstractExpList entries below the printer.
+     * args number while finding ExpList entries below the printer.
      */
     private PrintContext currentPrintContext = null;
 
@@ -104,16 +113,20 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void visitAssignStm(AssignStm stm) {}
+    public void visitAssignStm(AssignStm stm) {
+    }
 
     @Override
-    public void leaveAssignStm(AssignStm stm) {}
+    public void leaveAssignStm(AssignStm stm) {
+    }
 
     @Override
-    public void visitCompoundStm(CompoundStm stm) {}
+    public void visitCompoundStm(CompoundStm stm) {
+    }
 
     @Override
-    public void leaveCompoundStm(CompoundStm stm) {}
+    public void leaveCompoundStm(CompoundStm stm) {
+    }
 
     @Override
     public void visitEseqExp(EseqExp exp) {
@@ -151,10 +164,12 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void visitOpExp(OpExp exp) {}
+    public void visitOpExp(OpExp exp) {
+    }
 
     @Override
-    public void leaveOpExp(OpExp exp) {}
+    public void leaveOpExp(OpExp exp) {
+    }
 
     @Override
     public void visitPairExpList(PairExpList expList) {
@@ -167,7 +182,8 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leavePairExpList(PairExpList expList) {}
+    public void leavePairExpList(PairExpList expList) {
+    }
 
     @Override
     public void visitLastExpList(LastExpList expList) {
@@ -180,7 +196,8 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leaveLastExpList(LastExpList expList) {}
+    public void leaveLastExpList(LastExpList expList) {
+    }
 
     public Stack<PrintContext> getPrintContexts() {
         return printContexts;

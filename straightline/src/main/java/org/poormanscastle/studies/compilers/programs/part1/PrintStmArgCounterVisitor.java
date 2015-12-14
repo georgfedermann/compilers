@@ -63,70 +63,69 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public boolean proceedWithAssignStm(AssignStm stm) {
+        // can contain EseqExp and thus more PrintStm
         return true;
     }
 
     @Override
     public boolean proceedWithCompoundStm(CompoundStm stm) {
+        // can contain PrintStm directly or down the hierarchy
         return true;
     }
 
     @Override
     public boolean proceedWithPrintStm(PrintStm stm) {
+        // is relevant for this visitor
         return true;
     }
 
     @Override
     public boolean proceedWithEseqExp(EseqExp exp) {
+        // can contain PrintStm directly or down the hierarchy
         return true;
     }
 
     @Override
     public boolean proceedWithIdExp(IdExp exp) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(StringUtils.join("Ignoring IdExp since it cannot hold print statements: ", exp.toString()));
-        }
+        // cannot be ancestor of a PrintStm
         return false;
     }
 
     @Override
     public boolean proceedWithNumExp(NumExp exp) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(StringUtils.join("Ignoring NumExp since it cannot hold print statements: ", exp.toString()));
-        }
+        // cannot be ancestor of a PrintStm
         return false;
     }
 
     @Override
     public boolean proceedWithOpExp(OpExp exp) {
+        // can contain PrintStm directly or down the hierarchy
         return true;
     }
 
     @Override
     public boolean proceedWithPairExpList(PairExpList expList) {
+        // can contain PrintStm directly or down the hierarchy
         return true;
     }
 
     @Override
     public boolean proceedWithLastExpList(LastExpList expList) {
+        // can contain PrintStm directly or down the hierarchy
         return true;
     }
 
     @Override
-    public void visitAssignStm(AssignStm stm) {
-    }
+    public void visitAssignStm(AssignStm stm) {}
 
     @Override
-    public void leaveAssignStm(AssignStm stm) {
-    }
+    public void leaveAssignStm(AssignStm stm) {}
 
     @Override
-    public void visitCompoundStm(CompoundStm stm) {
-    }
+    public void visitCompoundStm(CompoundStm stm) {}
 
     @Override
-    public void leaveCompoundStm(CompoundStm stm) {
-    }
+    public void leaveCompoundStm(CompoundStm stm) {}
 
     @Override
     public void visitEseqExp(EseqExp exp) {
@@ -164,12 +163,10 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void visitOpExp(OpExp exp) {
-    }
+    public void visitOpExp(OpExp exp) {}
 
     @Override
-    public void leaveOpExp(OpExp exp) {
-    }
+    public void leaveOpExp(OpExp exp) {}
 
     @Override
     public void visitPairExpList(PairExpList expList) {
@@ -182,8 +179,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leavePairExpList(PairExpList expList) {
-    }
+    public void leavePairExpList(PairExpList expList) {}
 
     @Override
     public void visitLastExpList(LastExpList expList) {
@@ -196,8 +192,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     }
 
     @Override
-    public void leaveLastExpList(LastExpList expList) {
-    }
+    public void leaveLastExpList(LastExpList expList) {}
 
     public Stack<PrintContext> getPrintContexts() {
         return printContexts;

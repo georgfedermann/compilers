@@ -1,6 +1,6 @@
 rm *.java
 rm *.class
-javacc.sh lang.jj
+javacc lang.jj
 javac *.java
 java MyParser < HelloWorld.mj
 

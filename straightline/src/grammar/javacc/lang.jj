@@ -1,0 +1,30 @@
+
+PARSER_BEGIN(MyParser)
+public class MyParser {
+    public static void main (String[] args) throws ParseException {
+        MyParser parser = new MyParser(System.in);
+        parser.Start();
+    }
+}
+PARSER_END(MyParser)
+
+/* For the regular expression on the right, the token on the left will be returned. */
+
+TOKEN : {
+    < IF: "if" >
+    | < #WHITESPACE: (["\n", "\t", "\r", " "])* >
+}
+
+/* This regex will be skipped as whitespace or comments. */
+SKIP : {
+    <"--" ((<WHITESPACE>)* | (["a"-"z" ])* )* >
+    | " "
+    | "\t"
+    | "\n"
+}
+
+/* grammar accepts any tokens as defined above in any sequence. */
+void Start() :
+{}
+{ ( <IF> /* | <ID> | <NUM> | <REAL> )*/ )* }
+

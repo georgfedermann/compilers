@@ -1,0 +1,69 @@
+
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(MiniJava)
+package org.poormanscastle.studies.compilers.grammar.minijava.javacc;
+public class MiniJava{
+    public static void main(String[] args) throws ParseException{
+        MiniJava miniJava = new MiniJava(System.in);
+        miniJava.Statement();
+    }
+}
+PARSER_END(MiniJava)
+
+TOKEN : {
+    < CLASS : "class" > |
+    < PUBLIC : "public" > |
+    < PRIVATE : "private" > |
+    < STATIC : "static" > |
+    < ID : ["_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z"])* > |
+    < BRACE_LEFT : "{" > |
+    < BRACE_RIGHT : "}" > |
+    < LPAREN : "(" > |
+    < RPAREN : ")" > |
+    < LBRACKET : "[" > |
+    < RBRACKET : "]" > |
+    < LT : "<" > |
+    < GT : ">" > |
+    < DOT : "." > |
+    < SEMICOLON : ";" > |
+    < COLON : ":" > |
+    < DECIMAL : (["0"-"9"])+(["0"-"9"])* > |
+    < EQ : "=" > |
+    < STAR : "*" > |
+    < DASH : "-" >
+}
+
+SKIP : {
+    " " |
+    "\n" |
+    "\r" |
+    "\t" |
+    < "//"(~["\n", "\r"])*("\r" | "\n" | "\r\n") >
+}
+
+void Statement() :
+{}
+{
+    ( <CLASS> | <PUBLIC> | <ID> | <PRIVATE> | <STATIC> | <BRACE_LEFT> | <BRACE_RIGHT> | <LPAREN> | <STAR> |
+    <RPAREN> | <LBRACKET> | <RBRACKET> | <SEMICOLON> | <COLON> | <DOT> | <DECIMAL> | <EQ> |
+    <LT> | <GT> | <DASH> )*<EOF>
+}

@@ -1,22 +1,24 @@
 
 options {
   LOOKAHEAD = 1;
-  CHOICE_AMBIGUITY_CHECK = 2;
-  OTHER_AMBIGUITY_CHECK = 1;
-  STATIC = false;
-  DEBUG_PARSER = false;
-  DEBUG_LOOKAHEAD = false;
-  DEBUG_TOKEN_MANAGER = false;
-  ERROR_REPORTING = true;
-  JAVA_UNICODE_ESCAPE = false;
-  UNICODE_INPUT = false;
-  IGNORE_CASE = false;
-  USER_TOKEN_MANAGER = false;
-  USER_CHAR_STREAM = false;
   BUILD_PARSER = true;
   BUILD_TOKEN_MANAGER = true;
-  SANITY_CHECK = true;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  COMMON_TOKEN_ACTION = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_PARSER = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
   FORCE_LA_CHECK = false;
+  IGNORE_CASE = false;
+  JAVA_UNICODE_ESCAPE = false;
+  JDK_VERSION = "1.8";
+  OTHER_AMBIGUITY_CHECK = 1;
+  SANITY_CHECK = true;
+  STATIC = false;
+  UNICODE_INPUT = false;
+  USER_CHAR_STREAM = false;
+  USER_TOKEN_MANAGER = false;
 }
 
 PARSER_BEGIN(HitClou)
@@ -29,10 +31,50 @@ public class HitClou{
 }
 PARSER_END(HitClou)
 
+/* CLOU components */
 TOKEN : {
     < CLOUBAUSTEIN : "#\n" > |
     < PSEUDO_KOMMENTAR : "#*#" > |
     < FIXTEXT : (["A"-"Z", "a"-"z", "0"-"9", ",", "." ])+ >
+}
+
+/* Clou commands */
+TOKEN : {
+    < IF : "#?" > |
+    < EXECUTE_MACRO : "#$" > |
+    < HIT_COMMAND : "#^" > |
+    < INSERT_VAR : "#>" > |
+    < INSERT_BAUSTEIN : "#B" > |
+    < SWITCH : "#C" > |
+    < DEFINE_GLOBAL_VAR : "#D" > |
+    < DEFINE_LOCAL_VAR : "#d" > |
+    < POSITION_CURSOR_COL : "#G" > |
+    < PROCESS_HIT_FILE : "#H" > |
+    < POSITION_CURSOR : "#J" > |
+    < PROCESS_LIST : "#L" > |
+    < WHILE : "#S" > |
+    < INSERT_DATE : "#T" > |
+    < FOR : "#W" >
+}
+
+/* Separators */
+TOKEN : {
+    < BANG : "!" > |
+    < LBRACE : "{" > |
+    < RBRACE : "}" >
+}
+
+/* Operators */
+TOKEN : {
+    < ASSIGN : "#=" > |
+    < EQ : "=" > |
+    < NE : "<>" > |
+    < GT : ">" > |
+    < LT : "<" > |
+    < PLUS : "+" > |
+    < MINUS : "-" >
+
+
 }
 
 SKIP : {

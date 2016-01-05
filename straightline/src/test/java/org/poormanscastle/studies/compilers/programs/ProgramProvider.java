@@ -1,6 +1,6 @@
 package org.poormanscastle.studies.compilers.programs;
 
-import org.poormanscastle.studies.compilers.grammar.*;
+import org.poormanscastle.studies.compilers.ch01.*;
 
 /**
  * Provides programs implemented in the simple straight-line language.

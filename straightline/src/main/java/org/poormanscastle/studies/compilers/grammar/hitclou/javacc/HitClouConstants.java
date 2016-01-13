@@ -16,6 +16,56 @@ public interface HitClouConstants {
   int PSEUDO_KOMMENTAR = 2;
   /** RegularExpression Id. */
   int FIXTEXT = 3;
+  /** RegularExpression Id. */
+  int IF = 4;
+  /** RegularExpression Id. */
+  int EXECUTE_MACRO = 5;
+  /** RegularExpression Id. */
+  int HIT_COMMAND = 6;
+  /** RegularExpression Id. */
+  int INSERT_VAR = 7;
+  /** RegularExpression Id. */
+  int INSERT_BAUSTEIN = 8;
+  /** RegularExpression Id. */
+  int SWITCH = 9;
+  /** RegularExpression Id. */
+  int DEFINE_GLOBAL_VAR = 10;
+  /** RegularExpression Id. */
+  int DEFINE_LOCAL_VAR = 11;
+  /** RegularExpression Id. */
+  int POSITION_CURSOR_COL = 12;
+  /** RegularExpression Id. */
+  int PROCESS_HIT_FILE = 13;
+  /** RegularExpression Id. */
+  int POSITION_CURSOR = 14;
+  /** RegularExpression Id. */
+  int PROCESS_LIST = 15;
+  /** RegularExpression Id. */
+  int WHILE = 16;
+  /** RegularExpression Id. */
+  int INSERT_DATE = 17;
+  /** RegularExpression Id. */
+  int FOR = 18;
+  /** RegularExpression Id. */
+  int BANG = 19;
+  /** RegularExpression Id. */
+  int LBRACE = 20;
+  /** RegularExpression Id. */
+  int RBRACE = 21;
+  /** RegularExpression Id. */
+  int ASSIGN = 22;
+  /** RegularExpression Id. */
+  int EQ = 23;
+  /** RegularExpression Id. */
+  int NE = 24;
+  /** RegularExpression Id. */
+  int GT = 25;
+  /** RegularExpression Id. */
+  int LT = 26;
+  /** RegularExpression Id. */
+  int PLUS = 27;
+  /** RegularExpression Id. */
+  int MINUS = 28;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -26,7 +76,32 @@ public interface HitClouConstants {
     "\"#\\n\"",
     "\"#*#\"",
     "<FIXTEXT>",
-    "<token of kind 4>",
+    "\"#?\"",
+    "\"#$\"",
+    "\"#^\"",
+    "\"#>\"",
+    "\"#B\"",
+    "\"#C\"",
+    "\"#D\"",
+    "\"#d\"",
+    "\"#G\"",
+    "\"#H\"",
+    "\"#J\"",
+    "\"#L\"",
+    "\"#S\"",
+    "\"#T\"",
+    "\"#W\"",
+    "\"!\"",
+    "\"{\"",
+    "\"}\"",
+    "\"#=\"",
+    "\"=\"",
+    "\"<>\"",
+    "\">\"",
+    "\"<\"",
+    "\"+\"",
+    "\"-\"",
+    "<token of kind 29>",
     "\" \"",
     "\"\\t\"",
     "\"\\n\"",

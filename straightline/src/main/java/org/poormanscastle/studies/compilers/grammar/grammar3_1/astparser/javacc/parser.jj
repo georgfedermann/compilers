@@ -24,7 +24,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc
 public class AstParser{
     public static void main(String[] args) throws ParseException{
         AstParser parser = new AstParser(System.in);
-        parser.program();
+        parser.P();
     }
 }
 PARSER_END(AstParser)
@@ -39,7 +39,7 @@ TOKEN : {
     < PLUS : "+" > |
     < MINUS : "-" > |
     < TIMES : "*" > |
-    < SLASH : "/" > |
+    < DIV : "/" > |
     < ASSIGN : ":=" >
 }
 
@@ -54,5 +54,100 @@ TOKEN : {
 /* variable strings */
 TOKEN : {
     < ID : [ "_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z"])* > |
-    < NUM : (["0"-"9"])* >
+    < NUM : (["1"-"9"])(["0"-"9"])* >
 }
+
+/* Whitespace */
+SKIP : {
+    " " |
+    "\n" |
+    "\r" |
+    "\t"
+}
+
+void P() :
+{}
+{
+    S() PPrime() <EOF>
+}
+
+void PPrime() :
+{}
+{
+    <SEMICOLON> X()
+}
+
+void X() :
+{}
+{
+    ( S() PPrime() )?
+}
+
+void S() :
+{}
+{
+    <ID> <ASSIGN> E()
+    |
+    <PRINT> <LPAREN> L() <RPAREN>
+}
+
+void L() :
+{}
+{
+    E() LPrime()
+}
+
+void LPrime() :
+{}
+{
+    ( <COMMA> E() LPrime() )?
+}
+
+void E() :
+{}
+{
+    T() EPrime()
+    |
+    <LPAREN> S() <COMMA> E() <RPAREN>
+}
+
+void EPrime() :
+{}
+{
+    (
+        <PLUS> T() EPrime()
+        |
+        <MINUS> T() EPrime()
+    )?
+}
+
+void T() :
+{}
+{
+    F() TPrime()
+}
+
+void TPrime() :
+{}
+{
+    (
+        <TIMES> F() TPrime()
+        |
+        <DIV> F() TPrime()
+    )?
+}
+
+void F() :
+{}
+{
+    <NUM>
+    |
+    <ID>
+}
+
+
+
+
+
+
+

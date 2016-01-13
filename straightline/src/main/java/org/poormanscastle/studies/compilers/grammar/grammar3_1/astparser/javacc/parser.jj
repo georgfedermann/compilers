@@ -1,0 +1,52 @@
+
+options {
+    LOOKAHEAD = 1;
+    CHOICE_AMBIGUITY_CHECK = 2;
+    OTHER_AMBIGUITY_CHECK = 1;
+    STATIC = false;
+    DEBUG_PARSER = false;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    JAVA_UNICODE_ESCAPE = false;
+    UNICODE_INPUT = false;
+    IGNORE_CASE = false;
+    USER_TOKEN_MANAGER = false;
+    USER_CHAR_STREAM = false;
+    BUILD_PARSER = true;
+    BUILD_TOKEN_MANAGER = true;
+    SANITY_CHECK = true;
+    FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(AstParser)
+package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc;
+public class AstParser{
+    public static void main(String[] args) throws ParseException{
+        AstParser parser = new AstParser(System.in);
+        parser.program();
+    }
+}
+PARSER_END(AstParser)
+
+/* language commandos */
+TOKEN : {
+    < PRINT : "print" >
+}
+
+/* Operators */
+TOKEN : {
+    < PLUS : "+" > |
+    < MINUS : "-" > |
+    < TIMES : "*" > |
+    < SLASH : "/" > |
+    < ASSIGN : ":=" >
+}
+
+/* Separators */
+TOKEN : {
+    < LPAREN : "(" > |
+    < RPAREN : ")" > |
+    < COMMA : "," > |
+    < SEMICOLON : ";" >
+}

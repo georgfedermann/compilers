@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1Interpreter.javacc;
+package org.poormanscastle.studies.compilers.grammar.grammar3_1.interpreter.javacc;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,7 +18,7 @@ public class InterpreterTest {
     @Test
     public void testProgram1() throws Exception {
         new Interpreter(TestUtils.getTestdataAsInputStream("/grammar3_1/testprogram1.txt")).Program();
-        assertEquals("5521 18 1 2 6 3 13 42 ", systemOutRule.getLog());
+        assertEquals("5521 18 1 2 6 3 13 3 42 ", systemOutRule.getLog());
     }
 
 }

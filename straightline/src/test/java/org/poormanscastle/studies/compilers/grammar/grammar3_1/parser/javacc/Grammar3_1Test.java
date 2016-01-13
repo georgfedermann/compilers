@@ -1,7 +1,8 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.javacc;
+package org.poormanscastle.studies.compilers.grammar.grammar3_1.parser.javacc;
 
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.parser.javacc.Grammar3_1;
 
 /**
  * Created by georg on 12.01.16.

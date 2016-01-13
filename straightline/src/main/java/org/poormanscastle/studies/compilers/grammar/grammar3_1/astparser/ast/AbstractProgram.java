@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 /**
  * Created by georg on 13.01.16.
  */
-public abstract class AbstractAstItem implements AstItem {
+public abstract class AbstractProgram implements Program {
 
     @Override
     public String toString() {

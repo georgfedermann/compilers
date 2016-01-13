@@ -18,6 +18,12 @@ public class AssignmentStatement extends AbstractStatement {
      */
     private Expression expression;
 
+    public AssignmentStatement(CodePosition codePosition, String id, Expression expression) {
+        super(codePosition);
+        this.id = id;
+        this.expression = expression;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithAssignmentStatement(this);
@@ -26,6 +32,18 @@ public class AssignmentStatement extends AbstractStatement {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitAssignmentStatement(this);
-
+        if(expression.handleProceedWith(visitor)){
+            expression.accept(visitor);
+        }
+        visitor.leaveAssignmentStatement(this);
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
 }

@@ -11,4 +11,6 @@ public interface AstItemVisitor {
     boolean proceedWithAssignmentStatement(AssignmentStatement assignmentStatement);
 
     void visitAssignmentStatement(AssignmentStatement assignmentStatement);
+
+    void leaveAssignmentStatement(AssignmentStatement assignmentStatement);
 }

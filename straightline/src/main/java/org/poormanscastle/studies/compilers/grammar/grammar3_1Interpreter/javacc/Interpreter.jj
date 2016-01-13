@@ -1,0 +1,172 @@
+
+options {
+    LOOKAHEAD = 1;
+    CHOICE_AMBIGUITY_CHECK = 2;
+    OTHER_AMBIGUITY_CHECK = 1;
+    STATIC = false;
+    DEBUG_PARSER = false;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    JAVA_UNICODE_ESCAPE = false;
+    UNICODE_INPUT = false;
+    IGNORE_CASE = false;
+    USER_TOKEN_MANAGER = false;
+    USER_CHAR_STREAM = false;
+    BUILD_PARSER = true;
+    BUILD_TOKEN_MANAGER = true;
+    SANITY_CHECK = true;
+    FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(Interpreter)
+package org.poormanscastle.studies.compilers.grammar.grammar3_1Interpreter.javacc;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class Interpreter{
+
+    private Map<String,Integer> memoryTable = new HashMap<String,Integer>();
+
+    public static void main(String[] args) throws ParseException{
+        Interpreter interpreter = new Interpreter(System.in);
+        interpreter.Program();
+    }
+}
+PARSER_END(Interpreter)
+
+
+/* language commands */
+TOKEN : {
+    < PRINT : "print" >
+}
+
+/* Operators */
+TOKEN : {
+    < PLUS : "+" > |
+    < DASH : "-" > |
+    < STAR : "*" > |
+    < SLASH : "/" > |
+    < ASSIGN : ":=" >
+}
+
+/* Separators */
+TOKEN : {
+    < LPAREN : "(" > |
+    < RPAREN : ")" > |
+    < COMMA : "," > |
+    < SEMICOLON : ";" >
+}
+
+/* variable strings */
+TOKEN : {
+    < ID : ["_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z"])* > |
+    < NUM : (["0"-"9"])+(["0"-"9"])* >
+}
+
+/* Whitespace */
+SKIP : {
+    " " |
+    "\n" |
+    "\r" |
+    "\t"
+}
+
+void Program() :
+{}
+{
+    S() PPrime() <EOF>
+}
+
+void S() :
+{ Token t; Integer value; List<Integer> valueList = new LinkedList<Integer>(); }
+{
+    t = <ID><ASSIGN>value = E(){memoryTable.put(t.image, value);}
+    |
+    <PRINT><LPAREN>
+        L(valueList){
+            for(Integer integer : valueList){
+                System.out.print(String.valueOf(integer) + " ");
+            }
+        }
+    <RPAREN>
+}
+
+void L(List<Integer> valueList) :
+{ Integer value; }
+{
+    value = E(){valueList.add(value);} LPrime(valueList)
+}
+
+void LPrime(List<Integer> valueList) :
+{ Integer value; }
+{
+    ( <COMMA> value = E(){valueList.add(value);} LPrime(valueList) )?
+}
+
+void PPrime() :
+{}
+{
+    <SEMICOLON> ( S() PPrime() )?
+}
+
+Integer E() :
+{ Integer term; Integer result; }
+{
+    term=T() result=EPrime(term){ return result != null ? result : term; }
+    |
+    <LPAREN> S() <COMMA> result=E() <RPAREN>{ return result; }
+}
+
+Integer EPrime(Integer input) :
+{ Integer term; Integer result; }
+{
+    (
+        <PLUS>
+            term=T(){ term += input; }
+            result=EPrime(term){ return result != null ? result : term; }
+        |
+        <DASH>
+            term=T(){ term = input - term; }
+            result=EPrime(term){ return result != null ? result : term; }
+    )?
+    {return null;}
+}
+
+Integer T() :
+{ Integer factor; Integer result; }
+{
+    factor=F() result=TPrime(factor){ return result != null ? result : factor; }
+}
+
+Integer TPrime(Integer input) :
+{ Integer factor; Integer result; }
+{
+    (
+        <STAR>
+            factor=F(){ factor *= input; }
+            result=TPrime(factor){ return result != null ? result : factor; }
+        |
+        <SLASH>
+            factor=F(){ factor = input / factor; }
+            result=TPrime(factor){ return result != null ? result : factor; }
+    )?
+    {return null;}
+}
+
+Integer F() :
+{ Token t;}
+{
+    t=<NUM>{return new Integer(Integer.parseInt(t.image));}
+    |
+    t=<ID>{return memoryTable.get(t.image);}
+}
+
+
+
+
+
+

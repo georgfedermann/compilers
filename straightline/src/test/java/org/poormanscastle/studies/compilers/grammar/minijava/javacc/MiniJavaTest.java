@@ -1,5 +1,6 @@
 package org.poormanscastle.studies.compilers.grammar.minijava.javacc;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
 
@@ -10,6 +11,7 @@ public class MiniJavaTest {
 
     @Test
     public void testStatement() throws Exception {
-        new MiniJava(TestUtils.getTestdataAsInputStream("/miniJavaTestData/testclass.txt")).Statement();
+        System.out.println(IOUtils.toString(TestUtils.getTestdataAsInputStream("/miniJavaTestData/testclass.txt")));
+        // new MiniJava(TestUtils.getTestdataAsInputStream("/miniJavaTestData/testclass.txt")).Program();
     }
 }

@@ -1,0 +1,145 @@
+
+options {
+    LOOKAHEAD = 1;
+    CHOICE_AMBIGUITY_CHECK = 2;
+    OTHER_AMBIGUITY_CHECK = 1;
+    STATIC = false;
+    DEBUG_PARSER = false;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    JAVA_UNICODE_ESCAPE = false;
+    UNICODE_INPUT = false;
+    IGNORE_CASE = false;
+    USER_TOKEN_MANAGER = false;
+    USER_CHAR_STREAM = false;
+    BUILD_PARSER = true;
+    BUILD_TOKEN_MANAGER = true;
+    SANITY_CHECK = true;
+    FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(Grammar3_1)
+package org.poormanscastle.studies.compilers.grammar.grammar3_1.javacc;
+public class Grammar3_1{
+    public static void main(String[] args) throws ParseException{
+        Grammar3_1 grammar = new Grammar3_1(System.in);
+        grammar.Program();
+    }
+}
+PARSER_END(Grammar3_1)
+
+
+/* language commands */
+TOKEN : {
+    < PRINT : "print" >
+}
+
+/* Operators */
+TOKEN : {
+    < PLUS : "+" > |
+    < DASH : "-" > |
+    < STAR : "*" > |
+    < SLASH : "/" > |
+    < ASSIGN : ":=" >
+}
+
+/* Separators */
+TOKEN : {
+    < LPAREN : "(" > |
+    < RPAREN : ")" > |
+    < COMMA : "," > |
+    < SEMICOLON : ";" >
+}
+
+/* variable strings */
+TOKEN : {
+    < ID : ["_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z"])* > |
+    < NUM : (["0"-"9"])+(["0"-"9"])* >
+}
+
+/* Whitespace */
+SKIP : {
+    " " |
+    "\n" |
+    "\r" |
+    "\t"
+}
+
+void Program() :
+{}
+{
+    S() PPrime() <EOF>
+}
+
+void S() :
+{}
+{
+    <ID><ASSIGN>E()
+    |
+    <PRINT><LPAREN>L()<RPAREN>
+}
+
+void L() :
+{}
+{
+    E() LPrime()
+}
+
+void LPrime() :
+{}
+{
+    ( <COMMA> E() LPrime() )?
+}
+
+void PPrime() :
+{}
+{
+    <SEMICOLON> ( S() PPrime() )?
+}
+
+void E() :
+{}
+{
+    T() EPrime()
+    |
+    <LPAREN> S() <COMMA> E() <RPAREN>
+}
+
+void EPrime() :
+{}
+{
+    (
+        <PLUS> T() EPrime()
+        |
+        <DASH>T()EPrime()
+    )?
+}
+
+void T() :
+{}
+{
+    F() TPrime()
+}
+
+void TPrime() :
+{}
+{
+    (
+        <STAR> F() TPrime()
+        |
+        <SLASH> F() TPrime()
+    )?
+}
+
+void F() :
+{}
+{
+    <NUM> | <ID>
+}
+
+
+
+
+
+

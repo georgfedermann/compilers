@@ -19,37 +19,45 @@ public interface MiniJavaConstants {
   /** RegularExpression Id. */
   int STATIC = 4;
   /** RegularExpression Id. */
-  int ID = 5;
+  int VOID = 5;
   /** RegularExpression Id. */
-  int BRACE_LEFT = 6;
+  int MAIN = 6;
   /** RegularExpression Id. */
-  int BRACE_RIGHT = 7;
+  int STRING = 7;
   /** RegularExpression Id. */
-  int LPAREN = 8;
+  int LBRACE = 8;
   /** RegularExpression Id. */
-  int RPAREN = 9;
+  int RBRACE = 9;
   /** RegularExpression Id. */
-  int LBRACKET = 10;
+  int LPAREN = 10;
   /** RegularExpression Id. */
-  int RBRACKET = 11;
+  int RPAREN = 11;
   /** RegularExpression Id. */
-  int LT = 12;
+  int LBRACKET = 12;
   /** RegularExpression Id. */
-  int GT = 13;
+  int RBRACKET = 13;
   /** RegularExpression Id. */
-  int DOT = 14;
+  int LT = 14;
   /** RegularExpression Id. */
-  int SEMICOLON = 15;
+  int GT = 15;
   /** RegularExpression Id. */
-  int COLON = 16;
+  int DOT = 16;
   /** RegularExpression Id. */
-  int DECIMAL = 17;
+  int SEMICOLON = 17;
   /** RegularExpression Id. */
-  int EQ = 18;
+  int COLON = 18;
   /** RegularExpression Id. */
-  int STAR = 19;
+  int DECIMAL = 19;
   /** RegularExpression Id. */
-  int DASH = 20;
+  int EQ = 20;
+  /** RegularExpression Id. */
+  int STAR = 21;
+  /** RegularExpression Id. */
+  int DASH = 22;
+  /** RegularExpression Id. */
+  int ID = 23;
+  /** RegularExpression Id. */
+  int COMMENT = 24;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -61,7 +69,9 @@ public interface MiniJavaConstants {
     "\"public\"",
     "\"private\"",
     "\"static\"",
-    "<ID>",
+    "\"void\"",
+    "\"main\"",
+    "\"String\"",
     "\"{\"",
     "\"}\"",
     "\"(\"",
@@ -77,11 +87,14 @@ public interface MiniJavaConstants {
     "\"=\"",
     "\"*\"",
     "\"-\"",
+    "<ID>",
+    "<COMMENT>",
     "\" \"",
     "\"\\n\"",
     "\"\\r\"",
     "\"\\t\"",
-    "<token of kind 25>",
+    "\"System.out.println(\"",
+    "\");\"",
   };
 
 }

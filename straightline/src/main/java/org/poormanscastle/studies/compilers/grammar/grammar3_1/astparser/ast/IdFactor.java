@@ -30,5 +30,5 @@ public class IdFactor extends AbstractAstItem implements Factor {
         visitor.visitIdFactor(this);
         visitor.leaveIdFactor(this);
     }
-    
+
 }

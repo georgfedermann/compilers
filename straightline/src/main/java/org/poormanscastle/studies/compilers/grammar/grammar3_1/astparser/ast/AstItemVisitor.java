@@ -4,7 +4,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
  * implements algorithms and logic which handle one aspect or interpretation of an AST for grammar 3.1.
  * like e.g. an interpreter of a program written in language defined by grammar 3.1 for which an AST
  * was created by the AST parser.
- *
+ * <p>
  * Created by georg on 13.01.16.
  */
 public interface AstItemVisitor {
@@ -27,4 +27,28 @@ public interface AstItemVisitor {
 
     void leaveNumFactor(NumFactor numFactor);
 
+    boolean proceedWithPlusOperator(PlusOperator plusOperator);
+
+    void visitPlusOperator(PlusOperator plusOperator);
+
+    void leavePlusOperator(PlusOperator plusOperator);
+
+    boolean proceedWithMinusOperator(MinusOperator minusOperator);
+
+    void visitMinusOperator(MinusOperator minusOperator);
+
+    void leaveMinusOperator(MinusOperator minusOperator);
+
+    boolean proceedWithTimesOperator(TimesOperator timesOperator);
+
+    void visitTimesOperator(TimesOperator timesOperator);
+
+    void leaveTimesOperator(TimesOperator timesOperator);
+
+    boolean proceedWithDivOperator(DivOperator divOperator);
+
+    void visitDivOperator(DivOperator divOperator);
+
+    void leaveDivOperator(DivOperator divOperator);
+    
 }

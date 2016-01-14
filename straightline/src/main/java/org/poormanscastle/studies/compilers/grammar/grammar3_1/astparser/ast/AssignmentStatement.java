@@ -6,7 +6,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
  * whose value gets assigned to the given variable.
  * Created by georg on 14.01.16.
  */
-public class AssignmentStatement extends AbstractStatement {
+public class AssignmentStatement extends AbstractAstItem implements Statement {
 
     /**
      * name of some variable which shall get assigned the value as retrieved from the expression.
@@ -32,7 +32,7 @@ public class AssignmentStatement extends AbstractStatement {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitAssignmentStatement(this);
-        if(expression.handleProceedWith(visitor)){
+        if (expression.handleProceedWith(visitor)) {
             expression.accept(visitor);
         }
         visitor.leaveAssignmentStatement(this);

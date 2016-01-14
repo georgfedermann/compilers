@@ -8,9 +8,23 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
  * Created by georg on 13.01.16.
  */
 public interface AstItemVisitor {
+
     boolean proceedWithAssignmentStatement(AssignmentStatement assignmentStatement);
 
     void visitAssignmentStatement(AssignmentStatement assignmentStatement);
 
     void leaveAssignmentStatement(AssignmentStatement assignmentStatement);
+
+    boolean proceedWithIdFactor(IdFactor idFactor);
+
+    void visitIdFactor(IdFactor idFactor);
+
+    void leaveIdFactor(IdFactor idFactor);
+
+    boolean proceedWithNumFactor(NumFactor numFactor);
+
+    void visitNumFactor(NumFactor numFactor);
+
+    void leaveNumFactor(NumFactor numFactor);
+
 }

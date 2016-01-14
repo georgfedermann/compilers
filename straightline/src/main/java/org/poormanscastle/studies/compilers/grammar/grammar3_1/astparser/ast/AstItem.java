@@ -1,22 +1,24 @@
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
 
+import java.io.Serializable;
+
 /**
  * an AstItem is part of the abstract syntax tree of any sentence written using grammar 3.1,
  * or is any of the nonterminal symbols of the language defined by grammar 3.1.
- *
+ * <p>
  * this interface makes those symbols traversible by implementations of the AstVisitor, implementing
  * different aspects of the AstTree
- *
+ * <p>
  * Created by georg on 13.01.16.
  */
-public interface AstItem {
+public interface AstItem extends Serializable {
 
     /**
      * delegates the decision whether the given visitor shall visit this object to the host object.
      * this method can decide what to do in case a visitor comes knocking, how to point the visitor
      * to child elements in the tree hierarchy, or choose to remain empty.
      *
-     * @param visitor
+     * @param visitor visitor like in visitor pattern
      */
     void accept(AstItemVisitor visitor);
 
@@ -31,8 +33,9 @@ public interface AstItem {
      * To avoid all of these, each AstItem implements handleProceedWith(AstVisitor). Now, the implementation
      * of this method will be resolved via dynamic polymorphism, once again delegating the decision logic
      * to dynamic binding and freeing the implementation of instanceof checks, type casts and switch logic.
-     * @param visitor
-     * @return
+     *
+     * @param visitor visitor like in visitor pattern
+     * @return returns {@code true} if the visitor shall proceed with this item, {@code false} otherwise.
      */
     boolean handleProceedWith(AstItemVisitor visitor);
 

@@ -57,4 +57,10 @@ public interface AstItemVisitor {
 
     void leaveOperatorExpression(OperatorExpression operatorExpression);
 
+    boolean proceedWithStatementList(StatementList statementList);
+
+    void visitStatementList(StatementList statementList);
+
+    void leaveStatementList(StatementList statementList);
+    
 }

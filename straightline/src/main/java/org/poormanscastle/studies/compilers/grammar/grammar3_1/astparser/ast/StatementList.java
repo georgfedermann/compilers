@@ -34,7 +34,7 @@ public class StatementList extends AbstractAstItem implements Statement {
         if (statement.handleProceedWith(visitor)) {
             statement.accept(visitor);
         }
-        if (nextStatements.handleProceedWith(visitor)) {
+        if (nextStatements != null && nextStatements.handleProceedWith(visitor)) {
             nextStatements.accept(visitor);
         }
         visitor.leaveStatementList(this);

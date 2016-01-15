@@ -15,6 +15,16 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
  */
 public enum Operator {
 
-    PLUS, MINUS, TIMES, DIV;
+    PLUS("+"), MINUS("-"), TIMES("*"), DIV("/");
+
+    private String label;
+
+    private Operator(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 
 }

@@ -29,6 +29,10 @@ public final class CodePosition {
         endColumn = token.endColumn;
     }
 
+    public static CodePosition createFromToken(Token token){
+        return new CodePosition(token);
+    }
+
     public int getBeginLine() {
         return beginLine;
     }

@@ -21,6 +21,9 @@ options {
 
 PARSER_BEGIN(AstParser)
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc;
+
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.*;
+
 public class AstParser{
     public static void main(String[] args) throws ParseException{
         AstParser parser = new AstParser(System.in);
@@ -137,12 +140,12 @@ void TPrime() :
     )?
 }
 
-void F() :
-{}
+Expression F() :
+{ Token token; }
 {
-    <NUM>
+    token = <NUM> { return new NumExpression(new CodePosition(token), Integer.parseInt(token.image)); }
     |
-    <ID>
+    token = <ID> { return new IdExpression(new CodePosition(token), token.image); }
 }
 
 

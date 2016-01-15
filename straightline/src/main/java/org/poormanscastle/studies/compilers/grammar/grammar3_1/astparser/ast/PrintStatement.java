@@ -24,6 +24,9 @@ public class PrintStatement extends AbstractAstItem implements Statement {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitPrintStatement(this);
+        if (expressionList.handleProceedWith(visitor)) {
+            expressionList.accept(visitor);
+        }
         visitor.leavePrintStatement(this);
     }
 }

@@ -24,6 +24,9 @@ public class LastExpressionList extends AbstractAstItem implements ExpressionLis
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitLastExpressionList(this);
+        if (head.handleProceedWith(visitor)) {
+            head.accept(visitor);
+        }
         visitor.leaveLastExpressionList(this);
     }
 }

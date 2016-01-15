@@ -34,6 +34,12 @@ public class EseqExpression extends AbstractAstItem implements Expression {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitEseqExpression(this);
+        if (statement.handleProceedWith(visitor)) {
+            statement.accept(visitor);
+        }
+        if (expression.handleProceedWith(visitor)) {
+            expression.accept(visitor);
+        }
         visitor.leaveEseqExpression(this);
     }
 }

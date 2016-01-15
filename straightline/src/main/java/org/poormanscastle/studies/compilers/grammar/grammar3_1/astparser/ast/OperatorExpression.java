@@ -35,6 +35,12 @@ public class OperatorExpression extends AbstractAstItem implements Expression {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitOperatorExpression(this);
+        if (leftOperand.handleProceedWith(visitor)) {
+            leftOperand.accept(visitor);
+        }
+        if (rightOperand.handleProceedWith(visitor)) {
+            rightOperand.accept(visitor);
+        }
         visitor.leaveOperatorExpression(this);
     }
 

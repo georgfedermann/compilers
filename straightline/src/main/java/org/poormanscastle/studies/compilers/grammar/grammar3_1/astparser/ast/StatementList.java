@@ -31,6 +31,12 @@ public class StatementList extends AbstractAstItem implements Statement {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitStatementList(this);
+        if (statement.handleProceedWith(visitor)) {
+            statement.accept(visitor);
+        }
+        if (nextStatements.handleProceedWith(visitor)) {
+            nextStatements.accept(visitor);
+        }
         visitor.leaveStatementList(this);
     }
 

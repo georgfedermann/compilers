@@ -63,7 +63,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
 
     @Override
     public boolean proceedWithAssignStm(AssignStm stm) {
-        // can contain EseqExp and thus more PrintStm
+        // can contain EseqExpression and thus more PrintStm
         return true;
     }
 
@@ -137,7 +137,7 @@ public class PrintStmArgCounterVisitor implements GrammarItemVisitor {
     @Override
     public void leaveEseqExp(EseqExp exp) {
         if (currentPrintContext != null) {
-            checkState(currentPrintContext.getSourceLvl() > 0, "sourceLvl must be greater than 0 just before leaving an EseqExp within a print stm, but was %s.", String.valueOf(currentPrintContext.getSourceLvl()));
+            checkState(currentPrintContext.getSourceLvl() > 0, "sourceLvl must be greater than 0 just before leaving an EseqExpression within a print stm, but was %s.", String.valueOf(currentPrintContext.getSourceLvl()));
             currentPrintContext.decrementSourceLvl();
         }
     }

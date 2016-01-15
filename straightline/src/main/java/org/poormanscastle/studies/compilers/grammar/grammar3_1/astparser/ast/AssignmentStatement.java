@@ -11,12 +11,12 @@ public class AssignmentStatement extends AbstractAstItem implements Statement {
     /**
      * name of some variable which shall get assigned the value as retrieved from the expression.
      */
-    private String id;
+    private final String id;
 
     /**
      * the value retrieved from this expression shall be assigned to the variable as defined by the id.
      */
-    private Expression expression;
+    private final Expression expression;
 
     public AssignmentStatement(CodePosition codePosition, String id, Expression expression) {
         super(codePosition);

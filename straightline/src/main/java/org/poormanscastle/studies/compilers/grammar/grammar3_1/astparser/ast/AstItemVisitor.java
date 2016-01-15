@@ -15,40 +15,46 @@ public interface AstItemVisitor {
 
     void leaveAssignmentStatement(AssignmentStatement assignmentStatement);
 
-    boolean proceedWithIdFactor(IdFactor idFactor);
+    boolean proceedWithIdExpression(IdExpression idExpression);
 
-    void visitIdFactor(IdFactor idFactor);
+    void visitIdExpression(IdExpression idExpression);
 
-    void leaveIdFactor(IdFactor idFactor);
+    void leaveIdExpression(IdExpression idExpression);
 
-    boolean proceedWithNumFactor(NumFactor numFactor);
+    boolean proceedWithNumExpression(NumExpression numExpression);
 
-    void visitNumFactor(NumFactor numFactor);
+    void visitNumExpression(NumExpression numExpression);
 
-    void leaveNumFactor(NumFactor numFactor);
+    void leaveNumExpression(NumExpression numExpression);
 
-    boolean proceedWithPlusOperator(PlusOperator plusOperator);
+    boolean proceedWithEseqExpression(EseqExpression eseqExpression);
 
-    void visitPlusOperator(PlusOperator plusOperator);
+    void visitEseqExpression(EseqExpression eseqExpression);
 
-    void leavePlusOperator(PlusOperator plusOperator);
+    void leaveEseqExpression(EseqExpression eseqExpression);
 
-    boolean proceedWithMinusOperator(MinusOperator minusOperator);
+    boolean proceedWithPrintStatement(PrintStatement printStatement);
 
-    void visitMinusOperator(MinusOperator minusOperator);
+    void visitPrintStatement(PrintStatement printStatement);
 
-    void leaveMinusOperator(MinusOperator minusOperator);
+    void leavePrintStatement(PrintStatement printStatement);
 
-    boolean proceedWithTimesOperator(TimesOperator timesOperator);
+    boolean proceedWithPairExpressionList(PairExpressionList pairExpressionList);
 
-    void visitTimesOperator(TimesOperator timesOperator);
+    void visitPairExpressionList(PairExpressionList pairExpressionList);
 
-    void leaveTimesOperator(TimesOperator timesOperator);
+    void leavePairExpressionList(PairExpressionList pairExpressionList);
 
-    boolean proceedWithDivOperator(DivOperator divOperator);
+    boolean proceedWithLastExpressionList(LastExpressionList lastExpressionList);
 
-    void visitDivOperator(DivOperator divOperator);
+    void visitLastExpressionList(LastExpressionList lastExpressionList);
 
-    void leaveDivOperator(DivOperator divOperator);
-    
+    void leaveLastExpressionList(LastExpressionList lastExpressionList);
+
+    boolean proceedWithOperatorExpression(OperatorExpression operatorExpression);
+
+    void visitOperatorExpression(OperatorExpression operatorExpression);
+
+    void leaveOperatorExpression(OperatorExpression operatorExpression);
+
 }

@@ -5,11 +5,11 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
  * integers).
  * Created by georg on 14.01.16.
  */
-public class NumFactor extends AbstractAstItem implements Factor {
+public class NumExpression extends AbstractAstItem implements Expression {
 
-    private Integer num;
+    private final Integer num;
 
-    public NumFactor(CodePosition codePosition, Integer num) {
+    public NumExpression(CodePosition codePosition, Integer num) {
         super(codePosition);
         this.num = num;
     }
@@ -20,12 +20,12 @@ public class NumFactor extends AbstractAstItem implements Factor {
 
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
-        return visitor.proceedWithNumFactor(this);
+        return visitor.proceedWithNumExpression(this);
     }
 
     @Override
     public void accept(AstItemVisitor visitor) {
-        visitor.visitNumFactor(this);
-        visitor.leaveNumFactor(this);
+        visitor.visitNumExpression(this);
+        visitor.leaveNumExpression(this);
     }
 }

@@ -87,57 +87,107 @@ void X() :
 }
 
 void S() :
-{}
+{ Token token; Expression expression; ExpressionList expressionList; }
 {
-    <ID> <ASSIGN> E()
+    token = <ID> <ASSIGN> expression = E()
+    {
+        return new AssignmentStatement(new CodePosition(token), token.image, expression);
+    }
     |
-    <PRINT> <LPAREN> L() <RPAREN>
+    token = <PRINT> <LPAREN> expressionList = L() <RPAREN>
+    {
+        return new PrintStatement(new CodePosition(token), expressionList);
+    }
 }
 
-void L() :
-{}
+ExpressionList L() :
+{ Expression expression; ExpressionList expressionList; }
 {
-    E() LPrime()
+    expression = E() expressionList = LPrime()
+    {
+        if (expressionList != null){
+            return new PairExpressionList(expression.getCodePosition(), expression, expressionList);
+        } else {
+            return new LastExpressionList(expression.getCodePosition(), expression);
+        }
+    }
 }
 
-void LPrime() :
-{}
-{
-    ( <COMMA> E() LPrime() )?
-}
-
-void E() :
-{}
-{
-    T() EPrime()
-    |
-    <LPAREN> S() <COMMA> E() <RPAREN>
-}
-
-void EPrime() :
-{}
+ExpressionList LPrime() :
+{ Token token; Expression expression; ExpressionList expressionList; }
 {
     (
-        <PLUS> T() EPrime()
-        |
-        <MINUS> T() EPrime()
+        token = <COMMA> expression = E() expressionList = LPrime()
+        {
+            if (expressionList != null){
+                return new PairExpressionList(new CodePosition(token), expression, expressionList);
+            } else {
+                return new LastExpressionList(new CodePosition(token), expression);
+            }
+        }
     )?
+    { return null; }
 }
 
-void T() :
-{}
+Expression E() :
+{ Token token; Expression leftOperand; Expression rightOperand; Statement statement; }
 {
-    F() TPrime()
+    leftOperand = T() rightOperand = EPrime(leftOperand)
+    {
+        return rightOperand != null ? rightOperand : leftOperand;
+    }
+    |
+    token = <LPAREN> statement = S() <COMMA> leftOperand = E() <RPAREN>
+    {
+        return new EseqExpression(new CodePosition(token), statement, leftOperand);
+    }
 }
 
-void TPrime() :
-{}
+Expression EPrime(Expression leftOperand) :
+{ Expression rightOperand; Expression ePrimeExpression; }
 {
     (
-        <TIMES> F() TPrime()
+        <PLUS> rightOperand = T() ePrimeExpression = EPrime(rightOperand)
+        {
+            return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.PLUS,
+                ePrimeExpression != null ? ePrimeExpression : rightOperand );
+        }
         |
-        <DIV> F() TPrime()
+        <MINUS> rightOperand = T() ePrimeExpression = EPrime(rightOperand)
+        {
+            return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.MINUS,
+                ePrimeExpression != null ? ePrimeExpression : rightOperand );
+        }
     )?
+    { return null; }
+}
+
+Expression T() :
+{ Expression leftOperand; Expression rightOperand; Expression operatorExpression; }
+{
+    leftOperand = F() rightOperand = TPrime(leftOperand)
+    {
+        return rightOperand == null ? leftOperand : rightOperand;
+    }
+}
+
+Expression TPrime(Expression leftOperand) :
+{ Expression rightOperand; Expression tPrimeExpression; }
+{
+    (
+        operatorToken = <TIMES> rightOperand = F() tPrimeExpression = TPrime(rightOperand)
+        {
+            return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.TIMES,
+                tPrimeExpression != null ? tPrimeExpression : rightOperand );
+        }
+        |
+        <DIV> rightOperand = F() tPrimeExpression = TPrime(rightOperand)
+        {
+            return new OperatorExpression(leftOperand.getPosition(), leftOperand, Operator.DIV,
+                tPrimeExpression != null ? tPrimeExpression : rightOperand );
+        }
+    )?
+    { return null; }
 }
 
 Expression F() :

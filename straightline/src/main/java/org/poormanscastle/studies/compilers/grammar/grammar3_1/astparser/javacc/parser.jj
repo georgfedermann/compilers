@@ -68,25 +68,35 @@ SKIP : {
     "\t"
 }
 
-void P() :
-{}
+Statement P() :
+{ Statement statement; StatementList statementList; }
 {
-    S() PPrime() <EOF>
+    statement = S() statementList = PPrime()
+    {
+        return new StatementList(statement.getCodePosition(), statement, statementList);
+    }
+    <EOF>
 }
 
-void PPrime() :
-{}
+StatementList PPrime() :
+{ StatementList statementList; }
 {
-    <SEMICOLON> X()
+    <SEMICOLON> statementList = X() { return statementList; }
 }
 
-void X() :
-{}
+StatementList X() :
+{ StatementList statementList; Statement statement; }
 {
-    ( S() PPrime() )?
+    (
+        statement = S() statementList = PPrime()
+        {
+            return new StatementList(statement.getCodePosition(), statement, statementList);
+        }
+    )?
+    { return null; }
 }
 
-void S() :
+Statement S() :
 { Token token; Expression expression; ExpressionList expressionList; }
 {
     token = <ID> <ASSIGN> expression = E()

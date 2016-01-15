@@ -39,4 +39,5 @@ public interface AstItem extends Serializable {
      */
     boolean handleProceedWith(AstItemVisitor visitor);
 
+    CodePosition getCodePosition();
 }

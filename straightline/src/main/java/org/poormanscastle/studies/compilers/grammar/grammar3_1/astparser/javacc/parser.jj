@@ -182,7 +182,7 @@ Expression T() :
 }
 
 Expression TPrime(Expression leftOperand) :
-{ Expression rightOperand; Expression tPrimeExpression; }
+{ Expression rightOperand; Expression tPrimeExpression; Token operatorToken; }
 {
     (
         operatorToken = <TIMES> rightOperand = F() tPrimeExpression = TPrime(rightOperand)
@@ -193,7 +193,7 @@ Expression TPrime(Expression leftOperand) :
         |
         <DIV> rightOperand = F() tPrimeExpression = TPrime(rightOperand)
         {
-            return new OperatorExpression(leftOperand.getPosition(), leftOperand, Operator.DIV,
+            return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.DIV,
                 tPrimeExpression != null ? tPrimeExpression : rightOperand );
         }
     )?

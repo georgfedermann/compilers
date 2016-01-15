@@ -18,6 +18,7 @@ public abstract class AbstractAstItem implements AstItem {
         this.codePosition = codePosition;
     }
 
+    @Override
     public CodePosition getCodePosition() {
         return codePosition;
     }

@@ -10,44 +10,53 @@ public class AstParser implements AstParserConstants {
         parser.P();
     }
 
-  final public void P() throws ParseException {
-    S();
-    PPrime();
+  final public Statement P() throws ParseException {Statement statement; StatementList statementList;
+    statement = S();
+    statementList = PPrime();
+{if ("" != null) return new StatementList(statement.getCodePosition(), statement, statementList);}
     jj_consume_token(0);
+    throw new Error("Missing return statement in function");
   }
 
-  final public void PPrime() throws ParseException {
+  final public StatementList PPrime() throws ParseException {StatementList statementList;
     jj_consume_token(SEMICOLON);
-    X();
+    statementList = X();
+{if ("" != null) return statementList;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void X() throws ParseException {
+  final public StatementList X() throws ParseException {StatementList statementList; Statement statement;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PRINT:
     case ID:{
-      S();
-      PPrime();
+      statement = S();
+      statementList = PPrime();
+{if ("" != null) return new StatementList(statement.getCodePosition(), statement, statementList);}
       break;
       }
     default:
       jj_la1[0] = jj_gen;
       ;
     }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void S() throws ParseException {
+  final public Statement S() throws ParseException {Token token; Expression expression; ExpressionList expressionList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ID:{
-      jj_consume_token(ID);
+      token = jj_consume_token(ID);
       jj_consume_token(ASSIGN);
-      E();
+      expression = E();
+{if ("" != null) return new AssignmentStatement(new CodePosition(token), token.image, expression);}
       break;
       }
     case PRINT:{
-      jj_consume_token(PRINT);
+      token = jj_consume_token(PRINT);
       jj_consume_token(LPAREN);
-      L();
+      expressionList = L();
       jj_consume_token(RPAREN);
+{if ("" != null) return new PrintStatement(new CodePosition(token), expressionList);}
       break;
       }
     default:
@@ -55,41 +64,57 @@ public class AstParser implements AstParserConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
-  final public void L() throws ParseException {
-    E();
-    LPrime();
+  final public ExpressionList L() throws ParseException {Expression expression; ExpressionList expressionList;
+    expression = E();
+    expressionList = LPrime();
+if (expressionList != null){
+            {if ("" != null) return new PairExpressionList(expression.getCodePosition(), expression, expressionList);}
+        } else {
+            {if ("" != null) return new LastExpressionList(expression.getCodePosition(), expression);}
+        }
+    throw new Error("Missing return statement in function");
   }
 
-  final public void LPrime() throws ParseException {
+  final public ExpressionList LPrime() throws ParseException {Token token; Expression expression; ExpressionList expressionList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
-      jj_consume_token(COMMA);
-      E();
-      LPrime();
+      token = jj_consume_token(COMMA);
+      expression = E();
+      expressionList = LPrime();
+if (expressionList != null){
+                {if ("" != null) return new PairExpressionList(new CodePosition(token), expression, expressionList);}
+            } else {
+                {if ("" != null) return new LastExpressionList(new CodePosition(token), expression);}
+            }
       break;
       }
     default:
       jj_la1[2] = jj_gen;
       ;
     }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void E() throws ParseException {
+  final public Expression E() throws ParseException {Token token; Expression leftOperand; Expression rightOperand; Statement statement;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ID:
     case NUM:{
-      T();
-      EPrime();
+      leftOperand = T();
+      rightOperand = EPrime(leftOperand);
+{if ("" != null) return rightOperand != null ? rightOperand : leftOperand;}
       break;
       }
     case LPAREN:{
-      jj_consume_token(LPAREN);
-      S();
+      token = jj_consume_token(LPAREN);
+      statement = S();
       jj_consume_token(COMMA);
-      E();
+      leftOperand = E();
       jj_consume_token(RPAREN);
+{if ("" != null) return new EseqExpression(new CodePosition(token), statement, leftOperand);}
       break;
       }
     default:
@@ -97,23 +122,28 @@ public class AstParser implements AstParserConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
-  final public void EPrime() throws ParseException {
+  final public Expression EPrime(Expression leftOperand) throws ParseException {Expression rightOperand; Expression ePrimeExpression;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PLUS:
     case MINUS:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case PLUS:{
         jj_consume_token(PLUS);
-        T();
-        EPrime();
+        rightOperand = T();
+        ePrimeExpression = EPrime(rightOperand);
+{if ("" != null) return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.PLUS,
+                ePrimeExpression != null ? ePrimeExpression : rightOperand );}
         break;
         }
       case MINUS:{
         jj_consume_token(MINUS);
-        T();
-        EPrime();
+        rightOperand = T();
+        ePrimeExpression = EPrime(rightOperand);
+{if ("" != null) return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.MINUS,
+                ePrimeExpression != null ? ePrimeExpression : rightOperand );}
         break;
         }
       default:
@@ -127,28 +157,36 @@ public class AstParser implements AstParserConstants {
       jj_la1[5] = jj_gen;
       ;
     }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void T() throws ParseException {
-    F();
-    TPrime();
+  final public Expression T() throws ParseException {Expression leftOperand; Expression rightOperand; Expression operatorExpression;
+    leftOperand = F();
+    rightOperand = TPrime(leftOperand);
+{if ("" != null) return rightOperand == null ? leftOperand : rightOperand;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void TPrime() throws ParseException {
+  final public Expression TPrime(Expression leftOperand) throws ParseException {Expression rightOperand; Expression tPrimeExpression; Token operatorToken;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case TIMES:
     case DIV:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case TIMES:{
-        jj_consume_token(TIMES);
-        F();
-        TPrime();
+        operatorToken = jj_consume_token(TIMES);
+        rightOperand = F();
+        tPrimeExpression = TPrime(rightOperand);
+{if ("" != null) return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.TIMES,
+                tPrimeExpression != null ? tPrimeExpression : rightOperand );}
         break;
         }
       case DIV:{
         jj_consume_token(DIV);
-        F();
-        TPrime();
+        rightOperand = F();
+        tPrimeExpression = TPrime(rightOperand);
+{if ("" != null) return new OperatorExpression(leftOperand.getCodePosition(), leftOperand, Operator.DIV,
+                tPrimeExpression != null ? tPrimeExpression : rightOperand );}
         break;
         }
       default:
@@ -162,6 +200,8 @@ public class AstParser implements AstParserConstants {
       jj_la1[7] = jj_gen;
       ;
     }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
   }
 
   final public Expression F() throws ParseException {Token token;

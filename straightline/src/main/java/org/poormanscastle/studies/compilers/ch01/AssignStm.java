@@ -13,7 +13,6 @@ public class AssignStm extends AbstractStm {
     public AssignStm(String id, Exp exp) {
         this.id = id;
         this.exp = exp;
-        this.exp = exp;
     }
 
     public String getId() {

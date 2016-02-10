@@ -17,13 +17,26 @@ import static org.junit.Assert.assertNotNull;
 public class TableCreatorTest {
 
     @Test
-    public void testProceed() throws Exception {
+    public void testGrammar_0_2() throws Exception {
         TableCreator creator = new TableCreator();
         Grammar grammar = creator.proceed(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"));
         assertNotNull(grammar);
         assertEquals(45, grammar.getProductions().size());
         assertEquals(23, grammar.getTerminalSymbols().size());
         assertEquals(46, grammar.getSymbols().size());
+
+        int counter = 0;
+        for (Production production : grammar.getProductions()) {
+            assertEquals(counter++ == 0, production.isStartProduction());
+        }
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void testGrammar_3_10() throws Exception{
+        TableCreator creator = new TableCreator();
+        Grammar grammar = creator.proceed(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr"));
+        assertNotNull(grammar);
 
         int counter = 0;
         for (Production production : grammar.getProductions()) {

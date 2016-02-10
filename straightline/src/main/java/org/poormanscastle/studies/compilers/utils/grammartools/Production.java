@@ -32,12 +32,12 @@ public class Production {
     /**
      * the right-hand-side symbols
      */
-    private List<Symbol> rhs = new LinkedList<>();
+    private final List<Symbol> rhs = new LinkedList<>();
 
     /**
      * production definition as read from the input stream
      */
-    private String definitionString;
+    private final String definitionString;
 
     private boolean startProduction = false;
 
@@ -48,7 +48,7 @@ public class Production {
      * since the lhs nonterminal symbol accumulates the contents of its first set over
      * all its productions.
      */
-    private Set<Symbol> firstSet = new HashSet<>();
+    private final Set<Symbol> firstSet = new HashSet<>();
 
     @Override
     public String toString() {
@@ -95,10 +95,6 @@ public class Production {
         return firstSet;
     }
 
-    public void setFirstSet(Set<Symbol> firstSet) {
-        this.firstSet = firstSet;
-    }
-
     public List<Symbol> getRhs() {
         return rhs;
     }
@@ -112,17 +108,8 @@ public class Production {
         return lhs;
     }
 
-    public void setLhs(Symbol lhs) {
-        checkArgument(!lhs.isTerminal());
-        this.lhs = lhs;
-    }
-
     public boolean isStartProduction() {
         return startProduction;
-    }
-
-    public void setStartProduction(boolean startProduction) {
-        this.startProduction = startProduction;
     }
 
     public String getDefinitionString() {

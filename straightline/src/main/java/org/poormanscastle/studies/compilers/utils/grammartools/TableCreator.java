@@ -81,15 +81,15 @@ public class TableCreator {
     public Grammar proceed(InputStream inputStream) throws Exception {
         Grammar grammar = readGrammar(inputStream);
         grammar.identifyNullableSymbols();
-        grammar.identifyStartSymbols();
+        grammar.calculateStartAndFollowSets();
         return grammar;
     }
 
     public String createTable(Grammar grammar) {
         Velocity.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
         Velocity.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
-        // Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-        // Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 
         Velocity.init();
         VelocityContext context = new VelocityContext();
@@ -97,8 +97,8 @@ public class TableCreator {
 
         // create list of nonterminal symbols for usage in the table
         List<Symbol> nonterminalSymbols = new ArrayList<>();
-        for(Production production : grammar.getProductions()){
-            if(!nonterminalSymbols.contains(production.getLhs())){
+        for (Production production : grammar.getProductions()) {
+            if (!nonterminalSymbols.contains(production.getLhs())) {
                 nonterminalSymbols.add(production.getLhs());
             }
         }
@@ -112,7 +112,8 @@ public class TableCreator {
 
     public static void main(String[] args) throws Exception {
         TableCreator creator = new TableCreator();
-        creator.proceed(System.in);
+        Grammar grammar = creator.proceed(System.in);
+        System.out.print(creator.createTable(grammar));
     }
 
 }

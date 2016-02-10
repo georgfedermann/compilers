@@ -3,7 +3,7 @@
         <title>Predicitive Parser Table</title>
         <style>
             body{
-                font-family: Arial;
+                font-family: Arial Narrow;
             }
             table, th, td {
                 border: 1px solid grey;
@@ -11,17 +11,22 @@
             }
             thead {
                 font-weight: bold;
+                border: 2px solid black;
             }
             thead td {
                 text-align: center;
             }
             tbody td {
-                width: 120px;
+                width: 83px;
                 padding: 2px 4px 2px 4px;
-                font-size: smaller;
+                font-size: 9pt;
             }
             .bold {
                 font-weight: bold;
+            }
+            .alert {
+                font-weight: bold;
+                color: red;
             }
             div#tableDiv {
                 width: 6000px;
@@ -30,7 +35,7 @@
         </style>
     </head>
     <body>
-        <h1>Predictive Parser Tabler</h1>
+        <h1>Predictive Parser Table</h1>
         <div id="tableDiv">
         <table>
             <thead>
@@ -60,25 +65,31 @@
   #end
                 </td>
   #foreach($terminalSymbol in $grammar.terminalSymbols)
-    #set($moreThanOne=0)
-                <td>
+    #set($outputText = "")
+    #set($productionCount=0)
     #foreach($production in $grammar.productions)
       #if($production.getLhs()==$nonterminalSymbol && $production.getFirstSet().contains($terminalSymbol))
-        #if($moreThanOne==1)
-            <br/>
+        #if($productionCount>0)
+            #set($outputText = $outputText + "<br/>")
         #end
-        $production.getDefinitionString()
-        #set($moreThanOne=1)
+        #set($outputText = $outputText + $production.getDefinitionString())
+        #set($productionCount=$productionCount+1)
       #end
       #if($production.getLhs()==$nonterminalSymbol && $production.isNullable() && $production.getLhs().getFollowSet().contains($terminalSymbol))
-        #if($moreThanOne==1)
-            <br/>
+        #if($productionCount>0)
+            #set($outputText = $outputText + "<br/>")
         #end
-        $production.getDefinitionString()
-        #set($moreThanOne=1)
+        #set($outputText = $outputText + $production.getDefinitionString())
+        #set($productionCount=$productionCount+1)
       #end
     #end
-                </td>
+    #set($class="")
+    #if($productionCount>1)
+      #set($class="alert")
+    #else
+      #set($class="")
+    #end
+                <td class="$class">$outputText</td>
   #end
             </tr>
 #end

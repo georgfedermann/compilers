@@ -1,0 +1,28 @@
+
+terminals_start
+$
++
+-
+*
+/
+id
+num
+(
+)
+terminals_end
+
+productions_start
+S -> E $
+
+E -> E + T
+E -> E - T
+E -> T
+
+T -> T * F
+T -> T / F
+T -> F
+
+F -> id
+F -> num
+F -> ( E )
+productions_end

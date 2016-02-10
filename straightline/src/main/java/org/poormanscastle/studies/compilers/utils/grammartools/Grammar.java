@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,18 +11,16 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * Created by georg on 09.02.16.
  */
 public class Grammar {
 
-    private List<Production> productions = new LinkedList<>();
+    private final List<Production> productions = new LinkedList<>();
 
-    private Map<String, Symbol> symbols = new HashMap<>();
+    private final Map<String, Symbol> symbols = new HashMap<>();
 
-    private Set<Symbol> terminalSymbols = new HashSet<>();
+    private final Set<Symbol> terminalSymbols = new HashSet<>();
 
     public boolean addProduction(Production production) {
         return productions.add(production);
@@ -56,31 +56,32 @@ public class Grammar {
     /**
      * creates the first sets and follow sets for all symbols and productions.
      */
-    public void identifyStartSymbols() {
+    public void calculateStartAndFollowSets() {
         // take care of the terminal symbols:
         // for all terminal symbols s: first(s) <- {s}
         for (Symbol symbol : getTerminalSymbols()) {
             checkState(symbol.isTerminal());
             symbol.addToFirstSet(symbol);
         }
-
-        boolean somethingHappened = false;
-
-
+        // the algorithm is repeated until the tables do not change for a whole iteration.
+        boolean tablesWereUpdated = false;
         do {
-            somethingHappened = false;
+            tablesWereUpdated = false;
             for (Production production : productions) {
                 // go through rhs and do some set algebra
                 // visible says if all rhs symbols up to now where nullable and the
                 // current symbol is relevant for first(X) in X -> c1 ... ci ... ck
                 boolean visibleFirstX = true;
                 for (int i = 0; i < production.getRhs().size(); i++) {
-                    // impact of symbol.firstSet on X.firstSet
+                    // impact of symbol.firstSet on X.firstSet.
+                    // also, production.firstSet gets updated
                     Symbol symbol = production.getRhs().get(i);
-                    if (visibleFirstX && !production.getLhs().getFirstSet().containsAll(symbol.getFirstSet())) {
+                    if (visibleFirstX // the next two checks are to avoid tablesWereUpdated=true when all is aleady set.
+                            && ( !production.getLhs().getFirstSet().containsAll(symbol.getFirstSet())
+                            || !production.getFirstSet().containsAll(symbol.getFirstSet()))) {
                         production.getLhs().getFirstSet().addAll(symbol.getFirstSet());
                         production.getFirstSet().addAll(symbol.getFirstSet());
-                        somethingHappened = true;
+                        tablesWereUpdated = true;
                     }
                     visibleFirstX &= symbol.isNullable();
                     // impact of X.followSet on symbol.FollowSet
@@ -88,7 +89,7 @@ public class Grammar {
                     for (int j = i + 1; j < production.getRhs().size(); j++) {
                         if (!symbol.getFollowSet().containsAll(production.getRhs().get(j).getFirstSet())) {
                             symbol.getFollowSet().addAll(production.getRhs().get(j).getFirstSet());
-                            somethingHappened = true;
+                            tablesWereUpdated = true;
                         }
                         if (!(visibleFollowX &= production.getRhs().get(j).isNullable())) {
                             break;
@@ -98,13 +99,11 @@ public class Grammar {
                     // add follow(X) to follow(si).
                     if (visibleFollowX && !symbol.getFollowSet().containsAll(production.getLhs().getFollowSet())) {
                         symbol.getFollowSet().addAll(production.getLhs().getFollowSet());
-                        somethingHappened = true;
+                        tablesWereUpdated = true;
                     }
                 }
             }
-
-
-        } while (somethingHappened);
+        } while (tablesWereUpdated);
     }
 
     public void identifyNullableSymbols() {

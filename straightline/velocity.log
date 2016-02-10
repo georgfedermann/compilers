@@ -325,3 +325,4 @@ Was expecting one of:
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:497)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:140)
+2016-02-10 22:32:03,362 - ResourceManager : unable to find resource '/grammartools/PredictiveParsingTable.velo' in any resource loader.

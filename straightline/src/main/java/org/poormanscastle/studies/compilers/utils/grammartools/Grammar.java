@@ -1,7 +1,5 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
-import static com.google.common.base.Preconditions.checkState;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,7 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by georg on 09.02.16.
@@ -54,6 +53,9 @@ public class Grammar {
         return terminalSymbols;
     }
 
+    /**
+     * creates the first sets and follow sets for all symbols and productions.
+     */
     public void identifyStartSymbols() {
         // take care of the terminal symbols:
         // for all terminal symbols s: first(s) <- {s}
@@ -77,6 +79,7 @@ public class Grammar {
                     Symbol symbol = production.getRhs().get(i);
                     if (visibleFirstX && !production.getLhs().getFirstSet().containsAll(symbol.getFirstSet())) {
                         production.getLhs().getFirstSet().addAll(symbol.getFirstSet());
+                        production.getFirstSet().addAll(symbol.getFirstSet());
                         somethingHappened = true;
                     }
                     visibleFirstX &= symbol.isNullable();

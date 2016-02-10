@@ -4,8 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 /**
  * Created by georg on 09.02.16.
@@ -32,7 +40,6 @@ public class TableCreator {
         String line = null;
 
         while ((line = reader.readLine()) != null) {
-            System.out.println(line);
             switch (state) {
                 case STATE_BEGIN:
                     if (TERMINALS_START.equalsIgnoreCase(line)) {
@@ -76,6 +83,31 @@ public class TableCreator {
         grammar.identifyNullableSymbols();
         grammar.identifyStartSymbols();
         return grammar;
+    }
+
+    public String createTable(Grammar grammar) {
+        Velocity.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
+        Velocity.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
+        // Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        // Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+
+        Velocity.init();
+        VelocityContext context = new VelocityContext();
+        context.put("grammar", grammar);
+
+        // create list of nonterminal symbols for usage in the table
+        List<Symbol> nonterminalSymbols = new ArrayList<>();
+        for(Production production : grammar.getProductions()){
+            if(!nonterminalSymbols.contains(production.getLhs())){
+                nonterminalSymbols.add(production.getLhs());
+            }
+        }
+        context.put("nonterminalSymbols", nonterminalSymbols);
+
+        Template template = Velocity.getTemplate("/grammartools/PredictiveParsingTable.velo");
+        StringWriter stringWriter = new StringWriter();
+        template.merge(context, stringWriter);
+        return stringWriter.toString();
     }
 
     public static void main(String[] args) throws Exception {

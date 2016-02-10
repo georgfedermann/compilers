@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Predicitive Parser Table</title>
+        <style>
+            table, th, td {
+                border: 1px solid grey;
+                border-collapse: collapse;
+            }
+            thead {
+                font-weight: bold;
+            }
+            td {
+                padding: 2px 4px 2px 4px;
+            }
+            .bold {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Predictive Parser Tabler</h1>
+        <table>
+            <thead>
+                <tr>
+                    <td>Symbol</td>
+                    <td>Nullable</td>
+                    <td>First Set</td>
+                    <td>Follow Set</td>
+                    
+                </tr>
+            </thead>
+            <tbody>
+#foreach($nonterminalSymbol in $nonterminalSymbols)
+            <tr>
+                <td class="bold">$nonterminalSymbol.getId()</td>
+                <td>$nonterminalSymbol.isNullable()</td>
+                <td>
+#foreach($firstSymbol in $nonterminalSymbol.getFirstSet())
+                    $firstSymbol.getId()
+#end
+                </td>
+                <td>
+#foreach($followSymbol in $nonterminalSymbol.getFollowSet())
+                    $followSymbol.getId()
+#end
+                </td>
+            </tr>
+#end
+            </tbody>
+        </table>
+    </body>
+</html>

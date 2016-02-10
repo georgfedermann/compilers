@@ -1,17 +1,19 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
-
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * one of the productions used to define a grammar.
- * <p>
+ * <p/>
  * Created by georg on 09.02.16.
  */
 public class Production {
@@ -38,6 +40,15 @@ public class Production {
     private String definitionString;
 
     private boolean startProduction = false;
+
+    /**
+     * a production's follow set is equal to its lhs symbol's follow set (because this
+     * production can be employed at any place where the original nonterminal symbol is
+     * allowed), but its first set must be calculated specifically for this prouction,
+     * since the lhs nonterminal symbol accumulates the contents of its first set over
+     * all its productions.
+     */
+    private Set<Symbol> firstSet = new HashSet<>();
 
     @Override
     public String toString() {
@@ -70,6 +81,14 @@ public class Production {
                     throw new RuntimeException("What fracking state is this machine in?");
             }
         }
+    }
+
+    public Set<Symbol> getFirstSet() {
+        return firstSet;
+    }
+
+    public void setFirstSet(Set<Symbol> firstSet) {
+        this.firstSet = firstSet;
     }
 
     public List<Symbol> getRhs() {

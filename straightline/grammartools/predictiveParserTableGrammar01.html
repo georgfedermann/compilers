@@ -1,0 +1,344 @@
+<html>
+    <head>
+        <title>Predicitive Parser Table</title>
+        <style>
+            table, th, td {
+                border: 1px solid grey;
+                border-collapse: collapse;
+            }
+            thead {
+                font-weight: bold;
+            }
+            td {
+                padding: 2px 4px 2px 4px;
+            }
+            .bold {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Predictive Parser Tabler</h1>
+        <table>
+            <thead>
+                <tr>
+                    <td>Symbol</td>
+                    <td>Nullable</td>
+                    <td>First Set</td>
+                    <td>Follow Set</td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="bold">P</td>
+                <td>false</td>
+                <td>
+                    (
+                    id
+                    print
+                    type
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">P'</td>
+                <td>false</td>
+                <td>
+                    ;
+                </td>
+                <td>
+                    $
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">P''</td>
+                <td>true</td>
+                <td>
+                    (
+                    id
+                    print
+                    type
+                </td>
+                <td>
+                    $
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">S</td>
+                <td>false</td>
+                <td>
+                    (
+                    id
+                    print
+                    type
+                </td>
+                <td>
+                    ;
+                    ,
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">DS</td>
+                <td>false</td>
+                <td>
+                    type
+                </td>
+                <td>
+                    ;
+                    ,
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">DS'</td>
+                <td>true</td>
+                <td>
+                    =
+                </td>
+                <td>
+                    ;
+                    ,
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">E</td>
+                <td>false</td>
+                <td>
+                    bool
+                    (
+                    num
+                    id
+                    decimal
+                    text
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">AS</td>
+                <td>false</td>
+                <td>
+                    id
+                </td>
+                <td>
+                    ;
+                    ,
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">PS</td>
+                <td>false</td>
+                <td>
+                    print
+                </td>
+                <td>
+                    ;
+                    ,
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">EL</td>
+                <td>false</td>
+                <td>
+                    bool
+                    (
+                    num
+                    id
+                    decimal
+                    text
+                </td>
+                <td>
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">EL'</td>
+                <td>true</td>
+                <td>
+                    ,
+                </td>
+                <td>
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">BE</td>
+                <td>false</td>
+                <td>
+                    bool
+                    id
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">BE'</td>
+                <td>true</td>
+                <td>
+                    eq
+                    and
+                    or
+                    neq
+                    xor
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">BT</td>
+                <td>false</td>
+                <td>
+                    bool
+                    id
+                </td>
+                <td>
+                    ;
+                    eq
+                    ,
+                    )
+                    and
+                    or
+                    neq
+                    xor
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">NE</td>
+                <td>false</td>
+                <td>
+                    (
+                    num
+                    id
+                    decimal
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">NE'</td>
+                <td>true</td>
+                <td>
+                    -
+                    +
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">NT</td>
+                <td>false</td>
+                <td>
+                    (
+                    num
+                    id
+                    decimal
+                </td>
+                <td>
+                    -
+                    ;
+                    ,
+                    )
+                    +
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">NT'</td>
+                <td>true</td>
+                <td>
+                    *
+                    /
+                </td>
+                <td>
+                    -
+                    ;
+                    ,
+                    )
+                    +
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">F</td>
+                <td>false</td>
+                <td>
+                    (
+                    num
+                    id
+                    decimal
+                </td>
+                <td>
+                    -
+                    ;
+                    *
+                    ,
+                    /
+                    )
+                    +
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">SE</td>
+                <td>false</td>
+                <td>
+                    text
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">SE'</td>
+                <td>true</td>
+                <td>
+                    +
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">ST</td>
+                <td>false</td>
+                <td>
+                    text
+                </td>
+                <td>
+                    ;
+                    ,
+                    )
+                    +
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">ES</td>
+                <td>false</td>
+                <td>
+                    (
+                </td>
+                <td>
+                    ;
+                    ,
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

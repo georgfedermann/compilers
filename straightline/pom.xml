@@ -42,6 +42,12 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
+        <!-- used to render output of the predictive parsing table creator -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
         <!-- support for testing System.out stream in unit tests -->
         <dependency>
             <groupId>com.github.stefanbirkner</groupId>

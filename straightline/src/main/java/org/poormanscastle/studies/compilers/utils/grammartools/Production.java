@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 /**
  * one of the productions used to define a grammar.
  * <p>
@@ -36,6 +38,11 @@ public class Production {
     private String definitionString;
 
     private boolean startProduction = false;
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toStringExclude(this, "lhs", "rhs", "STATE_LHS", "STATE_RHS", "MAPPING_ARROW");
+    }
 
     public Production(String definitionString, boolean startProduction, Grammar grammar) {
         int state = STATE_LHS;

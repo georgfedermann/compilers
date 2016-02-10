@@ -2,6 +2,9 @@
     <head>
         <title>Predicitive Parser Table</title>
         <style>
+            body{
+                font-family: Arial;
+            }
             table, th, td {
                 border: 1px solid grey;
                 border-collapse: collapse;
@@ -9,9 +12,13 @@
             thead {
                 font-weight: bold;
             }
-            td {
-                width: 150px;
+            thead td {
+                text-align: center;
+            }
+            tbody td {
+                width: 120px;
                 padding: 2px 4px 2px 4px;
+                font-size: smaller;
             }
             .bold {
                 font-weight: bold;

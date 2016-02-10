@@ -10,15 +10,21 @@
                 font-weight: bold;
             }
             td {
+                width: 150px;
                 padding: 2px 4px 2px 4px;
             }
             .bold {
                 font-weight: bold;
             }
+            div#tableDiv {
+                width: 6000px;
+                overflow: scroll;
+            }
         </style>
     </head>
     <body>
         <h1>Predictive Parser Tabler</h1>
+        <div id="tableDiv">
         <table>
             <thead>
                 <tr>
@@ -26,7 +32,9 @@
                     <td>Nullable</td>
                     <td>First Set</td>
                     <td>Follow Set</td>
-                    
+#foreach($terminalSymbol in $grammar.terminalSymbols)
+                    <td>$terminalSymbol.id</td>
+#end ## ends foreach over terminal symbols
                 </tr>
             </thead>
             <tbody>
@@ -35,18 +43,40 @@
                 <td class="bold">$nonterminalSymbol.getId()</td>
                 <td>$nonterminalSymbol.isNullable()</td>
                 <td>
-#foreach($firstSymbol in $nonterminalSymbol.getFirstSet())
+  #foreach($firstSymbol in $nonterminalSymbol.getFirstSet())
                     $firstSymbol.getId()
-#end
+  #end
                 </td>
                 <td>
-#foreach($followSymbol in $nonterminalSymbol.getFollowSet())
+  #foreach($followSymbol in $nonterminalSymbol.getFollowSet())
                     $followSymbol.getId()
-#end
+  #end
                 </td>
+  #foreach($terminalSymbol in $grammar.terminalSymbols)
+    #set($moreThanOne=0)
+                <td>
+    #foreach($production in $grammar.productions)
+      #if($production.getLhs()==$nonterminalSymbol && $production.getFirstSet().contains($terminalSymbol))
+        #if($moreThanOne==1)
+            <br/>
+        #end
+        $production.getDefinitionString()
+        #set($moreThanOne=1)
+      #end
+      #if($production.getLhs()==$nonterminalSymbol && $production.isNullable() && $production.getLhs().getFollowSet().contains($terminalSymbol))
+        #if($moreThanOne==1)
+            <br/>
+        #end
+        $production.getDefinitionString()
+        #set($moreThanOne=1)
+      #end
+    #end
+                </td>
+  #end
             </tr>
 #end
             </tbody>
         </table>
+        </div>
     </body>
 </html>

@@ -55,6 +55,14 @@ public class Production {
         return ReflectionToStringBuilder.toStringExclude(this, "lhs", "rhs", "STATE_LHS", "STATE_RHS", "MAPPING_ARROW");
     }
 
+    public boolean isNullable() {
+        boolean result = true;
+        for (Symbol symbol : rhs) {
+            result &= symbol.isNullable();
+        }
+        return result;
+    }
+
     public Production(String definitionString, boolean startProduction, Grammar grammar) {
         int state = STATE_LHS;
         this.definitionString = definitionString;
@@ -115,5 +123,9 @@ public class Production {
 
     public void setStartProduction(boolean startProduction) {
         this.startProduction = startProduction;
+    }
+
+    public String getDefinitionString() {
+        return definitionString;
     }
 }

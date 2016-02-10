@@ -1,0 +1,94 @@
+everything before line terminals_start is ignored
+
+terminals_start
+;
+,
+$
+type
+id
+=
+print
+(
+)
+and
+or
+xor
+eq
+neq
+not
+bool
++
+-
+*
+/
+num
+decimal
+text
+terminals_end
+
+everything until productions_start is ignored
+
+productions_start
+P -> S P' $
+P' -> ; P''
+P'' -> S P'
+P'' ->
+
+S -> DS
+S -> AS
+S -> PS
+
+DS -> type id DS'
+DS' -> = E
+DS' ->
+
+E -> BE
+E -> NE
+E -> SE
+
+AS -> id = E
+
+PS -> print ( EL )
+
+EL -> E EL'
+EL' -> , E EL'
+EL' ->
+
+BE -> BT BE'
+BE' -> and BT BE'
+BE' -> or BT BE'
+BE' -> xor BT BE'
+BE' -> eq BT BE'
+BE' -> neq BT BE'
+BE' ->
+
+BT -> id
+BT -> bool
+
+NE -> NT NE'
+NE' -> + NT NE'
+NE' -> - NT NE'
+NE' ->
+
+NT -> F NT'
+NT' -> * F NT'
+NT' -> / F NT'
+NT' ->
+
+F -> id
+F -> num
+F -> decimal
+F -> ( E )
+
+SE -> ST SE'
+SE' -> + ST SE'
+SE' ->
+
+ST -> text
+
+ES -> ( S , E )
+S -> ES
+
+productions_end
+
+grin

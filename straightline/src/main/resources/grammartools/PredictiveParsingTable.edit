@@ -5,30 +5,35 @@
             body{
                 font-family: Arial Narrow;
             }
-            table, th, td {
-                border: 1px solid grey;
+            table,th,td{
                 border-collapse: collapse;
             }
-            thead {
+            table{
+                border: 2px solid black;
+            }
+            th,td{
+                border: 1px solid grey;
+            }
+            thead{
                 font-weight: bold;
                 border: 2px solid black;
             }
-            thead td {
+            thead td{
                 text-align: center;
             }
-            tbody td {
+            tbody td{
                 width: 83px;
                 padding: 2px 4px 2px 4px;
                 font-size: 9pt;
             }
-            .bold {
+            .bold{
                 font-weight: bold;
             }
-            .alert {
+            .alert{
                 font-weight: bold;
                 color: red;
             }
-            div#tableDiv {
+            div#tableDiv{
                 width: 6000px;
                 overflow: scroll;
             }
@@ -85,11 +90,11 @@
     #end
     #set($class="")
     #if($productionCount>1)
-      #set($class="alert")
+      #set($class=" class=""alert""")
     #else
       #set($class="")
     #end
-                <td class="$class">$outputText</td>
+                <td$class>$outputText</td>
   #end
             </tr>
 #end

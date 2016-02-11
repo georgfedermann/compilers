@@ -107,7 +107,7 @@ public class TableCreator {
         Template template = Velocity.getTemplate("/grammartools/PredictiveParsingTable.velo");
         StringWriter stringWriter = new StringWriter();
         template.merge(context, stringWriter);
-        return stringWriter.toString();
+        return stringWriter.toString().replaceAll("\n", "");
     }
 
     public static void main(String[] args) throws Exception {

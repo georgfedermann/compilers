@@ -1,100 +1,100 @@
 <html>
-    <head>
-        <title>Predicitive Parser Table</title>
-        <style>
-            body{
-                font-family: Arial Narrow;
-            }
-            table, th, td {
-                border: 1px solid grey;
-                border-collapse: collapse;
-            }
-            thead {
-                font-weight: bold;
-                border: 2px solid black;
-            }
-            thead td {
-                text-align: center;
-            }
-            tbody td {
-                width: 83px;
-                padding: 2px 4px 2px 4px;
-                font-size: 9pt;
-            }
-            .bold {
-                font-weight: bold;
-            }
-            .alert {
-                font-weight: bold;
-                color: red;
-            }
-            div#tableDiv {
-                width: 6000px;
-                overflow: scroll;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Predictive Parser Table</h1>
-        <div id="tableDiv">
-        <table>
-            <thead>
-                <tr>
-                    <td>Symbol</td>
-                    <td>Nullable</td>
-                    <td>First Set</td>
-                    <td>Follow Set</td>
+<head>
+<title>Predicitive Parser Table</title>
+<style>
+body{
+font-family: Arial Narrow;
+}
+table, th, td {
+border: 1px solid grey;
+border-collapse: collapse;
+}
+thead {
+font-weight: bold;
+border: 2px solid black;
+}
+thead td {
+text-align: center;
+}
+tbody td {
+width: 83px;
+padding: 2px 4px 2px 4px;
+font-size: 9pt;
+}
+.bold {
+font-weight: bold;
+}
+.alert {
+font-weight: bold;
+color: red;
+}
+div#tableDiv {
+width: 6000px;
+overflow: scroll;
+}
+</style>
+</head>
+<body>
+<h1>Predictive Parser Table</h1>
+<div id="tableDiv">
+<table>
+<thead>
+<tr>
+<td>Symbol</td>
+<td>Nullable</td>
+<td>First Set</td>
+<td>Follow Set</td>
 #foreach($terminalSymbol in $grammar.terminalSymbols)
-                    <td>$terminalSymbol.id</td>
+<td>$terminalSymbol.id</td>
 #end ## ends foreach over terminal symbols
-                </tr>
-            </thead>
-            <tbody>
+</tr>
+</thead>
+<tbody>
 #foreach($nonterminalSymbol in $nonterminalSymbols)
-            <tr>
-                <td class="bold">$nonterminalSymbol.getId()</td>
-                <td>$nonterminalSymbol.isNullable()</td>
-                <td>
-  #foreach($firstSymbol in $nonterminalSymbol.getFirstSet())
-                    $firstSymbol.getId()
-  #end
-                </td>
-                <td>
-  #foreach($followSymbol in $nonterminalSymbol.getFollowSet())
-                    $followSymbol.getId()
-  #end
-                </td>
-  #foreach($terminalSymbol in $grammar.terminalSymbols)
-    #set($outputText = "")
-    #set($productionCount=0)
-    #foreach($production in $grammar.productions)
-      #if($production.getLhs()==$nonterminalSymbol && $production.getFirstSet().contains($terminalSymbol))
-        #if($productionCount>0)
-            #set($outputText = $outputText + "<br/>")
-        #end
-        #set($outputText = $outputText + $production.getDefinitionString())
-        #set($productionCount=$productionCount+1)
-      #end
-      #if($production.getLhs()==$nonterminalSymbol && $production.isNullable() && $production.getLhs().getFollowSet().contains($terminalSymbol))
-        #if($productionCount>0)
-            #set($outputText = $outputText + "<br/>")
-        #end
-        #set($outputText = $outputText + $production.getDefinitionString())
-        #set($productionCount=$productionCount+1)
-      #end
-    #end
-    #set($class="")
-    #if($productionCount>1)
-      #set($class="alert")
-    #else
-      #set($class="")
-    #end
-                <td class="$class">$outputText</td>
-  #end
-            </tr>
+<tr>
+<td class="bold">$nonterminalSymbol.getId()</td>
+<td>$nonterminalSymbol.isNullable()</td>
+<td>
+#foreach($firstSymbol in $nonterminalSymbol.getFirstSet())
+$firstSymbol.getId()
 #end
-            </tbody>
-        </table>
-        </div>
-    </body>
+</td>
+<td>
+#foreach($followSymbol in $nonterminalSymbol.getFollowSet())
+$followSymbol.getId()
+#end
+</td>
+#foreach($terminalSymbol in $grammar.terminalSymbols)
+#set($outputText = "")
+#set($productionCount=0)
+#foreach($production in $grammar.productions)
+#if($production.getLhs()==$nonterminalSymbol && $production.getFirstSet().contains($terminalSymbol))
+#if($productionCount>0)
+#set($outputText = $outputText + "<br/>")
+#end
+#set($outputText = $outputText + $production.getDefinitionString())
+#set($productionCount=$productionCount+1)
+#end
+#if($production.getLhs()==$nonterminalSymbol && $production.isNullable() && $production.getLhs().getFollowSet().contains($terminalSymbol))
+#if($productionCount>0)
+#set($outputText = $outputText + "<br/>")
+#end
+#set($outputText = $outputText + $production.getDefinitionString())
+#set($productionCount=$productionCount+1)
+#end
+#end
+#set($class="")
+#if($productionCount>1)
+#set($class="alert")
+#else
+#set($class="")
+#end
+<td class="$class">$outputText</td>
+#end
+</tr>
+#end
+</tbody>
+</table>
+</div>
+</body>
 </html>

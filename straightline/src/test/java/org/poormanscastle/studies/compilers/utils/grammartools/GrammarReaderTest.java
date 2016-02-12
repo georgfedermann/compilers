@@ -2,6 +2,7 @@ package org.poormanscastle.studies.compilers.utils.grammartools;
 
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +14,7 @@ public class GrammarReaderTest {
 
     @Test
     public void testReadGrammar() throws Exception {
-        Grammar grammar = new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"));
+        LL1Grammar grammar = new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"));
         assertNotNull(grammar);
         assertEquals(45, grammar.getProductions().size());
         assertEquals(23, grammar.getTerminalSymbols().size());

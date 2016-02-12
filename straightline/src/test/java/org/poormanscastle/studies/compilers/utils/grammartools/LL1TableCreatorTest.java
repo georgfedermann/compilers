@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1TableCreator;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +21,7 @@ public class LL1TableCreatorTest {
     @Test
     public void testGrammar_0_2() throws Exception {
         LL1TableCreator creator = new LL1TableCreator();
-        Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
+        LL1Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
         assertNotNull(grammar);
         assertEquals(45, grammar.getProductions().size());
         assertEquals(23, grammar.getTerminalSymbols().size());
@@ -36,7 +38,7 @@ public class LL1TableCreatorTest {
     @Test
     public void testGrammar_3_10() throws Exception {
         LL1TableCreator creator = new LL1TableCreator();
-        Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr")));
+        LL1Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr")));
         assertNotNull(grammar);
 
         int counter = 0;
@@ -49,7 +51,7 @@ public class LL1TableCreatorTest {
     @Test
     public void testCreateTable() throws Exception {
         LL1TableCreator creator = new LL1TableCreator();
-        Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
+        LL1Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
         String table = creator.createTable(grammar);
         assertNotNull(table);
         assertEquals(8215, table.length());

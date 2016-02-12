@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.utils.grammartools;
+package org.poormanscastle.studies.compilers.utils.grammartools.ll1;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,13 +8,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.Production;
+import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
 
 import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by georg on 09.02.16.
  */
-public class Grammar {
+public class LL1Grammar {
 
     private final List<Production> productions = new LinkedList<>();
 

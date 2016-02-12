@@ -1,6 +1,8 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1TableCreator;
 
 /**
  * takes a grammar and produces a visual representation of the parser table in form of a string which can than be
@@ -18,7 +20,7 @@ public interface TableCreator {
      * @param grammar
      * @return
      */
-    String createTable(Grammar grammar);
+    String createTable(LL1Grammar grammar);
 
     /**
      * here the table creator can preprocess the grammar in whatever way is necessary to accumulate informations
@@ -29,7 +31,7 @@ public interface TableCreator {
      * @param grammar
      * @return
      */
-    Grammar preprocess(Grammar grammar);
+    LL1Grammar preprocess(LL1Grammar grammar);
 
     public static TableCreator getTableCreator(GrammarFlavor flavor) {
         if (flavor == GrammarFlavor.LL1) {

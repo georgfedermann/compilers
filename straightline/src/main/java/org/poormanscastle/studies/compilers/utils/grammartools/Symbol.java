@@ -20,12 +20,12 @@ public class Symbol {
     /**
      * is this a terminal or nonterminal symbol
      */
-    private boolean terminal;
+    private final boolean terminal;
 
     /**
      * the id of the symbol. In case of a terminal symbol this is the token type.
      */
-    private String id;
+    private final String id;
 
     /**
      * is this symbol nullable? terminal symbols cannot be nullable.
@@ -104,14 +104,17 @@ public class Symbol {
         return ReflectionToStringBuilder.toStringExclude(this, "firstSet", "followSet");
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
 
+    /**
+     * a symbol is terminal if it is not a lhs symbol in any production of the given grammar.
+     * <p/>
+     * All lexer tokens are terminal. E.g. $, +, -, id, num, dec, etc.
+     *
+     * @return
+     */
     public boolean isTerminal() {
         return terminal;
     }

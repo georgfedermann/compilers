@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
 
 /**
  * reads an input stream and tries to recognize grammars in the character patterns.
@@ -24,13 +25,13 @@ public class GrammarReader {
     private final String PRODUCTIONS_START = "PRODUCTIONS_START";
     private final String PRODUCTIONS_END = "PRODUCTIONS_END";
 
-    public Grammar readGrammar(InputStream inputStream) throws IOException {
+    public LL1Grammar readGrammar(InputStream inputStream) throws IOException {
         int state = STATE_BEGIN;
         boolean firstProduction = true;
-        Grammar grammar = new Grammar();
+        LL1Grammar grammar = new LL1Grammar();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             switch (state) {
                 case STATE_BEGIN:

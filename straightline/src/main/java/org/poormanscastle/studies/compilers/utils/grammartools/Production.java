@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -19,14 +20,10 @@ public class Production {
 
     private final String MAPPING_ARROW = "->";
 
-    private final int STATE_LHS = 0;
-
-    private final int STATE_RHS = 1;
-
     /**
      * the left-hand-side symbol (short lhs)
      */
-    private Symbol lhs;
+    private final Symbol lhs;
 
     /**
      * the right-hand-side symbols (short rhs)
@@ -75,35 +72,26 @@ public class Production {
      * @param startProduction  states whether this production is the one startProduction in the given grammar.
      * @param grammar          this objects holds all the grammar's symbols and productions.
      */
-    public Production(String definitionString, boolean startProduction, Grammar grammar) {
+    public Production(String definitionString, boolean startProduction, LL1Grammar grammar) {
         this.definitionString = definitionString;
         this.startProduction = startProduction;
-        // parsing the definition string. start with the LHS, than preprocess with RHS
-        int state = STATE_LHS;
+
         // for further proceedings, the mapping arrow -> is not needed any more
         StringTokenizer tokenizer = new StringTokenizer(definitionString.replace(MAPPING_ARROW, " "));
+        lhs = getNextSymbol(tokenizer, grammar);
         while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken().trim();
-            Symbol symbol = grammar.getSymbols().get(token);
-            // symbol was not registered before, i.e. first mentioned in this production
-            // -> create new symbol and register it with the grammar
-            if (symbol == null) {
-                symbol = new Symbol(token);
-                grammar.addSymbol(symbol);
-            }
-            switch (state) {
-                case STATE_LHS:
-                    checkState(!symbol.isTerminal());
-                    lhs = symbol;
-                    state = STATE_RHS;
-                    break;
-                case STATE_RHS:
-                    rhs.add(symbol);
-                    break;
-                default:
-                    throw new RuntimeException("What fracking state is this machine in?");
-            }
+            rhs.add(getNextSymbol(tokenizer, grammar));
         }
+    }
+
+    Symbol getNextSymbol(StringTokenizer tokenizer, LL1Grammar grammar) {
+        String token = tokenizer.nextToken().trim();
+        Symbol symbol = grammar.getSymbols().get(token);
+        if (symbol == null) {
+            symbol = new Symbol(token);
+            grammar.addSymbol(symbol);
+        }
+        return symbol;
     }
 
     public Set<Symbol> getFirstSet() {

@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.utils.grammartools;
+package org.poormanscastle.studies.compilers.utils.grammartools.ll1;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -9,6 +9,9 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.poormanscastle.studies.compilers.utils.grammartools.Production;
+import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
+import org.poormanscastle.studies.compilers.utils.grammartools.TableCreator;
 
 /**
  * tries to create an LL(1) parser table (recursive descent parser table, predictive parser table) for the given grammar.
@@ -17,14 +20,14 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 public class LL1TableCreator implements TableCreator {
 
     @Override
-    public Grammar preprocess(Grammar grammar) {
+    public LL1Grammar preprocess(LL1Grammar grammar) {
         grammar.identifyNullableSymbols();
         grammar.calculateStartAndFollowSets();
         return grammar;
     }
 
     @Override
-    public String createTable(Grammar grammar) {
+    public String createTable(LL1Grammar grammar) {
         Velocity.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
         Velocity.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
         Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");

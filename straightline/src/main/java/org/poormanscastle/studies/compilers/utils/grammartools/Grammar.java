@@ -1,7 +1,5 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
-import static com.google.common.base.Preconditions.checkState;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by georg on 09.02.16.
@@ -54,7 +54,7 @@ public class Grammar {
     }
 
     /**
-     * creates the first sets and follow sets for all symbols and productions.
+     * creates the first sets and follow sets for all symbols and productions. As needed for LL grammars.
      */
     public void calculateStartAndFollowSets() {
         // take care of the terminal symbols:
@@ -77,7 +77,7 @@ public class Grammar {
                     // also, production.firstSet gets updated
                     Symbol symbol = production.getRhs().get(i);
                     if (visibleFirstX // the next two checks are to avoid tablesWereUpdated=true when all is aleady set.
-                            && ( !production.getLhs().getFirstSet().containsAll(symbol.getFirstSet())
+                            && (!production.getLhs().getFirstSet().containsAll(symbol.getFirstSet())
                             || !production.getFirstSet().containsAll(symbol.getFirstSet()))) {
                         production.getLhs().getFirstSet().addAll(symbol.getFirstSet());
                         production.getFirstSet().addAll(symbol.getFirstSet());

@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * takes a grammar and produces a visual representation of the parser table in form of a string which can than be
  * interpreted by some visual application. E.g. output is html, renderer is browser. output is a dot file, can be
@@ -29,4 +31,16 @@ public interface TableCreator {
      */
     Grammar preprocess(Grammar grammar);
 
+    public static TableCreator getTableCreator(GrammarFlavor flavor) {
+        if (flavor == GrammarFlavor.LL1) {
+            return new LL1TableCreator();
+        } else {
+            throw new RuntimeException(StringUtils.join("Unsupported GrammarFlavor: ", flavor));
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        TableCreator tableCreator = TableCreator.getTableCreator(args.length == 0 ? GrammarFlavor.LL1 : GrammarFlavor.valueOf(args[0]));
+        System.out.print(tableCreator.createTable(tableCreator.preprocess(new GrammarReader().readGrammar(System.in))));
+    }
 }

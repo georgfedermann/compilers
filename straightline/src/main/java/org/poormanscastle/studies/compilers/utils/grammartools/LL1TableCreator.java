@@ -11,6 +11,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 /**
+ * tries to create an LL(1) parser table (recursive descent parser table, predictive parser table) for the given grammar.
  * Created by georg on 09.02.16.
  */
 public class LL1TableCreator implements TableCreator {
@@ -46,12 +47,5 @@ public class LL1TableCreator implements TableCreator {
         StringWriter stringWriter = new StringWriter();
         template.merge(context, stringWriter);
         return stringWriter.toString().replaceAll("\n", "");
-    }
-
-    public static void main(String[] args) throws Exception {
-        LL1TableCreator creator = new LL1TableCreator();
-        Grammar grammar = new GrammarReader().readGrammar(System.in);
-        creator.preprocess(grammar);
-        System.out.print(creator.createTable(grammar));
     }
 }

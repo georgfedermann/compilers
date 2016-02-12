@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * reads an input stream and tries to recognize grammars in the character patterns.
  * Created by 02eex612 on 12.02.2016.
  */
 public class GrammarReader {

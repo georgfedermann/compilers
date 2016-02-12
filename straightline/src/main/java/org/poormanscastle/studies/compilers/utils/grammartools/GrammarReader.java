@@ -25,6 +25,16 @@ public class GrammarReader {
     private final String PRODUCTIONS_START = "PRODUCTIONS_START";
     private final String PRODUCTIONS_END = "PRODUCTIONS_END";
 
+    /**
+     * TODO the return value of this method is not good. Make it that there is a grammar to subclass, and that
+     * GrammarReader can load and return any of them. E.g. the client hands over the Grammar object into which
+     * to load the input stream data, or hands over the class of the wished Grammar type, or a value of the
+     * enumeration or whatever you want, just do it!
+     *
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
     public LL1Grammar readGrammar(InputStream inputStream) throws IOException {
         int state = STATE_BEGIN;
         boolean firstProduction = true;

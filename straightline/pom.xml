@@ -82,7 +82,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.poormanscastle.studies.compilers.utils.grammartools.TableCreator</mainClass>
+                            <mainClass>org.poormanscastle.studies.compilers.utils.grammartools.LL1TableCreator</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

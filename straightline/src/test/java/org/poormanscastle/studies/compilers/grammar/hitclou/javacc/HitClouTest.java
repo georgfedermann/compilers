@@ -16,7 +16,7 @@ public class HitClouTest {
     @Test
     public void testInvalidClouBaustein() throws Exception {
         expectedException.expect(ParseException.class);
-        expectedException.expectMessage("Was expecting:\n    \"#\\n\" ...");
+        expectedException.expectMessage("Was expecting:");
         new HitClou(TestUtils.getTestdataAsInputStream("/clouTestData/notClou.clou")).Baustein();
     }
 

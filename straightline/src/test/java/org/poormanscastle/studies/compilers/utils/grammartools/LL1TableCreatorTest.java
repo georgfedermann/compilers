@@ -14,12 +14,12 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Created by georg on 09.02.16.
  */
-public class TableCreatorTest {
+public class LL1TableCreatorTest {
 
     @Test
     public void testGrammar_0_2() throws Exception {
-        TableCreator creator = new TableCreator();
-        Grammar grammar = creator.proceed(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"));
+        LL1TableCreator creator = new LL1TableCreator();
+        Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
         assertNotNull(grammar);
         assertEquals(45, grammar.getProductions().size());
         assertEquals(23, grammar.getTerminalSymbols().size());
@@ -29,13 +29,14 @@ public class TableCreatorTest {
         for (Production production : grammar.getProductions()) {
             assertEquals(counter++ == 0, production.isStartProduction());
         }
+        // TODO add checks for first sets, follow sets, nullability, etc.
         assertEquals(1, 1);
     }
 
     @Test
-    public void testGrammar_3_10() throws Exception{
-        TableCreator creator = new TableCreator();
-        Grammar grammar = creator.proceed(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr"));
+    public void testGrammar_3_10() throws Exception {
+        LL1TableCreator creator = new LL1TableCreator();
+        Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr")));
         assertNotNull(grammar);
 
         int counter = 0;
@@ -47,10 +48,11 @@ public class TableCreatorTest {
 
     @Test
     public void testCreateTable() throws Exception {
-        TableCreator creator = new TableCreator();
-        Grammar grammar = creator.proceed(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"));
+        LL1TableCreator creator = new LL1TableCreator();
+        Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
         String table = creator.createTable(grammar);
         assertNotNull(table);
+        assertEquals(8215, table.length());
         assertFalse(StringUtils.isBlank(table));
 
         FileOutputStream outputStream = new FileOutputStream(new File("grammartools/predictiveParserTableGrammar01.html"));

@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -25,12 +24,12 @@ public class Production {
     private final int STATE_RHS = 1;
 
     /**
-     * the left-hand-side symbol
+     * the left-hand-side symbol (short lhs)
      */
     private Symbol lhs;
 
     /**
-     * the right-hand-side symbols
+     * the right-hand-side symbols (short rhs)
      */
     private final List<Symbol> rhs = new LinkedList<>();
 
@@ -39,7 +38,7 @@ public class Production {
      */
     private final String definitionString;
 
-    private boolean startProduction = false;
+    private final boolean startProduction;
 
     /**
      * a production's follow set is equal to its lhs symbol's follow set (because this
@@ -63,17 +62,33 @@ public class Production {
         return result;
     }
 
+    /**
+     * initializes a new Production.
+     *
+     * @param definitionString gets stored to graphically represent this production when printing parser tables. Note:
+     *                         parser tables are different from parser trees:
+     *                         parser tables are input when parsing, parser trees are output when parsing.
+     *                         <p/>
+     *                         the definition string will be parsed to infere the lhs symbol and the rhs symbols. when
+     *                         the respective symbols can be found in the grammar they are taken from there. otherwise
+     *                         they get newly created and registered with the grammar.
+     * @param startProduction  states whether this production is the one startProduction in the given grammar.
+     * @param grammar          this objects holds all the grammar's symbols and productions.
+     */
     public Production(String definitionString, boolean startProduction, Grammar grammar) {
-        int state = STATE_LHS;
         this.definitionString = definitionString;
         this.startProduction = startProduction;
-        definitionString = definitionString.replace(MAPPING_ARROW, " ");
-        StringTokenizer tokenizer = new StringTokenizer(definitionString);
+        // parsing the definition string. start with the LHS, than preprocess with RHS
+        int state = STATE_LHS;
+        // for further proceedings, the mapping arrow -> is not needed any more
+        StringTokenizer tokenizer = new StringTokenizer(definitionString.replace(MAPPING_ARROW, " "));
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken().trim();
             Symbol symbol = grammar.getSymbols().get(token);
+            // symbol was not registered before, i.e. first mentioned in this production
+            // -> create new symbol and register it with the grammar
             if (symbol == null) {
-                symbol = new Symbol(token, false);
+                symbol = new Symbol(token);
                 grammar.addSymbol(symbol);
             }
             switch (state) {

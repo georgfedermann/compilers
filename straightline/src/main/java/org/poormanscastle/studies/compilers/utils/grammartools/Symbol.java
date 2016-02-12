@@ -10,9 +10,9 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  * symbols can be terminal or nonterminal. terminal symbols are tokens as provided
  * by the lexer, those tokens are abbreviations for the regular expressions used
  * to tokenize the input stream.
- * <p>
+ * <p/>
  * nonterminal symbols are the left-hand-sides in the grammar production rules.
- * <p>
+ * <p/>
  * Created by georg on 09.02.16.
  */
 public class Symbol {
@@ -39,6 +39,18 @@ public class Symbol {
     public Symbol(String id, boolean terminal) {
         this.id = id;
         this.terminal = terminal;
+    }
+
+    /**
+     * this constructur can be used to create nonterminal grammar symbols.
+     * <p/>
+     * E.g. In "S -> id := E" the symobls S and E can be created using this constructor, id and := should be created
+     * with a call to {@code new Symbol(":=", true)}.
+     *
+     * @param id
+     */
+    public Symbol(String id) {
+        this(id, false);
     }
 
     public boolean addToFirstSet(Symbol terminalSymbol) {

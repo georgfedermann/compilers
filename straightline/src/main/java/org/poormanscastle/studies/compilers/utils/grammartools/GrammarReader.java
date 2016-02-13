@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang3.StringUtils;
-import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
 
 /**
  * reads an input stream and tries to recognize grammars in the character patterns.
@@ -26,19 +25,13 @@ public class GrammarReader {
     private final String PRODUCTIONS_END = "PRODUCTIONS_END";
 
     /**
-     * TODO the return value of this method is not good. Make it that there is a grammar to subclass, and that
-     * GrammarReader can load and return any of them. E.g. the client hands over the Grammar object into which
-     * to load the input stream data, or hands over the class of the wished Grammar type, or a value of the
-     * enumeration or whatever you want, just do it!
-     *
      * @param inputStream
-     * @return
+     * @return Grammar for method call chaining, where applicable
      * @throws IOException
      */
-    public LL1Grammar readGrammar(InputStream inputStream) throws IOException {
+    public Grammar readGrammar(InputStream inputStream, Grammar grammar) throws IOException {
         int state = STATE_BEGIN;
         boolean firstProduction = true;
-        LL1Grammar grammar = new LL1Grammar();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -77,6 +70,6 @@ public class GrammarReader {
                     throw new RuntimeException("What the heck, what state is this machine in?");
             }
         }
-        return grammar;
+        return grammar.initialize();
     }
 }

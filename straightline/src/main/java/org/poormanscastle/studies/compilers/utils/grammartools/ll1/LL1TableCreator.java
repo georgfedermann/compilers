@@ -1,16 +1,13 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.ll1;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.poormanscastle.studies.compilers.utils.grammartools.Production;
-import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
+import org.poormanscastle.studies.compilers.utils.grammartools.Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.TableCreator;
 
 /**
@@ -20,14 +17,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.TableCreator;
 public class LL1TableCreator implements TableCreator {
 
     @Override
-    public LL1Grammar preprocess(LL1Grammar grammar) {
-        grammar.identifyNullableSymbols();
-        grammar.calculateStartAndFollowSets();
-        return grammar;
-    }
-
-    @Override
-    public String createTable(LL1Grammar grammar) {
+    public String createTable(Grammar grammar) {
         Velocity.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
         Velocity.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
         Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -37,14 +27,7 @@ public class LL1TableCreator implements TableCreator {
         VelocityContext context = new VelocityContext();
         context.put("grammar", grammar);
 
-        // create list of nonterminal symbols for usage in the table
-        List<Symbol> nonterminalSymbols = new ArrayList<>();
-        for (Production production : grammar.getProductions()) {
-            if (!nonterminalSymbols.contains(production.getLhs())) {
-                nonterminalSymbols.add(production.getLhs());
-            }
-        }
-        context.put("nonterminalSymbols", nonterminalSymbols);
+        context.put("nonterminalSymbols", grammar.getLhsSymbols());
 
         Template template = Velocity.getTemplate("/grammartools/PredictiveParsingTable.velo");
         StringWriter stringWriter = new StringWriter();

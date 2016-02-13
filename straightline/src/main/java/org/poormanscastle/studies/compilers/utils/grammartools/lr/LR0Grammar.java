@@ -1,69 +1,27 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.lr;
 
-import java.util.HashMap;
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.AbstractGrammar;
+import org.poormanscastle.studies.compilers.utils.grammartools.Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
-
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by georg on 09.02.16.
  */
-public class LR0Grammar {
+public class LR0Grammar extends AbstractGrammar {
 
     private final Set<LRState> states = new HashSet<>();
 
     private final Set<LREdge> edges = new HashSet<>();
 
-    private final List<Production> productions = new LinkedList<>();
-
-    private final Map<String, Symbol> symbols = new HashMap<>();
-
-    private final Set<Symbol> terminalSymbols = new HashSet<>();
-
-    public boolean addProduction(Production production) {
-        return productions.add(production);
-    }
-
-    public Symbol addSymbol(Symbol symbol) {
-        if (symbols.containsKey(symbol.getId())) {
-            throw new RuntimeException(StringUtils.join("Symbol already defined: ", symbol));
-        }
-        return symbols.put(symbol.getId(), symbol);
-    }
-
-    public void addTerminalSymbol(Symbol terminalSymbol) {
-        if (terminalSymbols.contains(terminalSymbol)) {
-            throw new RuntimeException(StringUtils.join("TerminalSymbol already defined: ", terminalSymbol));
-        }
-        if (symbols.containsKey(terminalSymbol.getId())) {
-            throw new RuntimeException(StringUtils.join("Symbol already defined: ", terminalSymbol));
-        }
-        terminalSymbols.add(terminalSymbol);
-        addSymbol(terminalSymbol);
-    }
-
-    public List<Production> getProductions() {
-        return productions;
-    }
-
-    public Map<String, Symbol> getSymbols() {
-        return symbols;
-    }
-
-    public Set<Symbol> getTerminalSymbols() {
-        return terminalSymbols;
-    }
-
-    public Set<LRState> getStates() {
-        return states;
+    @Override
+    public Grammar initialize() {
+        return null;
     }
 
     /**
@@ -107,7 +65,7 @@ public class LR0Grammar {
             oldSize = state.getItems().size();
             for (LRItem item : state.getItems()) {
                 if (!item.isReducible() && !item.getNextSymbol().isTerminal()) {
-                    for (Production production : getProductions()) {
+                    for (Production production : productions) {
                         if (item.getNextSymbol() == production.getLhs()) {
                             state.getItems().add(new LRItem(production));
                         }

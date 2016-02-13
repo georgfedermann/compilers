@@ -1,5 +1,9 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.ll1;
 
+import static com.google.common.base.Preconditions.checkState;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,21 +12,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.AbstractGrammar;
+import org.poormanscastle.studies.compilers.utils.grammartools.Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
-
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by georg on 09.02.16.
  */
-public class LL1Grammar {
-
-    private final List<Production> productions = new LinkedList<>();
-
-    private final Map<String, Symbol> symbols = new HashMap<>();
-
-    private final Set<Symbol> terminalSymbols = new HashSet<>();
+public class LL1Grammar extends AbstractGrammar {
 
     public boolean addProduction(Production production) {
         return productions.add(production);
@@ -43,16 +41,11 @@ public class LL1Grammar {
         addSymbol(terminalSymbol);
     }
 
-    public List<Production> getProductions() {
-        return productions;
-    }
-
-    public Map<String, Symbol> getSymbols() {
-        return symbols;
-    }
-
-    public Set<Symbol> getTerminalSymbols() {
-        return terminalSymbols;
+    @Override
+    public Grammar initialize() {
+        identifyNullableSymbols();
+        calculateStartAndFollowSets();
+        return this;
     }
 
     /**
@@ -61,7 +54,7 @@ public class LL1Grammar {
     public void calculateStartAndFollowSets() {
         // take care of the terminal symbols:
         // for all terminal symbols s: first(s) <- {s}
-        for (Symbol symbol : getTerminalSymbols()) {
+        for (Symbol symbol : terminalSymbols) {
             checkState(symbol.isTerminal());
             symbol.addToFirstSet(symbol);
         }

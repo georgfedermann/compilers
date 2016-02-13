@@ -1,17 +1,15 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
-import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
-import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1TableCreator;
-
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by georg on 09.02.16.
@@ -19,39 +17,10 @@ import static org.junit.Assert.assertNotNull;
 public class LL1TableCreatorTest {
 
     @Test
-    public void testGrammar_0_2() throws Exception {
-        LL1TableCreator creator = new LL1TableCreator();
-        LL1Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
-        assertNotNull(grammar);
-        assertEquals(45, grammar.getProductions().size());
-        assertEquals(23, grammar.getTerminalSymbols().size());
-        assertEquals(46, grammar.getSymbols().size());
-
-        int counter = 0;
-        for (Production production : grammar.getProductions()) {
-            assertEquals(counter++ == 0, production.isStartProduction());
-        }
-        // TODO add checks for first sets, follow sets, nullability, etc.
-        assertEquals(1, 1);
-    }
-
-    @Test
-    public void testGrammar_3_10() throws Exception {
-        LL1TableCreator creator = new LL1TableCreator();
-        LL1Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr")));
-        assertNotNull(grammar);
-
-        int counter = 0;
-        for (Production production : grammar.getProductions()) {
-            assertEquals(counter++ == 0, production.isStartProduction());
-        }
-        assertEquals(1, 1);
-    }
-
-    @Test
     public void testCreateTable() throws Exception {
-        LL1TableCreator creator = new LL1TableCreator();
-        LL1Grammar grammar = creator.preprocess(new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr")));
+        Grammar grammar = Grammar.createGrammar(GrammarFlavor.LL1);
+        new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
+        TableCreator creator = TableCreator.getTableCreator(GrammarFlavor.LL1);
         String table = creator.createTable(grammar);
         assertNotNull(table);
         assertEquals(8215, table.length());

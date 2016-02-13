@@ -3,6 +3,8 @@ package org.poormanscastle.studies.compilers.utils.grammartools.lr;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.AbstractGrammar;
@@ -11,6 +13,8 @@ import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
 
 /**
+ * Grammar implementation for LR(0) languages.
+ * <p>
  * Created by georg on 09.02.16.
  */
 public class LR0Grammar extends AbstractGrammar {
@@ -21,7 +25,8 @@ public class LR0Grammar extends AbstractGrammar {
 
     @Override
     public Grammar initialize() {
-        return null;
+        calculateStatesAndTransitions();
+        return this;
     }
 
     /**
@@ -32,21 +37,24 @@ public class LR0Grammar extends AbstractGrammar {
         edges.clear();
         LRState startState = new LRState();
         startState.getItems().add(new LRItem(productions.get(0)));
-        states.add(calculateClosure(startState));
+        startState = calculateClosure(startState);
+        states.add(startState);
 
         int oldSizeEdges, oldSizeStates;
         do {
+            List<LRState> deltaList = new LinkedList<>();
             oldSizeEdges = edges.size();
             oldSizeStates = states.size();
             for (LRState sourceState : states) {
                 for (LRItem item : sourceState.getItems()) {
                     if (!item.isReducible()) {
                         LRState targetState = calculateEdge(sourceState, item.getNextSymbol());
-                        states.add(targetState);
+                        deltaList.add(targetState);
                         edges.add(new LREdge(sourceState, targetState, item.getNextSymbol()));
                     }
                 }
             }
+            states.addAll(deltaList);
             checkState(oldSizeEdges >= 0 && oldSizeEdges <= edges.size());
             checkState(oldSizeStates >= 0 && oldSizeStates <= states.size());
         } while (oldSizeEdges < edges.size() || oldSizeStates < states.size());
@@ -62,16 +70,18 @@ public class LR0Grammar extends AbstractGrammar {
     public LRState calculateClosure(LRState state) {
         int oldSize;
         do {
+            List<LRItem> deltaList = new LinkedList<>();
             oldSize = state.getItems().size();
             for (LRItem item : state.getItems()) {
                 if (!item.isReducible() && !item.getNextSymbol().isTerminal()) {
                     for (Production production : productions) {
                         if (item.getNextSymbol() == production.getLhs()) {
-                            state.getItems().add(new LRItem(production));
+                            deltaList.add(new LRItem(production));
                         }
                     }
                 }
             }
+            state.getItems().addAll(deltaList);
             checkState(oldSize <= state.getItems().size());
         } while (oldSize < state.getItems().size());
         return state;
@@ -86,5 +96,4 @@ public class LR0Grammar extends AbstractGrammar {
         }
         return calculateClosure(newState);
     }
-
 }

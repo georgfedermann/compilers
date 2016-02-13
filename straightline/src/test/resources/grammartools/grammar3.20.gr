@@ -1,0 +1,16 @@
+
+terminals_start
+$
+(
+)
+x
+,
+terminals_end
+
+productions_start
+S' -> S $
+S -> ( L )
+S -> x
+L -> S
+L -> L , S
+productions_end

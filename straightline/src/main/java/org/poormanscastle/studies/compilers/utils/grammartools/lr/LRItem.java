@@ -6,6 +6,8 @@ import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
+import com.google.common.base.Objects;
+
 /**
  * Used in parsing of LR grammars, an item is a production (grammar rule) combined with a marker
  * that indicates the current position of the parser within the production.
@@ -17,6 +19,20 @@ public class LRItem {
     private final Production production;
 
     private final int position;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LRItem lrItem = (LRItem) o;
+        return Objects.equal(position, lrItem.position) &&
+                Objects.equal(production, lrItem.production);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(production, position);
+    }
 
     public LRItem(Production production) {
         this(production, 0);

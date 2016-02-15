@@ -13,23 +13,26 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class GrammarReader {
 
-    private final int STATE_BEGIN = 0;
-    private final int STATE_READ_TERMINAL_SYMBOLS = 1;
-    private final int STATE_READ_TERMINAL_SYMBOLS_FINISHED = 2;
-    private final int STATE_READ_PRODUCTIONS = 3;
-    private final int STATE_READ_PRODUCTIONS_FINISHED = 4;
+    private final static int STATE_BEGIN = 0;
+    private final static int STATE_READ_TERMINAL_SYMBOLS = 1;
+    private final static int STATE_READ_TERMINAL_SYMBOLS_FINISHED = 2;
+    private final static int STATE_READ_PRODUCTIONS = 3;
+    private final static int STATE_READ_PRODUCTIONS_FINISHED = 4;
 
-    private final String TERMINALS_START = "TERMINALS_START";
-    private final String TERMINALS_END = "TERMINALS_END";
-    private final String PRODUCTIONS_START = "PRODUCTIONS_START";
-    private final String PRODUCTIONS_END = "PRODUCTIONS_END";
+    private final static String TERMINALS_START = "TERMINALS_START";
+    private final static String TERMINALS_END = "TERMINALS_END";
+    private final static String PRODUCTIONS_START = "PRODUCTIONS_START";
+    private final static String PRODUCTIONS_END = "PRODUCTIONS_END";
+
+    private GrammarReader() {
+    }
 
     /**
      * @param inputStream
      * @return Grammar for method call chaining, where applicable
      * @throws IOException
      */
-    public Grammar readGrammar(InputStream inputStream, Grammar grammar) throws IOException {
+    public static Grammar readGrammar(InputStream inputStream, Grammar grammar) throws IOException {
         int state = STATE_BEGIN;
         boolean firstProduction = true;
 

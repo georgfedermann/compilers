@@ -69,7 +69,7 @@ public class LR0Grammar extends AbstractGrammar {
                                 // maybe for this use case, replace the Set<LRState> with a Map<LRState, LRState>.
                                 for (LRState state : states) {
                                     if (state.equals(targetState)) {
-                                        targetState = state;
+                                        targetState = state; break;
                                     }
                                 }
                             }

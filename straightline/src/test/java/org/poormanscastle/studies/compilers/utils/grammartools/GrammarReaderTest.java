@@ -1,10 +1,10 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by 02eex612 on 12.02.2016.
@@ -14,7 +14,7 @@ public class GrammarReaderTest {
     @Test
     public void testReadGrammar() throws Exception {
         Grammar grammar = Grammar.createGrammar(GrammarFlavor.LL1);
-        new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
+        GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
         assertNotNull(grammar);
         assertEquals(45, grammar.getProductions().size());
         assertEquals(23, grammar.getTerminalSymbols().size());

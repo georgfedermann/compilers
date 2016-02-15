@@ -37,6 +37,6 @@ public interface TableCreator {
         Grammar grammar = Grammar.createGrammar(flavor);
         TableCreator tableCreator = TableCreator.getTableCreator(flavor);
         System.out.print(tableCreator.createTable(
-                new GrammarReader().readGrammar(System.in, grammar)));
+                GrammarReader.readGrammar(System.in, grammar)));
     }
 }

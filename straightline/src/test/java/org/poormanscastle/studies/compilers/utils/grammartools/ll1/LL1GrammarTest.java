@@ -1,14 +1,14 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.ll1;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.utils.grammartools.Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.GrammarFlavor;
 import org.poormanscastle.studies.compilers.utils.grammartools.GrammarReader;
 import org.poormanscastle.studies.compilers.utils.grammartools.Production;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by georg on 13.02.16.
@@ -19,7 +19,7 @@ public class LL1GrammarTest {
     public void testGrammar_0_2() throws Exception {
         // TODO move this test to GrammarTest
         Grammar grammar = Grammar.createGrammar(GrammarFlavor.LL1);
-        new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
+        GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
         assertNotNull(grammar);
         assertEquals(45, grammar.getProductions().size());
         assertEquals(23, grammar.getTerminalSymbols().size());
@@ -37,7 +37,7 @@ public class LL1GrammarTest {
     public void testGrammar_3_10() throws Exception {
         // TODO move this test to GrammarTest
         Grammar grammar = Grammar.createGrammar(GrammarFlavor.LL1);
-        new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr"), grammar);
+        GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr"), grammar);
         assertNotNull(grammar);
 
         int counter = 0;

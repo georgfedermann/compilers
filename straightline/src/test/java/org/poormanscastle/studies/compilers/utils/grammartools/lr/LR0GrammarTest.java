@@ -17,7 +17,7 @@ public class LR0GrammarTest {
     @Test
     public void testCalculateStatesAndTransitions() throws Exception {
         LR0Grammar grammar = (LR0Grammar) Grammar.createGrammar(GrammarFlavor.LR0);
-        new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.20.gr"), grammar);
+        GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.20.gr"), grammar);
         assertNotNull(grammar);
         assertEquals(9, grammar.getStates().size());
         assertEquals(12, grammar.getEdges().size());
@@ -29,7 +29,7 @@ public class LR0GrammarTest {
     @Test
     public void testCalculateStatesAndTransitionsGrammar01() throws Exception {
         Grammar grammar = Grammar.createGrammar(GrammarFlavor.LR0);
-        new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
+        GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
         assertNotNull(grammar);
     }
 }

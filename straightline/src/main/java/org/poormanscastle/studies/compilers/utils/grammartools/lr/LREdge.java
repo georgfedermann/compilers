@@ -37,4 +37,16 @@ public class LREdge {
         this.targetState = targetState;
         this.symbol = symbol;
     }
+
+    public LRState getSourceState() {
+        return sourceState;
+    }
+
+    public LRState getTargetState() {
+        return targetState;
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
+    }
 }

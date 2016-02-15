@@ -1,7 +1,5 @@
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.visitors;
 
-import static com.google.common.base.Preconditions.checkState;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -18,9 +16,11 @@ import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.Pai
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.StatementList;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * Creates a graphical view of the AST using DOT syntax.
- * <p>
+ * <p/>
  * Created by georg on 15.01.16.
  */
 public class AstPrettyPrintVisitor implements AstItemVisitor {
@@ -35,7 +35,7 @@ public class AstPrettyPrintVisitor implements AstItemVisitor {
         /**
          * some id to uniquely identify the item, so to refer to it in the graph definition.
          */
-        private String id = "i" + ++sequence;
+        private String id = StringUtils.join("i", ++AstPrettyPrintVisitor.sequence);
         /**
          * a name of the item, probably the simple class name of the AST item's type.
          */

@@ -44,10 +44,10 @@ public class LR0Grammar extends AbstractGrammar {
     public void calculateStatesAndTransitions() {
         states.clear();
         edges.clear();
+        // create an initial state for the closure(startProduction)
         LRState startState = new LRState();
         startState.getItems().add(new LRItem(productions.get(0)));
-        startState = calculateClosure(startState);
-        states.add(startState);
+        states.add(calculateClosure(startState));
 
         int oldSizeEdges, oldSizeStates;
         do {
@@ -62,6 +62,17 @@ public class LR0Grammar extends AbstractGrammar {
                         // EOF on the other hand should result in an accept action.
                         if (item.getNextSymbol() != Symbol.EOF) {
                             LRState targetState = calculateEdge(sourceState, item.getNextSymbol());
+                            // if this state - identified by its items, thus productions and parser positions within
+                            // those production - has already been encountered along another edge before use the
+                            // existing one. otherwise let the new edge point to the newly encountered state.
+                            if (states.contains(targetState)) {
+                                // maybe for this use case, replace the Set<LRState> with a Map<LRState, LRState>.
+                                for (LRState state : states) {
+                                    if (state.equals(targetState)) {
+                                        targetState = state;
+                                    }
+                                }
+                            }
                             deltaList.add(targetState);
                             edges.add(new LREdge(sourceState, targetState, item.getNextSymbol()));
                         }

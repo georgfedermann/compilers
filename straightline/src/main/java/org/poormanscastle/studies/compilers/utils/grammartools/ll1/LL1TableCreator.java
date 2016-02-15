@@ -12,6 +12,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.TableCreator;
 
 /**
  * tries to create an LL(1) parser table (recursive descent parser table, predictive parser table) for the given grammar.
+ *
  * Created by georg on 09.02.16.
  */
 public class LL1TableCreator implements TableCreator {

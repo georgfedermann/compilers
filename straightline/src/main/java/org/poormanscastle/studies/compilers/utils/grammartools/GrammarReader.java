@@ -46,7 +46,7 @@ public class GrammarReader {
                     if (TERMINALS_END.equalsIgnoreCase(line)) {
                         state = STATE_READ_TERMINAL_SYMBOLS_FINISHED;
                     } else if (!StringUtils.isBlank(line)) {
-                        grammar.addTerminalSymbol(new Symbol(line, true));
+                        grammar.addTerminalSymbol(Symbol.createTerminalSymbol(line));
                     }
                     break;
                 case STATE_READ_TERMINAL_SYMBOLS_FINISHED:

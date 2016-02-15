@@ -57,9 +57,14 @@ public class LR0Grammar extends AbstractGrammar {
             for (LRState sourceState : states) {
                 for (LRItem item : sourceState.getItems()) {
                     if (!item.isReducible()) {
-                        LRState targetState = calculateEdge(sourceState, item.getNextSymbol());
-                        deltaList.add(targetState);
-                        edges.add(new LREdge(sourceState, targetState, item.getNextSymbol()));
+                        // For items with next symbol == EOF, no edges get calculated.
+                        // if the parser follows and edge in the state machine, this results in a shift or goto action.
+                        // EOF on the other hand should result in an accept action.
+                        if (item.getNextSymbol() != Symbol.EOF) {
+                            LRState targetState = calculateEdge(sourceState, item.getNextSymbol());
+                            deltaList.add(targetState);
+                            edges.add(new LREdge(sourceState, targetState, item.getNextSymbol()));
+                        }
                     }
                 }
             }

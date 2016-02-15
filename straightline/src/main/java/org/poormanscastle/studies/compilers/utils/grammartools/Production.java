@@ -1,7 +1,5 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
-import static com.google.common.base.Preconditions.checkState;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,9 +8,11 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * one of the productions used to define a grammar.
- * <p>
+ * <p/>
  * Created by georg on 09.02.16.
  */
 public class Production {
@@ -64,7 +64,7 @@ public class Production {
      * @param definitionString gets stored to graphically represent this production when printing parser tables. Note:
      *                         parser tables are different from parser trees:
      *                         parser tables are input when parsing, parser trees are output when parsing.
-     *                         <p>
+     *                         <p/>
      *                         the definition string will be parsed to infere the lhs symbol and the rhs symbols. when
      *                         the respective symbols can be found in the grammar they are taken from there. otherwise
      *                         they get newly created and registered with the grammar.
@@ -87,7 +87,7 @@ public class Production {
         String token = tokenizer.nextToken().trim();
         Symbol symbol = grammar.getSymbolForToken(token);
         if (symbol == null) {
-            symbol = new Symbol(token);
+            symbol = Symbol.createNonterminalSymbol(token);
             grammar.addSymbol(symbol);
         }
         return symbol;

@@ -65,7 +65,7 @@ public abstract class AbstractGrammar implements Grammar {
 
     public void addTerminalSymbol(Symbol terminalSymbol) {
         if (terminalSymbols.contains(terminalSymbol)) {
-            throw new RuntimeException(StringUtils.join("TerminalSymbol already defined: ", terminalSymbol));
+            throw new RuntimeException(StringUtils.join("Terminal symbol already defined: ", terminalSymbol));
         }
         if (symbols.containsKey(terminalSymbol.getId())) {
             throw new RuntimeException(StringUtils.join("Symbol already defined: ", terminalSymbol));

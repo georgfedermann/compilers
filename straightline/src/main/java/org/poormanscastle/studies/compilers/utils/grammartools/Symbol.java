@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * symbols are part of grammar definitions.
  * symbols can be terminal or nonterminal. terminal symbols are tokens as provided
@@ -15,7 +17,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  * <p/>
  * Created by georg on 09.02.16.
  */
-public class Symbol {
+public final class Symbol {
 
     /**
      * special symbol for end of file. E.g. in LR(k) parsers, for EOF no new edge will be created, because the parser
@@ -42,21 +44,29 @@ public class Symbol {
 
     private Set<Symbol> followSet = new HashSet<>();
 
-    public Symbol(String id, boolean terminal) {
+    private Symbol(String id, boolean terminal) {
         this.id = id;
         this.terminal = terminal;
     }
 
+    public static Symbol createTerminalSymbol(String id) {
+        if ("$".equals(id)) {
+            return Symbol.EOF;
+        } else {
+            return new Symbol(id, true);
+        }
+    }
+
     /**
-     * this constructur can be used to create nonterminal grammar symbols.
+     * this can be used to create nonterminal grammar symbols.
      * <p/>
      * E.g. In "S -> id := E" the symobls S and E can be created using this constructor, id and := should be created
      * with a call to {@code new Symbol(":=", true)}.
      *
      * @param id
      */
-    public Symbol(String id) {
-        this(id, false);
+    public static Symbol createNonterminalSymbol(String id) {
+        return new Symbol(id, false);
     }
 
     public boolean addToFirstSet(Symbol terminalSymbol) {
@@ -98,9 +108,10 @@ public class Symbol {
     }
 
     /**
-     * whether this symbol can derive the empty string.
+     * whether this symbol can derive the empty string. terminal symbols cannot derive the empty string.
      *
-     * @return true if the symbol can be replaced by the empty string, false otherwise.
+     * @return for nonterminal symbols this method returns true if the symbol can derive the empty string,
+     * false otherwise. terminal symbols never are nullable.
      */
     public boolean isNullable() {
         return nullable;
@@ -110,7 +121,15 @@ public class Symbol {
         return ReflectionToStringBuilder.toStringExclude(this, "firstSet", "followSet");
     }
 
+    /**
+     * set the symbol's nullable property.
+     * <p/>
+     * invariant: terminal symbols cannot be nullable. trying to set a terminal symbol to nullable will raise an exception.
+     *
+     * @param nullable
+     */
     public void setNullable(boolean nullable) {
+        checkArgument(!(terminal && nullable), "Terminal symbols cannot be nullable.");
         this.nullable = nullable;
     }
 

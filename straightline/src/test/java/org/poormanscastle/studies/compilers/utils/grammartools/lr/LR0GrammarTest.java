@@ -20,7 +20,7 @@ public class LR0GrammarTest {
         new GrammarReader().readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.20.gr"), grammar);
         assertNotNull(grammar);
         assertEquals(9, grammar.getStates().size());
-        assertEquals(11, grammar.getEdges().size());
+        assertEquals(12, grammar.getEdges().size());
         assertEquals(5, grammar.getProductions().size());
         assertEquals(8, grammar.getSymbols().size());
         assertEquals(5, grammar.getTerminalSymbols().size());

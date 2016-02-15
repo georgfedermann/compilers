@@ -1,7 +1,6 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.lr;
 
-import static com.google.common.base.Preconditions.checkState;
-
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,9 +11,11 @@ import org.poormanscastle.studies.compilers.utils.grammartools.Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * Grammar implementation for LR(0) languages.
- * <p>
+ * <p/>
  * Created by georg on 09.02.16.
  */
 public class LR0Grammar extends AbstractGrammar {
@@ -27,6 +28,14 @@ public class LR0Grammar extends AbstractGrammar {
     public Grammar initialize() {
         calculateStatesAndTransitions();
         return this;
+    }
+
+    public Set<LRState> getStates() {
+        return Collections.unmodifiableSet(states);
+    }
+
+    public Set<LREdge> getEdges() {
+        return Collections.unmodifiableSet(edges);
     }
 
     /**

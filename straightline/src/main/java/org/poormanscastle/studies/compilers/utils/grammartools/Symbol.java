@@ -18,6 +18,12 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 public class Symbol {
 
     /**
+     * special symbol for end of file. E.g. in LR(k) parsers, for EOF no new edge will be created, because the parser
+     * will do no shift or reduce on this item, but accept or not accept.
+     */
+    public static final Symbol EOF = new Symbol("$", true);
+
+    /**
      * is this a terminal or nonterminal symbol
      */
     private final boolean terminal;
@@ -118,6 +124,5 @@ public class Symbol {
     public boolean isTerminal() {
         return terminal;
     }
-
 
 }

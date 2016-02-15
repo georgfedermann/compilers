@@ -3,10 +3,10 @@ package org.poormanscastle.studies.compilers.utils.grammartools.lr;
 import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
 
+import com.google.common.base.Objects;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-
-import com.google.common.base.Objects;
 
 /**
  * Used in parsing of LR grammars, an item is a production (grammar rule) combined with a marker
@@ -54,8 +54,7 @@ public class LRItem {
      * @return
      */
     public Symbol getNextSymbol() {
-        checkState(position >= 0);
-        checkState(position < production.getRhs().size());
+        checkState(position >= 0 && position < production.getRhs().size());
         return production.getRhs().get(position);
     }
 

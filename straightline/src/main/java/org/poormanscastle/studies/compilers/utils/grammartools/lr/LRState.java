@@ -3,7 +3,7 @@ package org.poormanscastle.studies.compilers.utils.grammartools.lr;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 
 import com.google.common.base.Objects;
 
@@ -54,7 +54,15 @@ public class LRState {
     public String getStateAsText() {
         StringBuilder result = new StringBuilder();
         for (LRItem item : items) {
-            result.append(StringUtils.join(item.getProduction().getDefinitionString(), "\\n"));
+            Production production = item.getProduction();
+            result.append(production.getLhs().getId()).append(" -> ");
+            for (int c = 0; c < production.getRhs().size(); c++) {
+                if (c == item.getPosition()) {
+                    result.append(". ");
+                }
+                result.append(production.getRhs().get(c).getId()).append(" ");
+            }
+            result.append(item.getPosition() == item.getProduction().getRhs().size() ? "." : "" + "\\n");
         }
         return result.toString();
     }

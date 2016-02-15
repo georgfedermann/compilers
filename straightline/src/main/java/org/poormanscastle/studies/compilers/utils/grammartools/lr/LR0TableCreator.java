@@ -24,13 +24,12 @@ public class LR0TableCreator implements TableCreator {
         LR0Grammar grammar = (LR0Grammar) grammarArg;
 
         StringBuilder output = new StringBuilder("digraph LR0StateMachine {\n");
+        output.append("\nnode [shape = rectangle]\n");
 
         // create the graph nodes from the grammar's states.
         for (LRState state : grammar.getStates()) {
             output.append(createDotNodeFromLRState(state));
         }
-
-        output.append("\nnode [shape = rectangle]\n");
 
         for (LREdge edge : grammar.getEdges()) {
             output.append(createDotEdgeFromLREdge(edge));

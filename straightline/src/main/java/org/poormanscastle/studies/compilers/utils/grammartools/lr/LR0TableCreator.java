@@ -46,7 +46,8 @@ public class LR0TableCreator implements TableCreator {
     }
 
     String createDotNodeFromLRState(LRState state) {
-        return StringUtils.join("i", state.getId(), " [label=\"", state.getStateAsText(), "\"];\n");
+        return StringUtils.join("i", state.getId(), " [label=\"", String.valueOf(state.getId()), "\\n",
+                state.getStateAsText(), "\"];\n");
     }
 
 }

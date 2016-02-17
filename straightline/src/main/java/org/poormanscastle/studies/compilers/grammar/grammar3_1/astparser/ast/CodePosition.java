@@ -3,7 +3,9 @@ package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc.Token;
 
 /**
- * tracks the position of the current token represented by the current AST item within the source code.
+ * Using the CodePosition, the parser and other compiler components can give enhanced error messages
+ * when detecting problems within an AstItem.
+ * <p/>
  * Created by georg on 14.01.16.
  */
 public final class CodePosition {
@@ -29,7 +31,7 @@ public final class CodePosition {
         endColumn = token.endColumn;
     }
 
-    public static CodePosition createFromToken(Token token){
+    public static CodePosition createFromToken(Token token) {
         return new CodePosition(token);
     }
 

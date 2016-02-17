@@ -1,7 +1,6 @@
-package org.poormanscastle.studies.compilers.utils.grammartools.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.AstItem;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**

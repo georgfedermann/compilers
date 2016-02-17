@@ -1,21 +1,19 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
- * Created by georg on 15.01.16.
+ * the PrintStatement prints the value of each expression in an ExpressionList.
+ * <p/>
+ * Created by 02eex612 on 17.02.2016.
  */
-public class PrintStatement extends AbstractAstItem implements Statement {
+public final class PrintStatement extends AbstractAstItem implements Statement {
 
     private final ExpressionList expressionList;
 
     public PrintStatement(CodePosition codePosition, ExpressionList expressionList) {
         super(codePosition);
         this.expressionList = expressionList;
-    }
-
-    public ExpressionList getExpressionList() {
-        return expressionList;
     }
 
     @Override

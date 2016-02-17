@@ -1,6 +1,8 @@
-package org.poormanscastle.studies.compilers.utils.grammartools.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
 
 import java.io.Serializable;
+
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * an AstItem is part of an abstract syntax tree representing a sentence that can be

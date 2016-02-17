@@ -1,7 +1,5 @@
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
 
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.AbstractAstItem;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.AstItemVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**

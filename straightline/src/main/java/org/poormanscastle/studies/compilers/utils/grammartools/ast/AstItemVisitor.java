@@ -1,4 +1,14 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
+package org.poormanscastle.studies.compilers.utils.grammartools.ast;
+
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.AssignmentStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.EseqExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.IdExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.LastExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.NumExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.OperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.PairExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.PrintStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.StatementList;
 
 /**
  * implements algorithms and logic which handle one aspect or interpretation of an AST for grammar 3.1.

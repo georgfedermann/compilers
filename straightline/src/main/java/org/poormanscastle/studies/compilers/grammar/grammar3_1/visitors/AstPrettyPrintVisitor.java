@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.AssignmentStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.AstItemVisitor;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.AstItemVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.EseqExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.LastExpressionList;

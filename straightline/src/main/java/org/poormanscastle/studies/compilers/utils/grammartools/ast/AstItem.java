@@ -1,14 +1,15 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
+package org.poormanscastle.studies.compilers.utils.grammartools.ast;
 
 import java.io.Serializable;
 
 /**
- * an AstItem is part of the abstract syntax tree of any sentence written using grammar 3.1,
- * or is any of the nonterminal symbols of the language defined by grammar 3.1.
- * <p>
- * this interface makes those symbols traversible by implementations of the AstVisitor, implementing
- * different aspects of the AstTree
- * <p>
+ * an AstItem is part of an abstract syntax tree representing a sentence that can be
+ * validated against a given context-free regular grammar.
+ * <p/>
+ * additionally, this interface supports traversability for implementations of the AstVisitor,
+ * implementing different aspects of the AstTree, as semantic analysis, IR tree production,
+ * method frame production, etc.
+ * <p/>
  * Created by georg on 13.01.16.
  */
 public interface AstItem extends Serializable {

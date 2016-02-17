@@ -1,5 +1,9 @@
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
 
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.AbstractAstItem;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.AstItemVisitor;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
+
 /**
  * represents an assignment statement of the simple straight-line language as defined by grammar 3.1.
  * an assignment statement consists of the id of a variable and an expression which gets evaluated and

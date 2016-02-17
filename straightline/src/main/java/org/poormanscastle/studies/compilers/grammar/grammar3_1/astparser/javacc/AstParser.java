@@ -3,6 +3,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc;
 
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.*;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 public class AstParser implements AstParserConstants {
     public static void main(String[] args) throws ParseException{

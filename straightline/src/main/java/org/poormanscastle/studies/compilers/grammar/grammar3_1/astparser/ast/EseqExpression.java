@@ -1,5 +1,9 @@
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
 
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.AbstractAstItem;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.AstItemVisitor;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
+
 /**
  * EseqExpr is kind of a compound expression where a statement is evaluated for side effects,
  * then expression is evaluated for a result, as defined by grammar 3.1.

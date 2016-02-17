@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
+package org.poormanscastle.studies.compilers.utils.grammartools.ast;
 
 import java.io.Serializable;
 

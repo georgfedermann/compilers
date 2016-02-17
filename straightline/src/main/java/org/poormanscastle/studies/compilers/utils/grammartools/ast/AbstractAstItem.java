@@ -1,9 +1,12 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
+package org.poormanscastle.studies.compilers.utils.grammartools.ast;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.AstItem;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * implements features and properties common to all AST items.
+ * <p/>
  * Created by georg on 13.01.16.
  */
 public abstract class AbstractAstItem implements AstItem {

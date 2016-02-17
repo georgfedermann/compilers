@@ -1,8 +1,9 @@
-package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast;
+package org.poormanscastle.studies.compilers.utils.grammartools.ast;
 
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc.Token;
 
 /**
+ * tracks the position of the current token represented by the current AST item within the source code.
  * Using the CodePosition, the parser and other compiler components can give enhanced error messages
  * when detecting problems within an AstItem.
  * <p/>

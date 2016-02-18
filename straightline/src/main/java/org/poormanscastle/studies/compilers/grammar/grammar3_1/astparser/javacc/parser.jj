@@ -207,10 +207,3 @@ Expression F() :
     |
     token = <ID> { return new IdExpression(new CodePosition(token), token.image); }
 }
-
-
-
-
-
-
-

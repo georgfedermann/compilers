@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 /**
  * implements algorithms and logic which handle one aspect or interpretation of an AST for grammar 3.1.

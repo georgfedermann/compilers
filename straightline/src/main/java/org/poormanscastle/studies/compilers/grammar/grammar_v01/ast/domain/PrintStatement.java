@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -13,6 +13,11 @@ public final class PrintStatement extends AbstractAstItem implements Statement {
 
     public PrintStatement(CodePosition codePosition, ExpressionList expressionList) {
         super(codePosition);
+        this.expressionList = expressionList;
+    }
+
+    public PrintStatement(ExpressionList expressionList) {
+        super(expressionList.getCodePosition());
         this.expressionList = expressionList;
     }
 

@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -15,6 +15,12 @@ public final class AssignmentStatement extends AbstractAstItem implements Statem
 
     public AssignmentStatement(CodePosition codePosition, String id, Expression expression) {
         super(codePosition);
+        this.id = id;
+        this.expression = expression;
+    }
+
+    public AssignmentStatement(String id, Expression expression) {
+        super(expression.getCodePosition());
         this.id = id;
         this.expression = expression;
     }

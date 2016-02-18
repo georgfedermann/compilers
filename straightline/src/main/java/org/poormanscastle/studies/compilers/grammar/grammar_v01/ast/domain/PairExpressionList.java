@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -13,6 +13,12 @@ public final class PairExpressionList extends AbstractAstItem implements Express
 
     public PairExpressionList(CodePosition codePosition, Expression expression, ExpressionList expressionList) {
         super(codePosition);
+        this.expression = expression;
+        this.expressionList = expressionList;
+    }
+
+    public PairExpressionList(Expression expression, ExpressionList expressionList) {
+        super(expression.getCodePosition());
         this.expression = expression;
         this.expressionList = expressionList;
     }

@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -11,6 +11,11 @@ public final class LastStatementList extends AbstractAstItem implements Statemen
 
     public LastStatementList(CodePosition codePosition, Statement statement) {
         super(codePosition);
+        this.statement = statement;
+    }
+
+    public LastStatementList(Statement statement) {
+        super(statement.getCodePosition());
         this.statement = statement;
     }
 

@@ -1,0 +1,213 @@
+
+options{
+    LOOKAHEAD = 1;
+    BUILD_PARSER = true;
+    BUILD_TOKEN_MANAGER = true;
+    CHOICE_AMBIGUITY_CHECK = 2;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_PARSER = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    FORCE_LA_CHECK = false;
+    IGNORE_CASE = false;
+    JAVA_UNICODE_ESCAPE = false;
+    OTHER_AMBIGUITY_CHECK = 1;
+    SANITY_CHECK = true;
+    STATIC = false; /* changed */
+    UNICODE_INPUT = false;
+    USER_CHAR_STREAM = false;
+    USER_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(V01AstParser)
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc;
+
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.*;
+
+public class V01AstParser{
+    public static void main(String[] args){
+        V01AstParser parser = new V01AstParser(System.in);
+        parser.P();
+    }
+}
+PARSER_END(V01AstParser)
+
+/* Lexer */
+/* Language Commandos */
+TOKEN : {
+    < PRINT : "print" >
+}
+
+/* Operators */
+TOKEN : {
+    < LPAREN : "(" > |
+    < RPAREN : ")" > |
+    < NOT : "!" > |
+    < TIMES : "*" > |
+    < DIV : "/" > |
+    < PLUS : "+" > |
+    < MINUS : "-" > |
+    < LT : "<" > |
+    < LTE : "<=" > |
+    < GT : ">" > |
+    < GTE : ">=" > |
+    < EQ : "=" > |
+    < NEQ : "!=" > |
+    < XOR : "^" > |
+    < AND : "&" > |
+    < OR : "|" > |
+    < LET : "=" >
+}
+
+/* Separators */
+TOKEN : {
+    < COMMA : ";" > |
+    < SEMICOLON : ";" >
+}
+
+/* variable strings */
+TOKEN : {
+    < ID : [ "_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z", "0"-"9"])* > |
+    < NUM : (["1"-"9"])+ > |
+    < DEC : (["0"-"9"])+("."(["0"-"9"])+)? | ("."(["0"-"9"])+) > |
+    < BOOL : "true" | "false" > |
+    < TEXT : "\""(["A"-"Z", "a"-"z", "0"-"9", ",", ";", "."])*"\"" > |
+    < TYPE : "int" | "double" | "boolean" | "text" >
+}
+
+SKIP : {
+    " " |
+    "\n" |
+    "\r" |
+    "\t"
+}
+
+Program P() :
+{ Statement statement;
+    StatementList statementList; }
+{
+    statement = S() statementList = PPrime()
+    {
+        return new ProgramImpl(statement.getCodePosition(), statementList == null ? statement :
+            new PairStatementList(statement.getCodePosition(), statement, statementList));
+    }
+}
+
+StatementList PPrime() :
+{ StatementList statementList; }
+{
+    <SEMICOLON> statementList = PPrimePrime()
+    {
+        return statementList;
+    }
+}
+
+StatementList PPrimePrime() :
+{ Statement statement; StatementList statementList; }
+{
+    (
+        statement = S() statementList = PPrime()
+        {
+            return statementList == null ?
+                new LastStatementList(statement.getCodePosition(), statement) :
+                new PairStatementList(statement.getCodePosition(), statement, statementList);
+        }
+    )?
+    { return null; }
+}
+
+Statement S() :
+{ Statement statement; }
+{
+    statement = DS() |
+    statement = AS() |
+    statement = PS()
+    {
+        return statement;
+    }
+}
+
+Statement DS() :
+{ Statement statement; Token typeToken; Token idToken; Expression expression; }
+{
+    typeToken = <TYPE> idToken = <ID> expression = DSPrime()
+    {
+
+    }
+}
+
+Expression DSPrime() :
+{ Expression expression; }
+{
+    <LET> expression = E()
+    {
+        return expression;
+    }
+}
+
+Statement AS() :
+{ Statement statement; Token idToken; Expression expression; }
+{
+    idToken = <ID> <LET> expression = E()
+    {
+        return new AssignmentStatement(idToken.image, expression);
+    }
+}
+
+Statement PS() :
+{}
+{
+    <PRINT> <LPAREN> EL() <RPAREN>
+}
+
+ExpressionList EL() :
+{ Expression expression; ExpressionList expressionList; }
+{
+    expression = E() expressionList = ELPrime()
+    {
+        return expressionList == null ? new LastExpressionList(expression.getCodePosition(), expression) :
+            new PairExpressionList(expression.getCodePosition(), expression, expressionList);
+    }
+}
+
+ExpressionList ELPrime() :
+{ Expression expression; ExpressionList expressionList; }
+{
+    (
+    <COMMA> expression = E() expressionList = ELPrime()
+    {
+        return expressionList == null ? new LastExpressionList(expression.getCodePosition(), expression) :
+            new PairExpressionList(expression, expressionList);
+    }
+    )?
+    { return null; }
+}
+
+Expression F() :
+{ Token valueToken; Expression expression; }
+{
+    valueToken = <ID>
+    {
+        return new IdExpression(new CodePosition(valueToken), valueToken.image);
+    }
+    |
+    valueToken = <NUM>
+    {
+        return new NumExpression(new CodePosition(valueToken), Integer.parseInt(valueToken.image));
+    }
+    |
+    valueToken = <DEC>
+    {
+        return new DecimalExpression(new CodePosition(valueToken), Double.parseDouble(valueToken.image));
+    }
+    |
+    valueToken = <BOOL>
+    {
+        return new BooleanExpression(new CodePosition(valueToken), Boolean.parseBoolean(valueToken.image));
+    }
+    |
+    valueToken = <TEXT>
+    {
+        return new TextExpression(new CodePosition(valueToken), valueToken.image);
+    }
+}

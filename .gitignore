@@ -15,3 +15,9 @@ hs_err_pid*
 *.iml
 target
 straightline/grammartools/*
+
+# grammar artefacts
+straightline/grammars/*.html
+straightline/grammars/*.dot
+straightline/grammars/*.pdf
+

@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -13,6 +13,12 @@ public final class UnaryOperatorExpression extends AbstractAstItem implements Ex
 
     public UnaryOperatorExpression(CodePosition codePosition, UnaryOperator operator, Expression expression) {
         super(codePosition);
+        this.operator = operator;
+        this.expression = expression;
+    }
+
+    public UnaryOperatorExpression(UnaryOperator operator, Expression expression) {
+        super(expression.getCodePosition());
         this.operator = operator;
         this.expression = expression;
     }

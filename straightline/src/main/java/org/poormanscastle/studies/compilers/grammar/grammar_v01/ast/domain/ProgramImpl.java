@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -11,6 +11,11 @@ public final class ProgramImpl extends AbstractAstItem implements Program {
 
     public ProgramImpl(CodePosition codePosition, Statement statement) {
         super(codePosition);
+        this.statement = statement;
+    }
+
+    public ProgramImpl(Statement statement) {
+        super(statement.getCodePosition());
         this.statement = statement;
     }
 

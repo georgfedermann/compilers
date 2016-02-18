@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -11,6 +11,11 @@ public final class LastExpressionList extends AbstractAstItem implements Express
 
     public LastExpressionList(CodePosition codePosition, Expression expression) {
         super(codePosition);
+        this.expression = expression;
+    }
+
+    public LastExpressionList(Expression expression) {
+        super(expression.getCodePosition());
         this.expression = expression;
     }
 

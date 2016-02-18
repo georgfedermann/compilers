@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -10,7 +10,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
  */
 public final class DeclarationStatement extends AbstractAstItem implements Statement {
 
-    private final String type;
+    private final Type type;
 
     private final String id;
 
@@ -18,14 +18,21 @@ public final class DeclarationStatement extends AbstractAstItem implements State
 
     public DeclarationStatement(CodePosition codePosition, String type, String id, Expression expression) {
         super(codePosition);
-        this.type = type;
+        this.type = Type.valueOf(type.toUpperCase());
+        this.id = id;
+        this.expression = expression;
+    }
+
+    public DeclarationStatement(String type, String id, Expression expression) {
+        super(expression.getCodePosition());
+        this.type = Type.valueOf(type.toUpperCase());
         this.id = id;
         this.expression = expression;
     }
 
     public DeclarationStatement(CodePosition codePosition, String type, String id) {
         super(codePosition);
-        this.type = type;
+        this.type = Type.valueOf(type.toUpperCase());
         this.id = id;
         expression = null;
     }

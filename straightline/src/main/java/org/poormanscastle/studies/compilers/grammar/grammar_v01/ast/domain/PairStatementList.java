@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
@@ -13,6 +13,12 @@ public final class PairStatementList extends AbstractAstItem implements Statemen
 
     public PairStatementList(CodePosition codePosition, Statement head, StatementList tail) {
         super(codePosition);
+        this.head = head;
+        this.tail = tail;
+    }
+
+    public PairStatementList(Statement head, StatementList tail) {
+        super(head.getCodePosition());
         this.head = head;
         this.tail = tail;
     }

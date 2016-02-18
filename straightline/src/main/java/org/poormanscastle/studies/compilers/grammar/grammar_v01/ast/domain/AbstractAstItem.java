@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast;
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;

@@ -1,6 +1,9 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * assigns the value of a given expression to a memory location identified by an id string.
@@ -15,14 +18,14 @@ public final class AssignmentStatement extends AbstractAstItem implements Statem
 
     public AssignmentStatement(CodePosition codePosition, String id, Expression expression) {
         super(codePosition);
+        checkArgument(!StringUtils.isBlank(id));
+        checkArgument(expression != null);
         this.id = id;
         this.expression = expression;
     }
 
     public AssignmentStatement(String id, Expression expression) {
-        super(expression.getCodePosition());
-        this.id = id;
-        this.expression = expression;
+        this(expression.getCodePosition(), id, expression);
     }
 
     @Override

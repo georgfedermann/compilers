@@ -2,6 +2,8 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by 02eex612 on 17.02.2016.
  */
@@ -13,14 +15,14 @@ public final class PairExpressionList extends AbstractAstItem implements Express
 
     public PairExpressionList(CodePosition codePosition, Expression expression, ExpressionList expressionList) {
         super(codePosition);
+        checkArgument(expression != null);
+        checkArgument(expressionList != null);
         this.expression = expression;
         this.expressionList = expressionList;
     }
 
     public PairExpressionList(Expression expression, ExpressionList expressionList) {
-        super(expression.getCodePosition());
-        this.expression = expression;
-        this.expressionList = expressionList;
+        this(expression.getCodePosition(), expression, expressionList);
     }
 
     @Override

@@ -2,6 +2,8 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * the PrintStatement prints the value of each expression in an ExpressionList.
  * <p/>
@@ -18,6 +20,7 @@ public final class PrintStatement extends AbstractAstItem implements Statement {
 
     public PrintStatement(ExpressionList expressionList) {
         super(expressionList.getCodePosition());
+        checkArgument(expressionList != null);
         this.expressionList = expressionList;
     }
 

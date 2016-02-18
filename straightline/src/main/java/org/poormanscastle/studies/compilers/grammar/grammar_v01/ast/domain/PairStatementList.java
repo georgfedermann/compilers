@@ -2,6 +2,8 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by 02eex612 on 17.02.2016.
  */
@@ -13,14 +15,14 @@ public final class PairStatementList extends AbstractAstItem implements Statemen
 
     public PairStatementList(CodePosition codePosition, Statement head, StatementList tail) {
         super(codePosition);
+        checkArgument(head != null);
+        checkArgument(tail != null);
         this.head = head;
         this.tail = tail;
     }
 
     public PairStatementList(Statement head, StatementList tail) {
-        super(head.getCodePosition());
-        this.head = head;
-        this.tail = tail;
+        this(head.getCodePosition(), head, tail);
     }
 
     @Override

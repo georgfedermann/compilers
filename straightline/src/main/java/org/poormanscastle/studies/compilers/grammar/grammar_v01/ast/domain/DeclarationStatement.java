@@ -1,6 +1,9 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * declares the id and the type of a variable. Also optionally accepts an expression to
@@ -14,27 +17,28 @@ public final class DeclarationStatement extends AbstractAstItem implements State
 
     private final String id;
 
+    /**
+     * Expression may remain {@code null} if the declaration statement has no implicit initialization.
+     */
     private final Expression expression;
 
     public DeclarationStatement(CodePosition codePosition, String type, String id, Expression expression) {
         super(codePosition);
+        checkArgument(!StringUtils.isBlank(type));
+        checkArgument(!StringUtils.isBlank(id));
         this.type = Type.valueOf(type.toUpperCase());
         this.id = id;
         this.expression = expression;
     }
 
     public DeclarationStatement(String type, String id, Expression expression) {
-        super(expression.getCodePosition());
-        this.type = Type.valueOf(type.toUpperCase());
-        this.id = id;
-        this.expression = expression;
+        this(expression.getCodePosition(), type, id, expression);
     }
 
     public DeclarationStatement(CodePosition codePosition, String type, String id) {
-        super(codePosition);
-        this.type = Type.valueOf(type.toUpperCase());
-        this.id = id;
-        expression = null;
+        this(codePosition, type, id, null);
+        checkArgument(!StringUtils.isBlank(type));
+        checkArgument(!StringUtils.isBlank(id));
     }
 
     @Override

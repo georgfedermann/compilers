@@ -2,6 +2,8 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * evaluates to an integer expression.
  * <p/>
@@ -13,6 +15,7 @@ public final class NumExpression extends AbstractAstItem implements Expression {
 
     public NumExpression(CodePosition codePosition, Integer value) {
         super(codePosition);
+        checkArgument(value != null);
         this.value = value;
     }
 

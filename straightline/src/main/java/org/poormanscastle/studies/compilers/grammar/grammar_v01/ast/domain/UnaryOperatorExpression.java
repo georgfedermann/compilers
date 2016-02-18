@@ -2,25 +2,27 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by 02eex612 on 17.02.2016.
  */
 public final class UnaryOperatorExpression extends AbstractAstItem implements Expression {
 
-    private UnaryOperator operator;
+    private final UnaryOperator operator;
 
-    private Expression expression;
+    private final Expression expression;
 
     public UnaryOperatorExpression(CodePosition codePosition, UnaryOperator operator, Expression expression) {
         super(codePosition);
+        checkArgument(operator != null);
+        checkArgument(expression != null);
         this.operator = operator;
         this.expression = expression;
     }
 
     public UnaryOperatorExpression(UnaryOperator operator, Expression expression) {
-        super(expression.getCodePosition());
-        this.operator = operator;
-        this.expression = expression;
+        this(expression.getCodePosition(), operator, expression);
     }
 
     @Override

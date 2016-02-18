@@ -25,7 +25,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.java
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.*;
 
 public class V01AstParser{
-    public static void main(String[] args){
+    public static void main(String[] args) throws ParseException{
         V01AstParser parser = new V01AstParser(System.in);
         parser.P();
     }
@@ -51,7 +51,7 @@ TOKEN : {
     < LTE : "<=" > |
     < GT : ">" > |
     < GTE : ">=" > |
-    < EQ : "=" > |
+    < EQ : "==" > |
     < NEQ : "!=" > |
     < XOR : "^" > |
     < AND : "&" > |
@@ -61,7 +61,7 @@ TOKEN : {
 
 /* Separators */
 TOKEN : {
-    < COMMA : ";" > |
+    < COMMA : "," > |
     < SEMICOLON : ";" >
 }
 
@@ -128,21 +128,26 @@ Statement S() :
 }
 
 Statement DS() :
-{ Statement statement; Token typeToken; Token idToken; Expression expression; }
+{ Token typeToken, idToken; Expression expression; }
 {
     typeToken = <TYPE> idToken = <ID> expression = DSPrime()
     {
-
+        return expression == null ?
+            new DeclarationStatement(new CodePosition(typeToken), typeToken.image, idToken.image) :
+            new DeclarationStatement(typeToken.image, idToken.image, expression);
     }
 }
 
 Expression DSPrime() :
 { Expression expression; }
 {
+    (
     <LET> expression = E()
     {
         return expression;
     }
+    )?
+    { return null; }
 }
 
 Statement AS() :
@@ -155,9 +160,12 @@ Statement AS() :
 }
 
 Statement PS() :
-{}
+{ ExpressionList expressionList; }
 {
-    <PRINT> <LPAREN> EL() <RPAREN>
+    <PRINT> <LPAREN> expressionList = EL() <RPAREN>
+    {
+        return new PrintStatement(expressionList);
+    }
 }
 
 ExpressionList EL() :
@@ -179,6 +187,70 @@ ExpressionList ELPrime() :
         return expressionList == null ? new LastExpressionList(expression.getCodePosition(), expression) :
             new PairExpressionList(expression, expressionList);
     }
+    )?
+    { return null; }
+}
+
+Expression E() :
+{ Expression lhs, rhs; }
+{
+    lhs = T8() rhs = EPrime(lhs)
+    {
+        return rhs == null ? lhs : rhs;
+    }
+}
+
+Expression EPrime(Expression lhs) :
+{ Expression rhs; Expression ePrimeExpression; Token operatorToken; }
+{
+    (
+        operatorToken = <OR> rhs = T8() ePrimeExpression = EPrime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.OR,
+                ePrimeExpression != null ? ePrimeExpression : rhs );
+        }
+    )?
+    { return null; }
+}
+
+Expression T8() :
+{ Expression lhs, rhs;}
+{
+    lhs = T7() rhs = T8Prime(lhs)
+    {return rhs == null ? lhs : rhs;}
+}
+
+Expression T8Prime(Expression lhs) :
+{ Expression rhs, t8PrimeExpression; Token operatorToken; }
+{
+    (
+        operatorToken = <AND> rhs = T7() t8PrimeExpression = T8Prime()
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.AND,
+                t8PrimeExpression != null ? t8PrimeExpression : rhs );
+        }
+    )?
+    { return null; }
+}
+
+Expression T7() :
+{ Expression lhs, rhs; }
+{
+    lhs = T6() rhs = T7Prime()
+    {
+        return rhs != null ? rhs : lhs;
+    }
+}
+
+Expression T7Prime(Expression lhs) :
+{ Token operatorToken; Expression rhs, t7PrimeExpression; }
+{
+    (
+        operatorToken = <XOR> rhs = T6() t7PrimeExpression = T7Prime()
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.XOR,
+                t7PrimeExpression != null ? t7PrimeExpression : rhs );
+        }
     )?
     { return null; }
 }

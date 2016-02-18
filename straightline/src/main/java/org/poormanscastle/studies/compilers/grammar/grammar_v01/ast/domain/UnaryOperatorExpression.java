@@ -23,6 +23,14 @@ public final class UnaryOperatorExpression extends AbstractAstItem implements Ex
         this(expression.getCodePosition(), operator, expression);
     }
 
+    public UnaryOperator getOperator() {
+        return operator;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithUnaryOperatorExpression(this);

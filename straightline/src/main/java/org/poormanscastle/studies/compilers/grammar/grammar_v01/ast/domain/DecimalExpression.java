@@ -17,6 +17,10 @@ public final class DecimalExpression extends AbstractAstItem implements Expressi
         this.value = value;
     }
 
+    public Double getValue() {
+        return value;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithDecimalExpression(this);

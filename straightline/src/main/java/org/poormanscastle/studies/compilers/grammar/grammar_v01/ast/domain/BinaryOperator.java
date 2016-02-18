@@ -9,7 +9,7 @@ public enum BinaryOperator {
 
     private String label;
 
-    private BinaryOperator(String label) {
+    BinaryOperator(String label) {
         this.label = label;
     }
 

@@ -16,7 +16,12 @@ public final class TextExpression extends AbstractAstItem implements Expression 
     public TextExpression(CodePosition codePosition, String value) {
         super(codePosition);
         checkArgument(!StringUtils.isBlank(value));
-        this.value = value;
+        // TODO string literals are delimted with quotes. JavaCC handles the quotes through. I remove all quotes here.
+        this.value = value.replaceAll("\"", "");
+    }
+
+    public String getValue() {
+        return value;
     }
 
     @Override

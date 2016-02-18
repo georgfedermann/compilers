@@ -29,8 +29,8 @@ public class V01AstParser implements V01AstParserConstants {
   final public StatementList PPrimePrime() throws ParseException {Statement statement; StatementList statementList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PRINT:
-    case ID:
-    case TYPE:{
+    case TYPE:
+    case ID:{
       statement = S();
       statementList = PPrime();
 {if ("" != null) return statementList == null ?
@@ -50,10 +50,12 @@ public class V01AstParser implements V01AstParserConstants {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case TYPE:{
       statement = DS();
+{if ("" != null) return statement;}
       break;
       }
     case ID:{
       statement = AS();
+{if ("" != null) return statement;}
       break;
       }
     case PRINT:{
@@ -69,9 +71,7 @@ public class V01AstParser implements V01AstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Statement DS() throws ParseException {Token typeToken;
-    Token idToken;
-    Expression expression;
+  final public Statement DS() throws ParseException {Token typeToken, idToken; Expression expression;
     typeToken = jj_consume_token(TYPE);
     idToken = jj_consume_token(ID);
     expression = DSPrime();
@@ -147,10 +147,10 @@ public class V01AstParser implements V01AstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression EPrime(Expression lhs) throws ParseException {Expression rhs; Expression ePrimeExpression; Token operatorToken;
+  final public Expression EPrime(Expression lhs) throws ParseException {Expression rhs; Expression ePrimeExpression;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case OR:{
-      operatorToken = jj_consume_token(OR);
+      jj_consume_token(OR);
       rhs = T8();
       ePrimeExpression = EPrime(rhs);
 {if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.OR,
@@ -165,8 +165,250 @@ public class V01AstParser implements V01AstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression T8() throws ParseException {
-{if ("" != null) return new BooleanExpression(null, Boolean.FALSE);}
+  final public Expression T8() throws ParseException {Expression lhs, rhs;
+    lhs = T7();
+    rhs = T8Prime(lhs);
+{if ("" != null) return rhs == null ? lhs : rhs;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T8Prime(Expression lhs) throws ParseException {Expression rhs, t8PrimeExpression;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case AND:{
+      jj_consume_token(AND);
+      rhs = T7();
+      t8PrimeExpression = T8Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.AND,
+                t8PrimeExpression != null ? t8PrimeExpression : rhs );}
+      break;
+      }
+    default:
+      jj_la1[5] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T7() throws ParseException {Expression lhs, rhs;
+    lhs = T6();
+    rhs = T7Prime(lhs);
+{if ("" != null) return rhs != null ? rhs : lhs;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T7Prime(Expression lhs) throws ParseException {Expression rhs, t7PrimeExpression;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case XOR:{
+      jj_consume_token(XOR);
+      rhs = T6();
+      t7PrimeExpression = T7Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.XOR,
+                t7PrimeExpression != null ? t7PrimeExpression : rhs );}
+      break;
+      }
+    default:
+      jj_la1[6] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T6() throws ParseException {Expression lhs, rhs;
+    lhs = T5();
+    rhs = T6Prime(lhs);
+{if ("" != null) return rhs != null ? rhs : lhs;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T6Prime(Expression lhs) throws ParseException {Expression rhs, t6PrimeExpression;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case EQ:{
+      jj_consume_token(EQ);
+      rhs = T5();
+      t6PrimeExpression = T6Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.EQ,
+                t6PrimeExpression != null ? t6PrimeExpression : rhs );}
+      break;
+      }
+    default:
+      jj_la1[7] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T5() throws ParseException {Expression lhs, rhs;
+    lhs = T4();
+    rhs = T5Prime(lhs);
+{if ("" != null) return rhs != null ? rhs : lhs;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T5Prime(Expression lhs) throws ParseException {Expression rhs, t5PrimeExpression;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case LT:
+    case LTE:
+    case GT:
+    case GTE:{
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case LT:{
+        jj_consume_token(LT);
+        rhs = T4();
+        t5PrimeExpression = T5Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.LT,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );}
+        break;
+        }
+      case LTE:{
+        jj_consume_token(LTE);
+        rhs = T4();
+        t5PrimeExpression = T5Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.LTE,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );}
+        break;
+        }
+      case GT:{
+        jj_consume_token(GT);
+        rhs = T4();
+        t5PrimeExpression = T5Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.GT,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );}
+        break;
+        }
+      case GTE:{
+        jj_consume_token(GTE);
+        rhs = T4();
+        t5PrimeExpression = T5Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.GTE,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );}
+        break;
+        }
+      default:
+        jj_la1[8] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      break;
+      }
+    default:
+      jj_la1[9] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T4() throws ParseException {Expression lhs, rhs;
+    lhs = T3();
+    rhs = T4Prime(lhs);
+{if ("" != null) return rhs != null ? rhs : lhs;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T4Prime(Expression lhs) throws ParseException {Expression rhs, t4PrimeExpression;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case PLUS:
+    case MINUS:{
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case PLUS:{
+        jj_consume_token(PLUS);
+        rhs = T3();
+        t4PrimeExpression = T4Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.PLUS,
+                t4PrimeExpression != null ? t4PrimeExpression : rhs );}
+        break;
+        }
+      case MINUS:{
+        jj_consume_token(MINUS);
+        rhs = T3();
+        t4PrimeExpression = T4Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.MINUS,
+                t4PrimeExpression != null ? t4PrimeExpression : rhs );}
+        break;
+        }
+      default:
+        jj_la1[10] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      break;
+      }
+    default:
+      jj_la1[11] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T3() throws ParseException {Expression lhs, rhs;
+    lhs = T2();
+    rhs = T3Prime(lhs);
+{if ("" != null) return rhs != null ? rhs : lhs;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T3Prime(Expression lhs) throws ParseException {Expression rhs, t3PrimeExpression;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case TIMES:
+    case DIV:{
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case TIMES:{
+        jj_consume_token(TIMES);
+        rhs = T2();
+        t3PrimeExpression = T3Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.TIMES,
+                t3PrimeExpression != null ? t3PrimeExpression : rhs );}
+        break;
+        }
+      case DIV:{
+        jj_consume_token(DIV);
+        rhs = T2();
+        t3PrimeExpression = T3Prime(rhs);
+{if ("" != null) return new BinaryOperatorExpression(lhs, BinaryOperator.DIV,
+                t3PrimeExpression != null ? t3PrimeExpression : rhs );}
+        break;
+        }
+      default:
+        jj_la1[12] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      break;
+      }
+    default:
+      jj_la1[13] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expression T2() throws ParseException {Expression f;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case BOOL:
+    case NUM:
+    case DEC:
+    case ID:
+    case TEXT:{
+      f = F();
+{if ("" != null) return f;}
+      break;
+      }
+    case NOT:{
+      jj_consume_token(NOT);
+      f = F();
+{if ("" != null) return new UnaryOperatorExpression(UnaryOperator.NOT, f);}
+      break;
+      }
+    default:
+      jj_la1[14] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -198,7 +440,7 @@ public class V01AstParser implements V01AstParserConstants {
       break;
       }
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -214,13 +456,13 @@ public class V01AstParser implements V01AstParserConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[6];
+  final private int[] jj_la1 = new int[16];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x4200002,0x4200002,0x40000,0x80000,0x20000,0x3e00000,};
+      jj_la1_0 = new int[] {0x2080002,0x2080002,0x40000,0x200000,0x20000,0x10000,0x8000,0x2000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0x7900010,0x7900000,};
    }
 
   /** Constructor with InputStream. */
@@ -234,7 +476,7 @@ public class V01AstParser implements V01AstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -248,7 +490,7 @@ public class V01AstParser implements V01AstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -258,7 +500,7 @@ public class V01AstParser implements V01AstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -268,7 +510,7 @@ public class V01AstParser implements V01AstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -277,7 +519,7 @@ public class V01AstParser implements V01AstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -286,7 +528,7 @@ public class V01AstParser implements V01AstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -342,7 +584,7 @@ public class V01AstParser implements V01AstParserConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 16; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

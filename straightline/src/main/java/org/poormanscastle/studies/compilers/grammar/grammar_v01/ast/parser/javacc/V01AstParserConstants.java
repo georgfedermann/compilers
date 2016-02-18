@@ -47,21 +47,21 @@ public interface V01AstParserConstants {
   /** RegularExpression Id. */
   int LET = 18;
   /** RegularExpression Id. */
-  int COMMA = 19;
+  int TYPE = 19;
   /** RegularExpression Id. */
-  int SEMICOLON = 20;
+  int BOOL = 20;
   /** RegularExpression Id. */
-  int ID = 21;
+  int COMMA = 21;
   /** RegularExpression Id. */
-  int NUM = 22;
+  int SEMICOLON = 22;
   /** RegularExpression Id. */
-  int DEC = 23;
+  int NUM = 23;
   /** RegularExpression Id. */
-  int BOOL = 24;
+  int DEC = 24;
   /** RegularExpression Id. */
-  int TEXT = 25;
+  int ID = 25;
   /** RegularExpression Id. */
-  int TYPE = 26;
+  int TEXT = 26;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -87,14 +87,14 @@ public interface V01AstParserConstants {
     "\"&\"",
     "\"|\"",
     "\"=\"",
+    "<TYPE>",
+    "<BOOL>",
     "\",\"",
     "\";\"",
-    "<ID>",
     "<NUM>",
     "<DEC>",
-    "<BOOL>",
+    "<ID>",
     "<TEXT>",
-    "<TYPE>",
     "\" \"",
     "\"\\n\"",
     "\"\\r\"",

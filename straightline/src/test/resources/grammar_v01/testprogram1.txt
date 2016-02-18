@@ -1,0 +1,17 @@
+int a = 0;
+int b;
+int c = 3;
+b = a + c * 3;
+double f = 4.5;
+double g = 3.6 * f;
+boolean yes = true;
+boolean no;
+no = !yes;
+boolean maybe = a < b;
+boolean maybeNot = b < a;
+text nameHero = "John Connor";
+text nameEvil;
+boolean anotherTry = a == "Hiafler";
+boolean k = l & m;
+nameEvil = "Walter White";
+print( a, b, c, yes, no, maybe, maybeNot, nameHero, nameEvil);

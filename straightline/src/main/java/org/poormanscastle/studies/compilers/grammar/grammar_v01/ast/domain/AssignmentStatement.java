@@ -27,6 +27,14 @@ public final class AssignmentStatement extends AbstractAstItem implements Statem
         this(expression.getCodePosition(), id, expression);
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithAssignmentStatement(this);

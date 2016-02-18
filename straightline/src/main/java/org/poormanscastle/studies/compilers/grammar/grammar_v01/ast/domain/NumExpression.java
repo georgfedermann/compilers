@@ -17,6 +17,10 @@ public final class NumExpression extends AbstractAstItem implements Expression {
         this.value = value;
     }
 
+    public Integer getValue() {
+        return value;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithNumExpression(this);

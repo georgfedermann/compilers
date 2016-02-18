@@ -25,6 +25,18 @@ public final class BinaryOperatorExpression extends AbstractAstItem implements E
         this(lhs.getCodePosition(), lhs, operator, rhs);
     }
 
+    public Expression getLhs() {
+        return lhs;
+    }
+
+    public BinaryOperator getOperator() {
+        return operator;
+    }
+
+    public Expression getRhs() {
+        return rhs;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithBinaryOperatorExpression(this);

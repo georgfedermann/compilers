@@ -40,6 +40,18 @@ public final class DeclarationStatement extends AbstractAstItem implements State
         checkArgument(!StringUtils.isBlank(id));
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithDeclarationStatement(this);

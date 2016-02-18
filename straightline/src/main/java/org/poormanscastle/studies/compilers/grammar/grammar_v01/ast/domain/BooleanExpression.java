@@ -15,6 +15,10 @@ public final class BooleanExpression extends AbstractAstItem implements Expressi
         this.value = value;
     }
 
+    public Boolean getValue() {
+        return value;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithBooleanExpression(this);

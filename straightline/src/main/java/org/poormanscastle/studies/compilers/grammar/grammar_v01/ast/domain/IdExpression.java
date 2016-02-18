@@ -19,6 +19,10 @@ public final class IdExpression extends AbstractAstItem implements Expression {
         this.id = id;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithIdExpression(this);

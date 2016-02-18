@@ -56,7 +56,9 @@ TOKEN : {
     < XOR : "^" > |
     < AND : "&" > |
     < OR : "|" > |
-    < LET : "=" >
+    < LET : "=" > |
+    < TYPE : "int" | "double" | "boolean" | "text" > |
+    < BOOL : "true" | "false" >
 }
 
 /* Separators */
@@ -67,12 +69,10 @@ TOKEN : {
 
 /* variable strings */
 TOKEN : {
-    < ID : [ "_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z", "0"-"9"])* > |
-    < NUM : (["1"-"9"])+ > |
+    < NUM : (["0"-"9"])+ > |
     < DEC : (["0"-"9"])+("."(["0"-"9"])+)? | ("."(["0"-"9"])+) > |
-    < BOOL : "true" | "false" > |
-    < TEXT : "\""(["A"-"Z", "a"-"z", "0"-"9", ",", ";", "."])*"\"" > |
-    < TYPE : "int" | "double" | "boolean" | "text" >
+    < ID : [ "_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z", "0"-"9"])* > |
+    < TEXT : "\""(["A"-"Z", "a"-"z", "0"-"9", ",", ";", ".", " "])*"\"" >
 }
 
 SKIP : {
@@ -119,8 +119,16 @@ StatementList PPrimePrime() :
 Statement S() :
 { Statement statement; }
 {
-    statement = DS() |
-    statement = AS() |
+    statement = DS()
+    {
+        return statement;
+    }
+    |
+    statement = AS()
+    {
+        return statement;
+    }
+    |
     statement = PS()
     {
         return statement;
@@ -201,10 +209,10 @@ Expression E() :
 }
 
 Expression EPrime(Expression lhs) :
-{ Expression rhs; Expression ePrimeExpression; Token operatorToken; }
+{ Expression rhs; Expression ePrimeExpression; }
 {
     (
-        operatorToken = <OR> rhs = T8() ePrimeExpression = EPrime(rhs)
+        <OR> rhs = T8() ePrimeExpression = EPrime(rhs)
         {
             return new BinaryOperatorExpression(lhs, BinaryOperator.OR,
                 ePrimeExpression != null ? ePrimeExpression : rhs );
@@ -221,10 +229,10 @@ Expression T8() :
 }
 
 Expression T8Prime(Expression lhs) :
-{ Expression rhs, t8PrimeExpression; Token operatorToken; }
+{ Expression rhs, t8PrimeExpression; }
 {
     (
-        operatorToken = <AND> rhs = T7() t8PrimeExpression = T8Prime()
+        <AND> rhs = T7() t8PrimeExpression = T8Prime(rhs)
         {
             return new BinaryOperatorExpression(lhs, BinaryOperator.AND,
                 t8PrimeExpression != null ? t8PrimeExpression : rhs );
@@ -236,23 +244,159 @@ Expression T8Prime(Expression lhs) :
 Expression T7() :
 { Expression lhs, rhs; }
 {
-    lhs = T6() rhs = T7Prime()
+    lhs = T6() rhs = T7Prime(lhs)
     {
         return rhs != null ? rhs : lhs;
     }
 }
 
 Expression T7Prime(Expression lhs) :
-{ Token operatorToken; Expression rhs, t7PrimeExpression; }
+{ Expression rhs, t7PrimeExpression; }
 {
     (
-        operatorToken = <XOR> rhs = T6() t7PrimeExpression = T7Prime()
+        <XOR> rhs = T6() t7PrimeExpression = T7Prime(rhs)
         {
             return new BinaryOperatorExpression(lhs, BinaryOperator.XOR,
                 t7PrimeExpression != null ? t7PrimeExpression : rhs );
         }
     )?
     { return null; }
+}
+
+Expression T6() :
+{ Expression lhs, rhs; }
+{
+    lhs = T5() rhs = T6Prime(lhs)
+    {
+        return rhs != null ? rhs : lhs;
+    }
+}
+
+Expression T6Prime(Expression lhs) :
+{ Expression rhs, t6PrimeExpression; }
+{
+    (
+        <EQ> rhs = T5() t6PrimeExpression = T6Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.EQ,
+                t6PrimeExpression != null ? t6PrimeExpression : rhs );
+        }
+    )?
+    { return null; }
+}
+
+Expression T5() :
+{ Expression lhs, rhs; }
+{
+    lhs = T4() rhs = T5Prime(lhs)
+    {
+        return rhs != null ? rhs : lhs;
+    }
+}
+
+Expression T5Prime(Expression lhs) :
+{ Expression rhs, t5PrimeExpression; }
+{
+    (
+        <LT> rhs = T4() t5PrimeExpression = T5Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.LT,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );
+        }
+        |
+        <LTE> rhs = T4() t5PrimeExpression = T5Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.LTE,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );
+        }
+        |
+        <GT> rhs = T4() t5PrimeExpression = T5Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.GT,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );
+        }
+        |
+        <GTE> rhs = T4() t5PrimeExpression = T5Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.GTE,
+                t5PrimeExpression != null ? t5PrimeExpression : rhs );
+        }
+    )?
+    { return null; }
+}
+
+Expression T4() :
+{ Expression lhs, rhs; }
+{
+    lhs = T3() rhs = T4Prime(lhs)
+    {
+        return rhs != null ? rhs : lhs;
+    }
+}
+
+Expression T4Prime(Expression lhs) :
+{ Expression rhs, t4PrimeExpression; }
+{
+    (
+        <PLUS> rhs = T3() t4PrimeExpression = T4Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.PLUS,
+                t4PrimeExpression != null ? t4PrimeExpression : rhs );
+        }
+        |
+        <MINUS> rhs = T3() t4PrimeExpression = T4Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.MINUS,
+                t4PrimeExpression != null ? t4PrimeExpression : rhs );
+        }
+    )?
+    { return null; }
+}
+
+Expression T3() :
+{ Expression lhs, rhs; }
+{
+    lhs = T2() rhs = T3Prime(lhs)
+    {
+        return rhs != null ? rhs : lhs;
+    }
+}
+
+Expression T3Prime(Expression lhs) :
+{ Expression rhs, t3PrimeExpression; }
+{
+    (
+        <TIMES> rhs = T2() t3PrimeExpression = T3Prime(rhs)
+        {
+               return new BinaryOperatorExpression(lhs, BinaryOperator.TIMES,
+                t3PrimeExpression != null ? t3PrimeExpression : rhs );
+        }
+        |
+        <DIV> rhs = T2() t3PrimeExpression = T3Prime(rhs)
+        {
+               return new BinaryOperatorExpression(lhs, BinaryOperator.DIV,
+                t3PrimeExpression != null ? t3PrimeExpression : rhs );
+        }
+    )?
+    { return null; }
+}
+
+Expression T2() :
+{ Expression f; }
+{
+    (
+        f = F()
+    )
+    {
+        return f;
+    }
+    |
+    (
+        <NOT> f = F()
+    )
+    {
+        return new UnaryOperatorExpression(UnaryOperator.NOT, f);
+    }
 }
 
 Expression F() :

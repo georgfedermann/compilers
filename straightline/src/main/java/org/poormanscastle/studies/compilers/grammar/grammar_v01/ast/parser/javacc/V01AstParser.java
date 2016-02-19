@@ -392,8 +392,8 @@ public class V01AstParser implements V01AstParserConstants {
     case BOOL:
     case NUM:
     case DEC:
-    case ID:
-    case TEXT:{
+    case TEXT:
+    case ID:{
       f = F();
 {if ("" != null) return f;}
       break;
@@ -458,11 +458,16 @@ public class V01AstParser implements V01AstParserConstants {
   private int jj_gen;
   final private int[] jj_la1 = new int[16];
   static private int[] jj_la1_0;
+  static private int[] jj_la1_1;
   static {
       jj_la1_init_0();
+      jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x2080002,0x2080002,0x40000,0x200000,0x20000,0x10000,0x8000,0x2000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0x7900010,0x7900000,};
+      jj_la1_0 = new int[] {0x4080002,0x4080002,0x40000,0x200000,0x20000,0x10000,0x8000,0x2000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0x7900010,0x7900000,};
+   }
+   private static void jj_la1_init_1() {
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -579,7 +584,7 @@ public class V01AstParser implements V01AstParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[31];
+    boolean[] la1tokens = new boolean[34];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -590,10 +595,13 @@ public class V01AstParser implements V01AstParserConstants {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
             la1tokens[j] = true;
           }
+          if ((jj_la1_1[i] & (1<<j)) != 0) {
+            la1tokens[32+j] = true;
+          }
         }
       }
     }
-    for (int i = 0; i < 31; i++) {
+    for (int i = 0; i < 34; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -1,3 +1,3 @@
 rm *.java
-javacc hitclou.jj
+javacc hitclou.jj && dos2unix *.java
 

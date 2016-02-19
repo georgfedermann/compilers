@@ -67,12 +67,34 @@ TOKEN : {
     < SEMICOLON : ";" >
 }
 
-/* variable strings */
+/* literals: string, integers and floats */
 TOKEN : {
     < NUM : (["0"-"9"])+ > |
     < DEC : (["0"-"9"])+("."(["0"-"9"])+)? | ("."(["0"-"9"])+) > |
-    < ID : [ "_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z", "0"-"9"])* > |
     < TEXT : "\""(["A"-"Z", "a"-"z", "0"-"9", ",", ";", ".", " "])*"\"" >
+}
+
+/* IDs: variable names, function names */
+TOKEN : {
+    < ID : [ "_", "a"-"z", "A"-"Z"](["_", "a"-"z", "A"-"Z", "0"-"9"])* >
+}
+
+/* comments: one line comments. realized using lexical states and MORE tokens
+   to avoid very complex regular expressions. // shift the lexer in
+   single-line-comment-mode, from where it switches back into default mode on newline. */
+MORE : {
+    "//" : IN_SINGLE_LINE_COMMENT_MODE
+}
+
+/*  special tokens will not be delivered to the parser, but will be available
+    on the next available token in its specialToken field. When a newline is found,
+    switch back into DEFAULT mode. */
+< IN_SINGLE_LINE_COMMENT_MODE > SPECIAL_TOKEN : {
+    < END_OF_SINGLE_LINE_COMMENT : "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+< IN_SINGLE_LINE_COMMENT_MODE > MORE : {
+    < ~[] >
 }
 
 SKIP : {

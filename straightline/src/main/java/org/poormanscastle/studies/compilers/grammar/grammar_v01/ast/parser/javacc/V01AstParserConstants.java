@@ -59,12 +59,16 @@ public interface V01AstParserConstants {
   /** RegularExpression Id. */
   int DEC = 24;
   /** RegularExpression Id. */
-  int ID = 25;
+  int TEXT = 25;
   /** RegularExpression Id. */
-  int TEXT = 26;
+  int ID = 26;
+  /** RegularExpression Id. */
+  int END_OF_SINGLE_LINE_COMMENT = 28;
 
   /** Lexical state. */
   int DEFAULT = 0;
+  /** Lexical state. */
+  int IN_SINGLE_LINE_COMMENT_MODE = 1;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -93,8 +97,11 @@ public interface V01AstParserConstants {
     "\";\"",
     "<NUM>",
     "<DEC>",
-    "<ID>",
     "<TEXT>",
+    "<ID>",
+    "\"//\"",
+    "<END_OF_SINGLE_LINE_COMMENT>",
+    "<token of kind 29>",
     "\" \"",
     "\"\\n\"",
     "\"\\r\"",

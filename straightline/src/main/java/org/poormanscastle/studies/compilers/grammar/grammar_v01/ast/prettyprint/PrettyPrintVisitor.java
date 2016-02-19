@@ -80,7 +80,7 @@ public class PrettyPrintVisitor implements AstItemVisitor {
 
     @Override
     public boolean proceedWithPrintStatement(PrintStatement printStatement) {
-        return false;
+        return true;
     }
 
     @Override

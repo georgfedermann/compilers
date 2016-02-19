@@ -1,3 +1,7 @@
+// valid test program to show off the features of language v0.1
+// and support in implementing compiler features after creating the AST
+// like semantic analysis, creating activation records and
+// translation to intermediate code.
 int a = 0;
 int b;
 int c = 3;

@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  * reads an input stream and tries to recognize grammars in the character patterns.
  * Created by 02eex612 on 12.02.2016.
  */
-public class GrammarReader {
+public final class GrammarReader {
 
     private final static int STATE_BEGIN = 0;
     private final static int STATE_READ_TERMINAL_SYMBOLS = 1;

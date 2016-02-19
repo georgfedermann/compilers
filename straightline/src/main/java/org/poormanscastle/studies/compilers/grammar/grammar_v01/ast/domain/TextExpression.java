@@ -1,6 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 import static com.google.common.base.Preconditions.checkArgument;
 

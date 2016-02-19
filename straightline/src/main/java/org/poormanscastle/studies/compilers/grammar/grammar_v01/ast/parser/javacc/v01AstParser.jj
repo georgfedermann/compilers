@@ -23,6 +23,7 @@ PARSER_BEGIN(V01AstParser)
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc;
 
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.*;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 public class V01AstParser{
     public static void main(String[] args) throws ParseException{
@@ -163,7 +164,7 @@ Statement DS() :
     typeToken = <TYPE> idToken = <ID> expression = DSPrime()
     {
         return expression == null ?
-            new DeclarationStatement(new CodePosition(typeToken), typeToken.image, idToken.image) :
+            new DeclarationStatement(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image) :
             new DeclarationStatement(typeToken.image, idToken.image, expression);
     }
 }
@@ -426,26 +427,26 @@ Expression F() :
 {
     valueToken = <ID>
     {
-        return new IdExpression(new CodePosition(valueToken), valueToken.image);
+        return new IdExpression(CodePosition.createFromToken(valueToken), valueToken.image);
     }
     |
     valueToken = <NUM>
     {
-        return new NumExpression(new CodePosition(valueToken), Integer.parseInt(valueToken.image));
+        return new NumExpression(CodePosition.createFromToken(valueToken), Integer.parseInt(valueToken.image));
     }
     |
     valueToken = <DEC>
     {
-        return new DecimalExpression(new CodePosition(valueToken), Double.parseDouble(valueToken.image));
+        return new DecimalExpression(CodePosition.createFromToken(valueToken), Double.parseDouble(valueToken.image));
     }
     |
     valueToken = <BOOL>
     {
-        return new BooleanExpression(new CodePosition(valueToken), Boolean.parseBoolean(valueToken.image));
+        return new BooleanExpression(CodePosition.createFromToken(valueToken), Boolean.parseBoolean(valueToken.image));
     }
     |
     valueToken = <TEXT>
     {
-        return new TextExpression(new CodePosition(valueToken), valueToken.image);
+        return new TextExpression(CodePosition.createFromToken(valueToken), valueToken.image);
     }
 }

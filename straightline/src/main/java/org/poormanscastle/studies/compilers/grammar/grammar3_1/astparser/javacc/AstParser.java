@@ -49,7 +49,7 @@ public class AstParser implements AstParserConstants {
       token = jj_consume_token(ID);
       jj_consume_token(ASSIGN);
       expression = E();
-{if ("" != null) return new AssignmentStatement(new CodePosition(token), token.image, expression);}
+{if ("" != null) return new AssignmentStatement(CodePosition.createFromToken(token), token.image, expression);}
       break;
       }
     case PRINT:{
@@ -57,7 +57,7 @@ public class AstParser implements AstParserConstants {
       jj_consume_token(LPAREN);
       expressionList = L();
       jj_consume_token(RPAREN);
-{if ("" != null) return new PrintStatement(new CodePosition(token), expressionList);}
+{if ("" != null) return new PrintStatement(CodePosition.createFromToken(token), expressionList);}
       break;
       }
     default:
@@ -86,9 +86,9 @@ if (expressionList != null){
       expression = E();
       expressionList = LPrime();
 if (expressionList != null){
-                {if ("" != null) return new PairExpressionList(new CodePosition(token), expression, expressionList);}
+                {if ("" != null) return new PairExpressionList(CodePosition.createFromToken(token), expression, expressionList);}
             } else {
-                {if ("" != null) return new LastExpressionList(new CodePosition(token), expression);}
+                {if ("" != null) return new LastExpressionList(CodePosition.createFromToken(token), expression);}
             }
       break;
       }
@@ -115,7 +115,7 @@ if (expressionList != null){
       jj_consume_token(COMMA);
       leftOperand = E();
       jj_consume_token(RPAREN);
-{if ("" != null) return new EseqExpression(new CodePosition(token), statement, leftOperand);}
+{if ("" != null) return new EseqExpression(CodePosition.createFromToken(token), statement, leftOperand);}
       break;
       }
     default:
@@ -209,12 +209,12 @@ if (expressionList != null){
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case NUM:{
       token = jj_consume_token(NUM);
-{if ("" != null) return new NumExpression(new CodePosition(token), Integer.parseInt(token.image));}
+{if ("" != null) return new NumExpression(CodePosition.createFromToken(token), Integer.parseInt(token.image));}
       break;
       }
     case ID:{
       token = jj_consume_token(ID);
-{if ("" != null) return new IdExpression(new CodePosition(token), token.image);}
+{if ("" != null) return new IdExpression(CodePosition.createFromToken(token), token.image);}
       break;
       }
     default:

@@ -23,6 +23,7 @@ PARSER_BEGIN(AstParser)
 package org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.javacc;
 
 import org.poormanscastle.studies.compilers.grammar.grammar3_1.astparser.ast.*;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 public class AstParser{
     public static void main(String[] args) throws ParseException{
@@ -101,12 +102,12 @@ Statement S() :
 {
     token = <ID> <ASSIGN> expression = E()
     {
-        return new AssignmentStatement(new CodePosition(token), token.image, expression);
+        return new AssignmentStatement(CodePosition.createFromToken(token), token.image, expression);
     }
     |
     token = <PRINT> <LPAREN> expressionList = L() <RPAREN>
     {
-        return new PrintStatement(new CodePosition(token), expressionList);
+        return new PrintStatement(CodePosition.createFromToken(token), expressionList);
     }
 }
 
@@ -130,9 +131,9 @@ ExpressionList LPrime() :
         token = <COMMA> expression = E() expressionList = LPrime()
         {
             if (expressionList != null){
-                return new PairExpressionList(new CodePosition(token), expression, expressionList);
+                return new PairExpressionList(CodePosition.createFromToken(token), expression, expressionList);
             } else {
-                return new LastExpressionList(new CodePosition(token), expression);
+                return new LastExpressionList(CodePosition.createFromToken(token), expression);
             }
         }
     )?
@@ -149,7 +150,7 @@ Expression E() :
     |
     token = <LPAREN> statement = S() <COMMA> leftOperand = E() <RPAREN>
     {
-        return new EseqExpression(new CodePosition(token), statement, leftOperand);
+        return new EseqExpression(CodePosition.createFromToken(token), statement, leftOperand);
     }
 }
 
@@ -203,7 +204,7 @@ Expression TPrime(Expression leftOperand) :
 Expression F() :
 { Token token; }
 {
-    token = <NUM> { return new NumExpression(new CodePosition(token), Integer.parseInt(token.image)); }
+    token = <NUM> { return new NumExpression(CodePosition.createFromToken(token), Integer.parseInt(token.image)); }
     |
-    token = <ID> { return new IdExpression(new CodePosition(token), token.image); }
+    token = <ID> { return new IdExpression(CodePosition.createFromToken(token), token.image); }
 }

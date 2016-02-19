@@ -3,6 +3,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc;
 
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.*;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 public class V01AstParser implements V01AstParserConstants {
     public static void main(String[] args) throws ParseException{
@@ -76,7 +77,7 @@ public class V01AstParser implements V01AstParserConstants {
     idToken = jj_consume_token(ID);
     expression = DSPrime();
 {if ("" != null) return expression == null ?
-            new DeclarationStatement(new CodePosition(typeToken), typeToken.image, idToken.image) :
+            new DeclarationStatement(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image) :
             new DeclarationStatement(typeToken.image, idToken.image, expression);}
     throw new Error("Missing return statement in function");
   }
@@ -416,27 +417,27 @@ public class V01AstParser implements V01AstParserConstants {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ID:{
       valueToken = jj_consume_token(ID);
-{if ("" != null) return new IdExpression(new CodePosition(valueToken), valueToken.image);}
+{if ("" != null) return new IdExpression(CodePosition.createFromToken(valueToken), valueToken.image);}
       break;
       }
     case NUM:{
       valueToken = jj_consume_token(NUM);
-{if ("" != null) return new NumExpression(new CodePosition(valueToken), Integer.parseInt(valueToken.image));}
+{if ("" != null) return new NumExpression(CodePosition.createFromToken(valueToken), Integer.parseInt(valueToken.image));}
       break;
       }
     case DEC:{
       valueToken = jj_consume_token(DEC);
-{if ("" != null) return new DecimalExpression(new CodePosition(valueToken), Double.parseDouble(valueToken.image));}
+{if ("" != null) return new DecimalExpression(CodePosition.createFromToken(valueToken), Double.parseDouble(valueToken.image));}
       break;
       }
     case BOOL:{
       valueToken = jj_consume_token(BOOL);
-{if ("" != null) return new BooleanExpression(new CodePosition(valueToken), Boolean.parseBoolean(valueToken.image));}
+{if ("" != null) return new BooleanExpression(CodePosition.createFromToken(valueToken), Boolean.parseBoolean(valueToken.image));}
       break;
       }
     case TEXT:{
       valueToken = jj_consume_token(TEXT);
-{if ("" != null) return new TextExpression(new CodePosition(valueToken), valueToken.image);}
+{if ("" != null) return new TextExpression(CodePosition.createFromToken(valueToken), valueToken.image);}
       break;
       }
     default:

@@ -8,7 +8,10 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
+ * this is a grammar symbol.
+ * <p/>
  * symbols are part of grammar definitions.
+ * <p/>
  * symbols can be terminal or nonterminal. terminal symbols are tokens as provided
  * by the lexer, those tokens are abbreviations for the regular expressions used
  * to tokenize the input stream.

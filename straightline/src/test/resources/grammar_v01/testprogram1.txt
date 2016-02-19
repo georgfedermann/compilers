@@ -18,4 +18,4 @@ text nameEvil;
 boolean anotherTry = a == c;
 boolean k = maybe & maybeNot;
 nameEvil = "Walter White";
-print( a, b, c, yes, no, maybe, maybeNot, nameHero, nameEvil);
+print( a, b, c, yes, no, maybe, maybeNot, a == b, 3 * a, a + b, !maybe, nameHero, nameEvil);

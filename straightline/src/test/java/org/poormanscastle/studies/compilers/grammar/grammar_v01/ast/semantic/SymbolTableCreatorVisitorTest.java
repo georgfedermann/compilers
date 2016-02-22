@@ -40,6 +40,5 @@ public class SymbolTableCreatorVisitorTest {
         assertEquals("TEXT", symbolTable.getBinding(Symbol.createSymbol("nameEvil")).getDeclaredType());
         assertEquals("BOOLEAN", symbolTable.getBinding(Symbol.createSymbol("anotherTry")).getDeclaredType());
         assertEquals("BOOLEAN", symbolTable.getBinding(Symbol.createSymbol("k")).getDeclaredType());
-
     }
 }

@@ -16,6 +16,33 @@ Grammar_v0.1.gr introduces
   -- or
   -- xor
 
+Grammar v0.1 types
+Grammar v0.1 supports 4 tpyes:
+type          values (value range depends on hardware)
+boolean       true, false
+int           integer numbers
+double        floating point numbers
+text          any text values, similar to string types in other languages
+
+Grammar v0.1 type interoperability and cast
+Operators always operate on operands of the same type.
+If operands are of different types, the compiler can perform automatic casts for certain type combinations.
+This table enumerats all valid type combinations and castz directions:
+boolean     -     boolean
+integer     -     integer
+double      <-    integer
+double      -     double
+text        <-    boolean
+text        <-    integer
+text        <-    double
+text        -     text
+
+E.g. integer can validly be combined with integer.
+Double can be combined with integer, the integer operand will automatically be cast to double.
+Double can be validly be combined with Double.
+Text can be combined with Double. The Double operand will automatically be cast to Text.
+
+
 - Grammar v0.1 Operator Precedence Chart
 ()
 not !

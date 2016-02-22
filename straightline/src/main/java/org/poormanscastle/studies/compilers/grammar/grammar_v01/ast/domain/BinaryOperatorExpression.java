@@ -33,6 +33,10 @@ public final class BinaryOperatorExpression extends AbstractExpression implement
         checkState(getState() == ExpressionState.VALID);
         checkState(lhs.getValueType() != null);
         checkState(rhs.getValueType() != null);
+        // TODO the operator also plays a part in inferring the resulting data type. In fact, the inferring should
+        // be implemented completely within the operator, because operators like ==, <, <=, >, >= will first have
+        // to cast operands according to casting rules, but the resulting return type may be something else completely.
+        // e.g. in 3.5 <= 7, the int will be cast to double, but the return value type will be boolean.
         return Type.getInferredType(lhs.getValueType(), rhs.getValueType());
     }
 

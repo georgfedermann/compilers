@@ -1,0 +1,4 @@
+// declaration without assignment have led to NPEs in the past
+// keep track of this bug with this unit test
+int a = 0;  // this works
+int b;      // this caused the NPE

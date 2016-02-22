@@ -166,14 +166,18 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
     public void leaveDeclarationStatement(DeclarationStatement declarationStatement) {
         String errMsg = "";
         Expression rhs = declarationStatement.getExpression();
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId()));
-        Type lhsType = binding == null ? Type.UNDEFINED : Type.valueOf(binding.getDeclaredType());
-        if (lhsType == Type.UNDEFINED) {
-            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(),
-                    ": variable ", declarationStatement.getId(), " may not have been declared.");
-        } else if (rhs.getState() != ExpressionState.VALID) {
-            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(), ": Expression is invalid.");
-        } else if (lhsType != rhs.getValueType() && !Type.areTypesCompatible(lhsType, rhs.getValueType())) {
+        // in the DeclStm the lhs is always ok, or it would not have been recognized as a DeclStm.
+        // the rhs can be an expression or null. if the rhs is null than this DeclStm is valid.
+        // if the rhs is not null, than it can be invalid or the types can be incompatible.
+        // Otherwise this DeclStm is valid.
+
+        // the next statement must work because this line was recognized as a DeclStm. If we run into an Exception here
+        // the bug must be fixed somewhere else, e.g. SymbolTableCreatorVisitor.
+        Type lhsType = Type.valueOf(symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId())).getDeclaredType());
+        if (rhs != null && rhs.getState() != ExpressionState.VALID) {
+            // this errMsg just vaguely repeats what was earlier reported more specifically for the sub expression
+            // errMsg = StringUtils.join("Error at ", rhs.getCodePosition(), ": Expression is invalid.");
+        } else if (rhs != null && !Type.areTypesCompatible(lhsType, rhs.getValueType())) {
             errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(), ": the operand types ",
                     lhsType, " and ", rhs.getValueType(), " are incompatible.");
         }
@@ -185,16 +189,6 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitAssignmentStatement(AssignmentStatement assignmentStatement) {
-        String errMsg = "";
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
-        if (binding == null) {
-            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
-                    ": variable ", assignmentStatement.getId(), " may not have been declared.");
-        }
-        if (!StringUtils.isBlank(errMsg)) {
-            System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
-        }
     }
 
     @Override
@@ -203,12 +197,13 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         Expression rhs = assignmentStatement.getExpression();
         Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
         Type lhsType = binding == null ? Type.UNDEFINED : Type.valueOf(binding.getDeclaredType());
-        if (lhsType == Type.UNDEFINED) {
+        if (lhsType == Type.UNDEFINED || lhsType == null) {
             errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
                     ": variable ", assignmentStatement.getId(), " may not have been declared.");
         } else if (rhs.getState() != ExpressionState.VALID) {
-            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": Expression is invalid.");
-        } else if (lhsType != rhs.getValueType() && !Type.areTypesCompatible(lhsType, rhs.getValueType())) {
+            // this errMsg just vaguely repeats what was earlier reported more specifically for the sub expression
+            // errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": Expression is invalid.");
+        } else if (!Type.areTypesCompatible(lhsType, rhs.getValueType())) {
             errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": the operand types ",
                     lhsType, " and ", rhs.getValueType(), " are incompatible.");
         }
@@ -227,8 +222,8 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         String errMsg = "";
         if (lhs.getState() != ExpressionState.VALID || rhs.getState() != ExpressionState.VALID) {
             binaryOperatorExpression.setState(ExpressionState.OPERANDS_INVALID);
-            errMsg = StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
-                    ": One or more sub expressions are invalid.");
+            // this errMsg just vaguely repeats what was earlier reported more specifically for the sub expression
+            // errMsg = StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(), ": One or more sub expressions are invalid.");
         } else if (lhs.getValueType() == rhs.getValueType() && operator.supportsType(lhs.getValueType())) {
             binaryOperatorExpression.setState(ExpressionState.VALID);
         } else if (lhs.getValueType() == rhs.getValueType() && !operator.supportsType(lhs.getValueType())) {

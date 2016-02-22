@@ -22,7 +22,7 @@ public class ExpressionValidatorVisitorTest {
     public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
 
     @Test
-    public void testIsAstValid() throws Exception {
+    public void testValidateProgram1() throws Exception {
         Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
@@ -45,7 +45,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifier() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclardId.prog")).P();
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -67,14 +67,11 @@ public class ExpressionValidatorVisitorTest {
         String exptectedErrMsg =
                 "Error at begin line/column 5/5; end line/column 5/5: variable b may not have been declared.\n" +
                         "Error at begin line/column 11/21; end line/column 11/21: variable b may not have been declared.\n" +
-                        "Error at begin line/column 11/17; end line/column 11/17: One or more sub expressions are invalid.\n" +
                         "Error at begin line/column 12/20; end line/column 12/20: variable b may not have been declared.\n" +
-                        "Error at begin line/column 12/20; end line/column 12/20: One or more sub expressions are invalid.\n" +
+                        "Error at begin line/column 15/22; end line/column 15/22: the operand types BOOLEAN and INT are incompatible.\n" +
                         "Error at begin line/column 18/11; end line/column 18/11: variable b may not have been declared.\n" +
                         "Error at begin line/column 18/48; end line/column 18/48: variable b may not have been declared.\n" +
-                        "Error at begin line/column 18/43; end line/column 18/43: One or more sub expressions are invalid.\n" +
-                        "Error at begin line/column 18/62; end line/column 18/62: variable b may not have been declared.\n" +
-                        "Error at begin line/column 18/58; end line/column 18/58: One or more sub expressions are invalid.\n";
+                        "Error at begin line/column 18/62; end line/column 18/62: variable b may not have been declared.\n";
         assertEquals(exptectedErrMsg, systemErrRule.getLog());
     }
 
@@ -128,6 +125,26 @@ public class ExpressionValidatorVisitorTest {
                         "Error at begin line/column 4/10; end line/column 4/13: the operand types INT and BOOLEAN are incompatible.\n";
 
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testDeclarationWithoutAssignment() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/DeclarationWithoutAssignment.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST ");
+        }
+
+        ExpressionValidatorVisitor expressionValidatorVisitor = new ExpressionValidatorVisitor(symbolTableCreator.getSymbolTable());
+        if (program.handleProceedWith(expressionValidatorVisitor)) {
+            program.accept(expressionValidatorVisitor);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        assertTrue(expressionValidatorVisitor.isAstValid());
     }
 
 }

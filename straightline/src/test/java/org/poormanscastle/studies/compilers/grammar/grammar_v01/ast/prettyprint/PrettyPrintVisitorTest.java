@@ -14,7 +14,7 @@ public class PrettyPrintVisitorTest {
 
     @Test
     public void testSerialize() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.txt")).P();
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
         assertNotNull(program);
         PrettyPrintVisitor printer = new PrettyPrintVisitor();
         printer.initialize();

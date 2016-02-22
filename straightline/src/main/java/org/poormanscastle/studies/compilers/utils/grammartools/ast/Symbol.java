@@ -28,7 +28,14 @@ public class Symbol {
         this.name = name.intern();
     }
 
-    public static Symbol createSymbol(String name) {
+    /**
+     * delivers the symbol for the given id. If there exists no such symbol yet, a new one is created for the
+     * given id.
+     *
+     * @param name
+     * @return
+     */
+    public static Symbol getSymbol(String name) {
         String u = name.intern();
         Symbol result = symbols.get(u);
         if (result == null) {

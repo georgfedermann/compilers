@@ -21,7 +21,7 @@ public class SymbolTable {
      * @param type
      */
     public void addSymbol(String name, String type) {
-        Symbol symbol = Symbol.createSymbol(name);
+        Symbol symbol = Symbol.getSymbol(name);
         if (bindings.containsKey(symbol)) {
             throw new RuntimeException(StringUtils.join("Symbol already in symbol table:", symbol));
         }

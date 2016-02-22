@@ -10,7 +10,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * <p/>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class TextExpression extends AbstractAstItem implements Expression {
+public final class TextExpression extends AbstractExpression implements Expression {
 
     private final String value;
 
@@ -19,10 +19,16 @@ public final class TextExpression extends AbstractAstItem implements Expression 
         checkArgument(!StringUtils.isBlank(value));
         // TODO string literals are delimted with quotes. JavaCC handles the quotes through. I remove all quotes here.
         this.value = value.replaceAll("\"", "");
+        setState(ExpressionState.VALID);
     }
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public Type getValueType() {
+        return Type.TEXT;
     }
 
     @Override

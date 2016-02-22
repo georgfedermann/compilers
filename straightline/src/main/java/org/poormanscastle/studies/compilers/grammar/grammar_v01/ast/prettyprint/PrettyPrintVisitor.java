@@ -348,4 +348,9 @@ public class PrettyPrintVisitor implements AstItemVisitor {
             return id;
         }
     }
+
+    @Override
+    public boolean isAstValid() {
+        return true;
+    }
 }

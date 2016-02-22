@@ -20,6 +20,11 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     private SymbolTable symbolTable = new SymbolTable();
 
+    @Override
+    public boolean isAstValid() {
+        return true;
+    }
+
     public SymbolTable getSymbolTable() {
         return symbolTable;
     }

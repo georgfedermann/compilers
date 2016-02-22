@@ -7,7 +7,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * Created by 02eex612 on 17.02.2016.
  */
-public final class BooleanExpression extends AbstractAstItem implements Expression {
+public final class BooleanExpression extends AbstractExpression implements Expression {
 
     private final Boolean value;
 
@@ -15,10 +15,16 @@ public final class BooleanExpression extends AbstractAstItem implements Expressi
         super(codePosition);
         checkArgument(value != null);
         this.value = value;
+        setState(ExpressionState.VALID);
     }
 
     public Boolean getValue() {
         return value;
+    }
+
+    @Override
+    public Type getValueType() {
+        return Type.BOOLEAN;
     }
 
     @Override

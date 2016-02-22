@@ -9,7 +9,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * <p/>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class NumExpression extends AbstractAstItem implements Expression {
+public final class NumExpression extends AbstractExpression implements Expression {
 
     private final Integer value;
 
@@ -17,6 +17,12 @@ public final class NumExpression extends AbstractAstItem implements Expression {
         super(codePosition);
         checkArgument(value != null);
         this.value = value;
+        setState(ExpressionState.VALID);
+    }
+
+    @Override
+    public Type getValueType() {
+        return Type.INT;
     }
 
     public Integer getValue() {

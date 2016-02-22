@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.ast;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * tracks the position of the current token represented by the current AST item within the source code.
  * Using the CodePosition, the parser and other compiler components can give enhanced error messages
@@ -22,6 +24,12 @@ public final class CodePosition {
         this.beginColumn = beginColumn;
         this.endLine = endLine;
         this.endColumn = endColumn;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.join("begin line/column ", beginLine, "/", beginColumn,
+                "; end line/column ", endLine, "/", endColumn);
     }
 
     /**

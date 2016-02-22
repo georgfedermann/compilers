@@ -9,6 +9,13 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
  */
 public interface AstItemVisitor {
 
+    /**
+     * this method can be called to check whether this visitor found that the AST is valid or not.
+     *
+     * @return
+     */
+    boolean isAstValid();
+
     boolean proceedWithPrintStatement(PrintStatement printStatement);
 
     void visitPrintStatement(PrintStatement printStatement);

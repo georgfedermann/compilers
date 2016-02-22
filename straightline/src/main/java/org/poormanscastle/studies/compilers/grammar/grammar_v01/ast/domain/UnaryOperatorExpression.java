@@ -3,11 +3,12 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by 02eex612 on 17.02.2016.
  */
-public final class UnaryOperatorExpression extends AbstractAstItem implements Expression {
+public final class UnaryOperatorExpression extends AbstractExpression implements Expression {
 
     private final UnaryOperator operator;
 
@@ -31,6 +32,12 @@ public final class UnaryOperatorExpression extends AbstractAstItem implements Ex
 
     public Expression getExpression() {
         return expression;
+    }
+
+    @Override
+    public Type getValueType() {
+        checkState(expression.getValueType() != null);
+        return expression.getValueType();
     }
 
     @Override

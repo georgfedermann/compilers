@@ -9,7 +9,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * <p/>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class DecimalExpression extends AbstractAstItem implements Expression {
+public final class DecimalExpression extends AbstractExpression implements Expression {
 
     private final Double value;
 
@@ -17,6 +17,12 @@ public final class DecimalExpression extends AbstractAstItem implements Expressi
         super(codePosition);
         checkArgument(value != null);
         this.value = value;
+        setState(ExpressionState.VALID);
+    }
+
+    @Override
+    public Type getValueType() {
+        return Type.DOUBLE;
     }
 
     public Double getValue() {

@@ -6,7 +6,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
  * <p/>
  * Created by 02eex612 on 22.02.2016.
  */
-public class AstItemVisitorAdapter implements AstItemVisitor {
+public abstract class AstItemVisitorAdapter implements AstItemVisitor {
 
     @Override
     public boolean proceedWithPrintStatement(PrintStatement printStatement) {

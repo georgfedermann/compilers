@@ -10,9 +10,14 @@ import static com.google.common.base.Preconditions.checkArgument;
  * <p/>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class IdExpression extends AbstractAstItem implements Expression {
+public final class IdExpression extends AbstractExpression implements Expression {
 
     private final String id;
+
+    /**
+     * the type of this identifier needs to be set in the semantic compiler phase.
+     */
+    private Type valueType;
 
     public IdExpression(CodePosition codePosition, String id) {
         super(codePosition);
@@ -22,6 +27,15 @@ public final class IdExpression extends AbstractAstItem implements Expression {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public Type getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(Type valueType) {
+        this.valueType = valueType;
     }
 
     @Override

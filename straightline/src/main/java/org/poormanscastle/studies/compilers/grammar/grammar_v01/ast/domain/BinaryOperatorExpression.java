@@ -3,11 +3,12 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by 02eex612 on 17.02.2016.
  */
-public final class BinaryOperatorExpression extends AbstractAstItem implements Expression {
+public final class BinaryOperatorExpression extends AbstractExpression implements Expression {
 
     private final Expression lhs;
     private final BinaryOperator operator;
@@ -25,6 +26,14 @@ public final class BinaryOperatorExpression extends AbstractAstItem implements E
 
     public BinaryOperatorExpression(Expression lhs, BinaryOperator operator, Expression rhs) {
         this(lhs.getCodePosition(), lhs, operator, rhs);
+    }
+
+    @Override
+    public Type getValueType() {
+        checkState(getState() == ExpressionState.VALID);
+        checkState(lhs.getValueType() != null);
+        checkState(rhs.getValueType() != null);
+        return Type.getInferredType(lhs.getValueType(), rhs.getValueType());
     }
 
     public Expression getLhs() {

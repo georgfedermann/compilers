@@ -101,4 +101,33 @@ public class ExpressionValidatorVisitorTest {
         assertEquals("Error at begin line/column 2/5; end line/column 2/5: variable b may not have been declared.\n", systemErrRule.getLog());
     }
 
+    @Test
+    public void testInvalidNotOperand() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/InvalidNotOperand.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
+        }
+
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+        }
+        assertFalse(expressionValidator.isAstValid());
+
+        String expectedErrorMessage =
+                "Error at begin line/column 3/14; end line/column 3/14: operator ! is incompatible with operand type DOUBLE\n" +
+                        "Error at begin line/column 3/14; end line/column 3/14: Expression is invalid.\n" +
+                        "Error at begin line/column 4/10; end line/column 4/13: the operand types INT and BOOLEAN are incompatible.\n";
+
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
 }

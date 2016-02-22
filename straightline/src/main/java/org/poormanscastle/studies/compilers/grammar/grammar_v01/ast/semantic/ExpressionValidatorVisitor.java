@@ -64,11 +64,6 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean proceedWithDeclarationStatement(DeclarationStatement declarationStatement) {
-        return true;
-    }
-
-    @Override
     public boolean proceedWithAssignmentStatement(AssignmentStatement assignmentStatement) {
         return true;
     }
@@ -126,25 +121,6 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public void visitAssignmentStatement(AssignmentStatement assignmentStatement) {
-        String errMsg = "";
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
-        if (binding == null) {
-            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
-                    ": variable ", assignmentStatement.getId(), " may not have been declared.");
-        }
-        if (!StringUtils.isBlank(errMsg)) {
-            System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
-        }
-    }
-
-    @Override
-    public void leaveAssignmentStatement(AssignmentStatement assignmentStatement) {
-        super.leaveAssignmentStatement(assignmentStatement);
-    }
-
-    @Override
     public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
         checkState(unaryOperatorExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
         Expression expression = unaryOperatorExpression.getExpression();
@@ -160,6 +136,81 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
                     ": operator ", operator.getLabel(), " is incompatible with operand type ", expression.getValueType());
         } else {
             unaryOperatorExpression.setState(ExpressionState.VALID);
+        }
+        if (!StringUtils.isBlank(errMsg)) {
+            System.err.print(StringUtils.join(errMsg, "\n"));
+            astIsValid = false;
+        }
+    }
+
+    @Override
+    public boolean proceedWithDeclarationStatement(DeclarationStatement declarationStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitDeclarationStatement(DeclarationStatement declarationStatement) {
+        String errMsg = "";
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId()));
+        if (binding == null) {
+            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(),
+                    ": variable ", declarationStatement.getId(), " may not have been declared.");
+        }
+        if (!StringUtils.isBlank(errMsg)) {
+            System.err.print(StringUtils.join(errMsg, "\n"));
+            astIsValid = false;
+        }
+    }
+
+    @Override
+    public void leaveDeclarationStatement(DeclarationStatement declarationStatement) {
+        String errMsg = "";
+        Expression rhs = declarationStatement.getExpression();
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId()));
+        Type lhsType = binding == null ? Type.UNDEFINED : Type.valueOf(binding.getDeclaredType());
+        if (lhsType == Type.UNDEFINED) {
+            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(),
+                    ": variable ", declarationStatement.getId(), " may not have been declared.");
+        } else if (rhs.getState() != ExpressionState.VALID) {
+            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(), ": Expression is invalid.");
+        } else if (lhsType != rhs.getValueType() && !Type.areTypesCompatible(lhsType, rhs.getValueType())) {
+            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(), ": the operand types ",
+                    lhsType, " and ", rhs.getValueType(), " are incompatible.");
+        }
+        if (!StringUtils.isBlank(errMsg)) {
+            System.err.print(StringUtils.join(errMsg, "\n"));
+            astIsValid = false;
+        }
+    }
+
+    @Override
+    public void visitAssignmentStatement(AssignmentStatement assignmentStatement) {
+        String errMsg = "";
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
+        if (binding == null) {
+            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
+                    ": variable ", assignmentStatement.getId(), " may not have been declared.");
+        }
+        if (!StringUtils.isBlank(errMsg)) {
+            System.err.print(StringUtils.join(errMsg, "\n"));
+            astIsValid = false;
+        }
+    }
+
+    @Override
+    public void leaveAssignmentStatement(AssignmentStatement assignmentStatement) {
+        String errMsg = "";
+        Expression rhs = assignmentStatement.getExpression();
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
+        Type lhsType = binding == null ? Type.UNDEFINED : Type.valueOf(binding.getDeclaredType());
+        if (lhsType == Type.UNDEFINED) {
+            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
+                    ": variable ", assignmentStatement.getId(), " may not have been declared.");
+        } else if (rhs.getState() != ExpressionState.VALID) {
+            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": Expression is invalid.");
+        } else if (lhsType != rhs.getValueType() && !Type.areTypesCompatible(lhsType, rhs.getValueType())) {
+            errMsg = StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": the operand types ",
+                    lhsType, " and ", rhs.getValueType(), " are incompatible.");
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));

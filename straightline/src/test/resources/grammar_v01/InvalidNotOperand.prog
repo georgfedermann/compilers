@@ -1,0 +1,7 @@
+// invalid operand to the not operator
+double a = 3.5;
+boolean b = !a;
+int c = !true;
+boolean d = true;
+d = !true;
+d = !d;

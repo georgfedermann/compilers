@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum Type {
 
-    BOOLEAN(1), INT(2), DOUBLE(4), TEXT(8);
+    BOOLEAN(1), INT(2), DOUBLE(4), TEXT(8), UNDEFINED(16);
 
     private int id;
 

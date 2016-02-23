@@ -36,6 +36,11 @@ public class Binding {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return StringUtils.join("declaredType: ", declaredType, "; value: ", value);
+    }
+
     public Binding(String declaredType) {
         this(declaredType, null);
     }

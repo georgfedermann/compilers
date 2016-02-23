@@ -1,0 +1,5 @@
+// this program tests mixed typed expressions
+int r = 15;
+double pi = 3.14;
+int u = 2 * r * pi;
+print("Der Umfang ist ", u);

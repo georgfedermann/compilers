@@ -23,7 +23,7 @@ public class InterpreterTest {
     public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
     @Test
-    public void testIsAstValid() throws Exception {
+    public void testProgram1_v01() throws Exception {
         Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
@@ -48,5 +48,33 @@ public class InterpreterTest {
             throw new RuntimeException("Interpreter was not accepted by AST");
         }
         assertEquals("0 9 3 true false true false false 0 9 false John Connor Walter White ", systemOutRule.getLog());
+    }
+
+    @Test
+    public void testMixedTypes_v01() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/mixedTypes.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+        }
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        assertTrue(expressionValidator.isAstValid());
+
+        Interpreter interpreter = new Interpreter(symbolTable);
+        if (program.handleProceedWith(interpreter)) {
+            program.accept(interpreter);
+        } else {
+            throw new RuntimeException("Interpreter was not accepted by AST");
+        }
+        assertEquals("Der Umfang ist  94.2 ", systemOutRule.getLog());
     }
 }

@@ -81,7 +81,5 @@ public interface ExecBinaryOperator {
             default:
                 throw new RuntimeException(StringUtils.join("Unsupported binary operator type: ", operator));
         }
-
     }
-
 }

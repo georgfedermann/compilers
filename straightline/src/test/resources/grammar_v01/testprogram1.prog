@@ -8,7 +8,7 @@ int c = 3;
 b = a + c * 3;
 double f = 4.5;
 double g = 3.6 * f;
-boolean yes = true;
+boolean yes = true;			// testing end-of-line comments
 boolean no;
 no = !yes;
 boolean maybe = a < b;

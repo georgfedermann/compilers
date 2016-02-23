@@ -7,6 +7,7 @@ import java.util.List;
  * Created by 02eex612 on 17.02.2016.
  */
 public enum BinaryOperator implements Operator {
+
     PLUS("+", OperatorCategory.ADDITIVE_ARITHMETIC, Type.INT, Type.DOUBLE, Type.TEXT),
     MINUS("-", OperatorCategory.ADDITIVE_ARITHMETIC, Type.INT, Type.DOUBLE),
     TIMES("*", OperatorCategory.MULTIPLICATIVE_ARITHMETIC, Type.INT, Type.DOUBLE),

@@ -1,0 +1,52 @@
+package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.interpreter;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.poormanscastle.studies.compilers.TestUtils;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.V01AstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.ExpressionValidatorVisitor;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Created by 02eex612 on 23.02.2016.
+ */
+public class InterpreterTest {
+
+    @Rule
+    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
+
+    @Test
+    public void testIsAstValid() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+        }
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        assertTrue(expressionValidator.isAstValid());
+
+        Interpreter interpreter = new Interpreter(symbolTable);
+        if (program.handleProceedWith(interpreter)) {
+            program.accept(interpreter);
+        } else {
+            throw new RuntimeException("Interpreter was not accepted by AST");
+        }
+        assertEquals("0 9 3 true false true false false 0 9 false John Connor Walter White ", systemOutRule.getLog());
+    }
+}

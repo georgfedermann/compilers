@@ -68,7 +68,6 @@ public class ExpressionValidatorVisitorTest {
                 "Error at begin line/column 5/5; end line/column 5/5: variable b may not have been declared.\n" +
                         "Error at begin line/column 11/21; end line/column 11/21: variable b may not have been declared.\n" +
                         "Error at begin line/column 12/20; end line/column 12/20: variable b may not have been declared.\n" +
-                        "Error at begin line/column 15/22; end line/column 15/22: the operand types BOOLEAN and INT are incompatible.\n" +
                         "Error at begin line/column 18/11; end line/column 18/11: variable b may not have been declared.\n" +
                         "Error at begin line/column 18/48; end line/column 18/48: variable b may not have been declared.\n" +
                         "Error at begin line/column 18/62; end line/column 18/62: variable b may not have been declared.\n";
@@ -121,7 +120,6 @@ public class ExpressionValidatorVisitorTest {
 
         String expectedErrorMessage =
                 "Error at begin line/column 3/14; end line/column 3/14: operator ! is incompatible with operand type DOUBLE\n" +
-                        "Error at begin line/column 3/14; end line/column 3/14: Expression is invalid.\n" +
                         "Error at begin line/column 4/10; end line/column 4/13: the operand types INT and BOOLEAN are incompatible.\n";
 
         assertEquals(expectedErrorMessage, systemErrRule.getLog());

@@ -3,6 +3,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -31,13 +32,10 @@ public final class BinaryOperatorExpression extends AbstractExpression implement
     @Override
     public Type getValueType() {
         checkState(getState() == ExpressionState.VALID);
-        checkState(lhs.getValueType() != null);
-        checkState(rhs.getValueType() != null);
-        // TODO the operator also plays a part in inferring the resulting data type. In fact, the inferring should
-        // be implemented completely within the operator, because operators like ==, <, <=, >, >= will first have
-        // to cast operands according to casting rules, but the resulting return type may be something else completely.
-        // e.g. in 3.5 <= 7, the int will be cast to double, but the return value type will be boolean.
-        return Type.getInferredType(lhs.getValueType(), rhs.getValueType());
+        checkNotNull(lhs.getValueType());
+        checkNotNull(rhs.getValueType());
+        checkNotNull(operator);
+        return operator.getInferredType(Type.getInferredType(lhs.getValueType(), rhs.getValueType()));
     }
 
     public Expression getLhs() {

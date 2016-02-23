@@ -37,7 +37,7 @@ public final class UnaryOperatorExpression extends AbstractExpression implements
     @Override
     public Type getValueType() {
         checkState(expression.getValueType() != null);
-        return expression.getValueType();
+        return operator.getInferredType(expression.getValueType());
     }
 
     @Override

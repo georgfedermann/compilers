@@ -6,17 +6,20 @@ import java.util.List;
 /**
  * Created by 02eex612 on 17.02.2016.
  */
-public enum UnaryOperator {
+public enum UnaryOperator implements Operator {
 
-    NOT("!", Type.BOOLEAN);
+    NOT("!", OperatorCategory.UNARY, Type.BOOLEAN);
 
     private String label;
 
     private List<Type> supportedTypes;
 
-    UnaryOperator(String label, Type... types) {
+    private OperatorCategory operatorCategory;
+
+    UnaryOperator(String label, OperatorCategory operatorCategory, Type... supportedTypes) {
         this.label = label;
-        supportedTypes = Arrays.asList(types);
+        this.supportedTypes = Arrays.asList(supportedTypes);
+        this.operatorCategory = operatorCategory;
     }
 
     public String getLabel() {
@@ -25,5 +28,16 @@ public enum UnaryOperator {
 
     public boolean supportsType(Type type) {
         return supportedTypes.contains(type);
+    }
+
+
+    @Override
+    public Type getInferredType(Type operandType) {
+        switch (operatorCategory) {
+            case UNARY:
+                return operandType;
+            default:
+                throw new RuntimeException("Unsupported Operator Category.");
+        }
     }
 }

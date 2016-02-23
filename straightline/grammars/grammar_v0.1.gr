@@ -54,6 +54,22 @@ xor
 and
 or
 
+Operator implementation goal for later
+(these operators and their precedence chart could be implemented in future versions)
+Postfix                         ++ --
+Unary                           + - ! ~ ++ -- sizeof
+Multiplicative Arithmetic       * / %
+Additiv Arithmetic              + -
+Relational                      < <= > >=
+Equality                        == !=
+Bitwise AND                     &
+Bitwise XOR                     ^
+Bitwise OR                      |
+Logical AND                     &&
+Logical OR                      ||
+Conditional                     ?:
+Assignment                      =
+
 Grammar v0.1 Abstract Grammar 
 (AST types are deferred from this listing)
 

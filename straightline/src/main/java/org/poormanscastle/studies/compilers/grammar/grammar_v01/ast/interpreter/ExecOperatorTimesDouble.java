@@ -6,7 +6,6 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.interpreter
 public class ExecOperatorTimesDouble implements ExecBinaryOperator {
     @Override
     public Object execute(Object lhs, Object rhs) {
-        // TODO clean up the casts in the other operators as sampled here:
         return ((Number) lhs).doubleValue() * ((Number) rhs).doubleValue();
     }
 }

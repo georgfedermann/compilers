@@ -6,6 +6,6 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.interpreter
 public class ExecOperatorMinusDouble implements ExecBinaryOperator {
     @Override
     public Object execute(Object lhs, Object rhs) {
-        return (Double) lhs - (Double) rhs;
+        return ((Number) lhs).doubleValue() - ((Number) rhs).doubleValue();
     }
 }

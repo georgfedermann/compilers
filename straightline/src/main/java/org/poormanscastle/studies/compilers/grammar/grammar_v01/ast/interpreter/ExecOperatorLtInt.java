@@ -6,6 +6,6 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.interpreter
 public class ExecOperatorLtInt implements ExecBinaryOperator {
     @Override
     public Object execute(Object lhs, Object rhs) {
-        return (Integer) lhs < (Integer) rhs;
+        return ((Number) lhs).intValue() < ((Number) rhs).intValue();
     }
 }

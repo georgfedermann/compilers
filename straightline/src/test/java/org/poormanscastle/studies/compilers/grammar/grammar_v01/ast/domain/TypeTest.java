@@ -56,4 +56,27 @@ public class TypeTest {
         exception.expectMessage("The two types BOOLEAN and DOUBLE are incompatible.");
         Type.getInferredType(Type.BOOLEAN, Type.DOUBLE);
     }
+
+    @Test
+    public void testIsRhsAssignableToLhs() throws Exception {
+        assertTrue(Type.isRhsAssignableToLhs(Type.BOOLEAN, Type.BOOLEAN));
+        assertFalse(Type.isRhsAssignableToLhs(Type.BOOLEAN, Type.INT));
+        assertFalse(Type.isRhsAssignableToLhs(Type.BOOLEAN, Type.DOUBLE));
+        assertFalse(Type.isRhsAssignableToLhs(Type.BOOLEAN, Type.TEXT));
+
+        assertFalse(Type.isRhsAssignableToLhs(Type.INT, Type.BOOLEAN));
+        assertTrue(Type.isRhsAssignableToLhs(Type.INT, Type.INT));
+        assertFalse(Type.isRhsAssignableToLhs(Type.INT, Type.DOUBLE));
+        assertFalse(Type.isRhsAssignableToLhs(Type.INT, Type.TEXT));
+
+        assertFalse(Type.isRhsAssignableToLhs(Type.DOUBLE, Type.BOOLEAN));
+        assertTrue(Type.isRhsAssignableToLhs(Type.DOUBLE, Type.INT));
+        assertTrue(Type.isRhsAssignableToLhs(Type.DOUBLE, Type.DOUBLE));
+        assertFalse(Type.isRhsAssignableToLhs(Type.DOUBLE, Type.TEXT));
+
+        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.BOOLEAN));
+        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.INT));
+        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.DOUBLE));
+        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.TEXT));
+    }
 }

@@ -120,7 +120,7 @@ public class ExpressionValidatorVisitorTest {
 
         String expectedErrorMessage =
                 "Error at begin line/column 3/14; end line/column 3/14: operator ! is incompatible with operand type DOUBLE\n" +
-                        "Error at begin line/column 4/10; end line/column 4/13: the operand types INT and BOOLEAN are incompatible.\n";
+                        "Error at begin line/column 4/10; end line/column 4/13: the type BOOLEAN cannot be assigned to INT.\n";
 
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
     }
@@ -167,8 +167,7 @@ public class ExpressionValidatorVisitorTest {
         assertFalse(expressionValidator.isAstValid());
 
         String expectedErrorMessage =
-                "Error at begin line/column 3/14; end line/column 3/14: operator ! is incompatible with operand type DOUBLE\n" +
-                        "Error at begin line/column 4/10; end line/column 4/13: the operand types INT and BOOLEAN are incompatible.\n";
+                "Error at begin line/column 6/9; end line/column 6/9: the type DOUBLE cannot be assigned to INT.\n";
 
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
     }

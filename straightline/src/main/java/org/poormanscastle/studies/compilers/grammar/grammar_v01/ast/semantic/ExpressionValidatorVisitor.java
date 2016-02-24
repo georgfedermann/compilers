@@ -177,11 +177,9 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         if (rhs != null && rhs.getState() != ExpressionState.VALID) {
             // this errMsg just vaguely repeats what was earlier reported more specifically for the sub expression
             // errMsg = StringUtils.join("Error at ", rhs.getCodePosition(), ": Expression is invalid.");
-        } else if (rhs != null && !Type.areTypesCompatible(lhsType, rhs.getValueType())) {
-            // TODO Type.areTypesCompatible is not sufficient here! a method isAssignableTo or something is needed to check
-            // whether a double value can be assigned to an int variable, etc.
-            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(), ": the operand types ",
-                    lhsType, " and ", rhs.getValueType(), " are incompatible.");
+        } else if (rhs != null && !Type.isRhsAssignableToLhs(lhsType, rhs.getValueType())) {
+            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(), ": the type ",
+                    rhs.getValueType(), " cannot be assigned to ", lhsType, ".");
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));

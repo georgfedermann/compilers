@@ -25,6 +25,89 @@ public enum Type {
     }
 
     /**
+     * this method helps to find out, whether the assignment in an AssignmentStatement in a DeclarationStatement
+     * is valid for the rhs expression and the type of the lhs identifier.
+     *
+     * @param lhsType the type of the lhs identifier
+     * @param rhsType the type of the value of the rhs expression.
+     * @return true if you are clear to go ahead with the assignment, false otherwise.
+     */
+    public static boolean isRhsAssignableToLhs(Type lhsType, Type rhsType) {
+        int state = queryAssignabilityMatrix(1, lhsType);
+        state = queryAssignabilityMatrix(state, rhsType);
+        return queryAssignabilityResolver(state);
+    }
+
+    private static boolean queryAssignabilityResolver(int state) {
+        return Arrays.asList(3, 5, 7, 8, 10, 11, 12, 13).contains(state);
+    }
+
+    /**
+     * queries the type transition matrix for the next state. the matrix holds the information
+     *
+     * @param state
+     * @param type
+     * @return
+     */
+    private static int queryAssignabilityMatrix(int state, Type type) {
+        switch (state) {
+            case 0:
+                return 0;
+            case 1:
+                switch (type) {
+                    case BOOLEAN:
+                        return 2;
+                    case INT:
+                        return 4;
+                    case DOUBLE:
+                        return 6;
+                    case TEXT:
+                        return 9;
+                    default:
+                        return 0;
+                }
+            case 2:
+                switch (type) {
+                    case BOOLEAN:
+                        return 3;
+                    default:
+                        return 0;
+                }
+            case 4:
+                switch (type) {
+                    case INT:
+                        return 5;
+                    default:
+                        return 0;
+                }
+            case 6:
+                switch (type) {
+                    case INT:
+                        return 7;
+                    case DOUBLE:
+                        return 8;
+                    default:
+                        return 0;
+                }
+            case 9:
+                switch (type) {
+                    case BOOLEAN:
+                        return 10;
+                    case INT:
+                        return 11;
+                    case DOUBLE:
+                        return 12;
+                    case TEXT:
+                        return 13;
+                    default:
+                        return 0;
+                }
+            default:
+                return 0;
+        }
+    }
+
+    /**
      * when two differently typed operands occur within an expression, this method helps to determine what the
      * overall type of the parent expression has to be.
      *

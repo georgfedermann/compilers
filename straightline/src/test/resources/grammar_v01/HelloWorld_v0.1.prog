@@ -1,0 +1,8 @@
+// test various text operations
+text greetings = "Hello, World!";
+print(greetings);
+print("Hello, World!");
+text gr1 = "Hello, ";
+text gr2 = "World!";
+text gr3 = gr1 + gr2;
+print(gr3);

@@ -1,0 +1,200 @@
+This grammmar is an object of study to learn hands-on about compiler implementation.
+It is increasingle losely based on Grammar3.1.gr from Andrew Appel's book Modern Compiler Implementation with Java.
+
+Grammar_v0.1.gr introduces
+- data types
+  -- int: integer numbers with num literals (token type num)
+  -- float: floating point numbers with decimal literals (token type dec)
+  -- boolean: boolean values with boolean literals (token type bool)
+  -- string: string values with text literals (token type text)
+- Declaration statements: where the type of a variable is declared and the variable is created
+- Assignment Statements (which only assign a value to a variable, before the assignment statement would also create the variable)
+- parenthesis to override operator precedence and left associativity
+- Boolean Operators
+  -- not
+  -- and
+  -- or
+  -- xor
+
+Grammar v0.1 types
+Grammar v0.1 supports 4 tpyes:
+type          values (value range depends on hardware)
+boolean       true, false
+int           integer numbers
+double        floating point numbers
+text          any text values, similar to string types in other languages
+
+Grammar v0.1 type interoperability and cast
+Operators always operate on operands of the same type.
+If operands are of different types, the compiler can perform automatic casts for certain type combinations.
+This table enumerats all valid type combinations and castz directions:
+boolean     -     boolean
+integer     -     integer
+double      <-    integer
+double      -     double
+text        <-    boolean
+text        <-    integer
+text        <-    double
+text        -     text
+
+E.g. integer can validly be combined with integer.
+Double can be combined with integer, the integer operand will automatically be cast to double.
+Double can be validly be combined with Double.
+Text can be combined with Double. The Double operand will automatically be cast to Text.
+Integer values can be assigned to integer, double and text types.
+
+- Grammar v0.1 Operator Precedence Chart
+()
+not !
+* /
++ -
+< <= > >=
+== !=
+xor
+and
+or
+
+Operator implementation goal for later
+(these operators and their precedence chart could be implemented in future versions)
+Postfix                         ++ --
+Unary                           + - ! ~ ++ -- sizeof
+Multiplicative Arithmetic       * / %
+Additiv Arithmetic              + -
+Relational                      < <= > >=
+Equality                        == !=
+Bitwise AND                     &
+Bitwise XOR                     ^
+Bitwise OR                      |
+Logical AND                     &&
+Logical OR                      ||
+Conditional                     ?:
+Assignment                      =
+
+Grammar v0.1 Abstract Grammar
+(AST types are deferred from this listing)
+
+P -> S ; $
+S -> S ; S
+S -> type id
+S -> type id = E
+S -> id = E
+S -> print ( EL )
+
+EL -> E
+EL -> EL, E
+
+E -> id
+E -> num
+E -> dec
+E -> bool
+E -> text
+E -> ( E )
+E -> not E
+E -> E + E
+E -> E - E
+E -> E * E
+E -> E / E
+E -> E xor E
+E -> E and E
+E -> E or E
+E -> E < E
+E -> E <= E
+E -> E > E
+E -> E >= E
+E -> E == E
+E -> E != E
+
+***********************************************************************
+terminals_start
+,
+;
+=
+==
+!=
+<
+<=
+>
+>=
+(
+)
++
+-
+*
+/
+and
+bool
+dec
+id
+not
+num
+or
+print
+text
+type
+xor
+terminals_end
+***********************************************************************
+
+***********************************************************************
+productions_start
+P -> S P'
+P' -> ; P''
+P'' -> S P'
+P'' ->
+
+S -> DS
+S -> AS
+S -> PS
+
+DS -> type id DS'
+DS' -> = E
+DS' ->
+
+AS -> id = E
+
+PS -> print ( EL )
+
+EL -> E EL'
+EL' -> , E EL'
+EL' ->
+
+E -> T8 E'
+E' -> or T8 E'
+E' ->
+T8 -> T7 T8'
+T8' -> and T7 T8'
+T8' ->
+T7 -> T6 T7'
+T7' -> xor T6 T7'
+T7' ->
+T6 -> T5 T6'
+T6' -> == T5 T6'
+T6' -> != T5 T6'
+T6' ->
+T5 -> T4 T5'
+T5' -> < T4 T5'
+T5' -> <= T4 T5'
+T5' -> > T4 T5'
+T5' -> >= T4 T5'
+T5' ->
+T4 -> T3 T4'
+T4' -> + T3 T4'
+T4' -> - T3 T4'
+T4' ->
+T3 -> T2 T3'
+T3' -> * T2 T3'
+T3' -> / T2 T3'
+T3' ->
+T2 -> F
+T2 -> not F
+
+F -> id
+F -> num
+F -> dec
+F -> bool
+F -> text
+F -> ( E )
+
+productions_end
+***********************************************************************
+

@@ -11,6 +11,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.Sym
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -76,5 +77,60 @@ public class InterpreterTest {
             throw new RuntimeException("Interpreter was not accepted by AST");
         }
         assertEquals("Der Umfang ist  94.2 ", systemOutRule.getLog());
+    }
+
+    @Test
+    public void testHelloWorld_v01() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/HelloWorld_v0.1.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+        }
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        assertTrue(expressionValidator.isAstValid());
+
+        Interpreter interpreter = new Interpreter(symbolTable);
+        if (program.handleProceedWith(interpreter)) {
+            program.accept(interpreter);
+        } else {
+            throw new RuntimeException("Interpreter was not accepted by AST");
+        }
+        assertEquals("Hello, World! Hello, World! Hello, World! ", systemOutRule.getLog());
+    }
+
+    @Test
+    public void testEmptyProgram() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/ProgramWithoutStatements.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+        }
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        assertTrue(expressionValidator.isAstValid());
+
+        Interpreter interpreter = new Interpreter(symbolTable);
+        if (program.handleProceedWith(interpreter)) {
+            program.accept(interpreter);
+        } else {
+            throw new RuntimeException("Interpreter was not accepted by AST");
+        }
     }
 }

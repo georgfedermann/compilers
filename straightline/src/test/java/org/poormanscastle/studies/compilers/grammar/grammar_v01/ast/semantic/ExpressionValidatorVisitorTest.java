@@ -1,5 +1,6 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
@@ -172,5 +173,52 @@ public class ExpressionValidatorVisitorTest {
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
     }
 
+
+    @Test
+    public void testAssignIntToTextVariable() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
+        }
+
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+        }
+        assertFalse(expressionValidator.isAstValid());
+
+        String expectedErrorMessage =
+                "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n";
+
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testIntToText_v01() throws Exception {
+        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+        }
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        Assert.assertFalse(expressionValidator.isAstValid());
+    }
 
 }

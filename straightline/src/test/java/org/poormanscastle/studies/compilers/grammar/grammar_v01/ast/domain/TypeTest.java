@@ -74,9 +74,9 @@ public class TypeTest {
         assertTrue(Type.isRhsAssignableToLhs(Type.DOUBLE, Type.DOUBLE));
         assertFalse(Type.isRhsAssignableToLhs(Type.DOUBLE, Type.TEXT));
 
-        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.BOOLEAN));
-        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.INT));
-        assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.DOUBLE));
+        assertFalse(Type.isRhsAssignableToLhs(Type.TEXT, Type.BOOLEAN));
+        assertFalse(Type.isRhsAssignableToLhs(Type.TEXT, Type.INT));
+        assertFalse(Type.isRhsAssignableToLhs(Type.TEXT, Type.DOUBLE));
         assertTrue(Type.isRhsAssignableToLhs(Type.TEXT, Type.TEXT));
     }
 }

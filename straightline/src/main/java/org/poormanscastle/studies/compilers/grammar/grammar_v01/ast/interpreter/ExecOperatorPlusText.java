@@ -6,6 +6,6 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.interpreter
 public class ExecOperatorPlusText implements ExecBinaryOperator {
     @Override
     public Object execute(Object lhs, Object rhs) {
-        return (String) lhs + (String) rhs;
+        return String.valueOf(lhs) + String.valueOf(rhs);
     }
 }

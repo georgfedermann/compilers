@@ -1,0 +1,8 @@
+// this program tests that it is not possible to assign int values to text variables.
+int a = 3;
+text name = a;
+print(name);
+name = 5;
+print(name);
+name = name + 6;
+print(name);

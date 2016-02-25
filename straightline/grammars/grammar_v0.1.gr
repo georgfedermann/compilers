@@ -41,7 +41,7 @@ E.g. integer can validly be combined with integer.
 Double can be combined with integer, the integer operand will automatically be cast to double.
 Double can be validly be combined with Double.
 Text can be combined with Double. The Double operand will automatically be cast to Text.
-
+Integer values can be assigned to integer, double and text types.
 
 - Grammar v0.1 Operator Precedence Chart
 ()

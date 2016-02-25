@@ -39,7 +39,7 @@ public enum Type {
     }
 
     private static boolean queryAssignabilityResolver(int state) {
-        return Arrays.asList(3, 5, 7, 8, 10, 11, 12, 13).contains(state);
+        return Arrays.asList(3, 5, 7, 8, 10).contains(state);
     }
 
     /**
@@ -91,14 +91,8 @@ public enum Type {
                 }
             case 9:
                 switch (type) {
-                    case BOOLEAN:
-                        return 10;
-                    case INT:
-                        return 11;
-                    case DOUBLE:
-                        return 12;
                     case TEXT:
-                        return 13;
+                        return 10;
                     default:
                         return 0;
                 }

@@ -3,7 +3,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.prettyprint
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.V01AstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -14,10 +14,10 @@ public class PrettyPrintVisitorTest {
 
     @Test
     public void testSerialize() throws Exception {
-//        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
-//        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
-//        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/mixedTypes.prog")).P();
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
+//        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
+//        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
+//        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/mixedTypes.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
         assertNotNull(program);
         PrettyPrintVisitor printer = new PrettyPrintVisitor();
         printer.initialize();

@@ -3,7 +3,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic;
 import org.junit.Test;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.V01AstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
 
@@ -18,7 +18,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testGetSymbolTable() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor visitor = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(visitor)) {

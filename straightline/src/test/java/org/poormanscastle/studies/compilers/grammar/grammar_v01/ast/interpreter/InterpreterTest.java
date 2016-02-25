@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.V01AstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.ExpressionValidatorVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
@@ -25,7 +25,7 @@ public class InterpreterTest {
 
     @Test
     public void testProgram1_v01() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -53,7 +53,7 @@ public class InterpreterTest {
 
     @Test
     public void testMixedTypes_v01() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/mixedTypes.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/mixedTypes.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -81,7 +81,7 @@ public class InterpreterTest {
 
     @Test
     public void testHelloWorld_v01() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/HelloWorld_v0.1.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/HelloWorld_v0.1.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -109,7 +109,7 @@ public class InterpreterTest {
 
     @Test
     public void testEmptyProgram() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/ProgramWithoutStatements.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/ProgramWithoutStatements.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {

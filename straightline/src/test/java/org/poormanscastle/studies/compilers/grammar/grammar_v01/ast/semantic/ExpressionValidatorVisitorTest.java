@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.V01AstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
 
 import static junit.framework.TestCase.assertFalse;
@@ -24,7 +24,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testValidateProgram1() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -46,7 +46,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifier() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -77,7 +77,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifierInAssignmentStm() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredIdAssignmentStatement.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredIdAssignmentStatement.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -100,7 +100,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testInvalidNotOperand() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/InvalidNotOperand.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/InvalidNotOperand.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -128,7 +128,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testDeclarationWithoutAssignment() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/DeclarationWithoutAssignment.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/DeclarationWithoutAssignment.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -148,7 +148,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testAssignDoubleValueToIntVariable() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -176,7 +176,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testAssignIntToTextVariable() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -203,7 +203,7 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testIntToText_v01() throws Exception {
-        Program program = new V01AstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {

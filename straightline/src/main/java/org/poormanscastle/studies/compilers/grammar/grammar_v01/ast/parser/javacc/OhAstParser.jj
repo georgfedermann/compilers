@@ -19,19 +19,19 @@ options{
     USER_TOKEN_MANAGER = false;
 }
 
-PARSER_BEGIN(V01AstParser)
+PARSER_BEGIN(OhAstParser)
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc;
 
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.*;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
-public class V01AstParser{
+public class OhAstParser{
     public static void main(String[] args) throws ParseException{
-        V01AstParser parser = new V01AstParser(System.in);
+        OhAstParser parser = new OhAstParser(System.in);
         parser.P();
     }
 }
-PARSER_END(V01AstParser)
+PARSER_END(OhAstParser)
 
 /* Lexer */
 /* Language Commandos */

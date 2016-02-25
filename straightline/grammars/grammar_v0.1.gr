@@ -1,7 +1,7 @@
 This grammmar is an object of study to learn hands-on about compiler implementation.
-It is based on Grammar3.1.gr from Andrew Appel's book Modern Compiler Implementation with Java.
+It is increasingle losely based on Grammar3.1.gr from Andrew Appel's book Modern Compiler Implementation with Java.
 
-Grammar_v0.1.gr introduces 
+Grammar_v0.1.gr introduces
 - data types
   -- int: integer numbers with num literals (token type num)
   -- float: floating point numbers with decimal literals (token type dec)
@@ -70,7 +70,7 @@ Logical OR                      ||
 Conditional                     ?:
 Assignment                      =
 
-Grammar v0.1 Abstract Grammar 
+Grammar v0.1 Abstract Grammar
 (AST types are deferred from this listing)
 
 P -> S ; $
@@ -156,7 +156,7 @@ PS -> print ( EL )
 
 EL -> E EL'
 EL' -> , E EL'
-EL' -> 
+EL' ->
 
 E -> T8 E'
 E' -> or T8 E'

@@ -65,7 +65,9 @@ TOKEN : {
 /* Separators */
 TOKEN : {
     < COMMA : "," > |
-    < SEMICOLON : ";" >
+    < SEMICOLON : ";" > |
+    < LBRACE : "{" > |
+    < RBRACE : "}" >
 }
 
 /* literals: string, integers and floats */

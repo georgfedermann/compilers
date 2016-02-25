@@ -1,6 +1,18 @@
 This grammmar is an object of study to learn hands-on about compiler implementation.
 It is increasingle losely based on Grammar3.1.gr from Andrew Appel's book Modern Compiler Implementation with Java.
 
+Grammar v0.2 introduces
+- Blocks
+  --  Blocks can be used to structure programs
+  --  Blocks can appear anywhere a Statement can appear
+  --  Identifiers have block scope
+  --  SymbolTables support block scope
+- If Control Structures
+  --  syntax
+      if (BooleanExpression) Statement ELSE Statement
+  --  Since a Block can appear anywhere a Statement can appear, this is equivalent to
+      if (BooleanExpression) Block ELSE Block
+
 Grammar_v0.1.gr introduces
 - data types
   -- int: integer numbers with num literals (token type num)
@@ -132,19 +144,25 @@ print
 text
 type
 xor
+{
+}
 terminals_end
 ***********************************************************************
 
 ***********************************************************************
 productions_start
-P -> S P'
-P' -> ; P''
-P'' -> S P'
-P'' ->
+P -> P' $
+P' -> S ; P'
+P' ->
 
 S -> DS
 S -> AS
 S -> PS
+
+S -> B
+B -> { B' }
+B' -> S ; B'
+B' ->
 
 DS -> type id DS'
 DS' -> = E

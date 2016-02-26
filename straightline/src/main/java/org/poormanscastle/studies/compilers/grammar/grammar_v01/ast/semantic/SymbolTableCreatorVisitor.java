@@ -8,6 +8,12 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Progr
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
 
 /**
+ * the statement below is actually not right:
+ * Each new identifier declaration (variable, function name, what ever) creates a new environment.
+ * A variable can only be used after it's been declared. Thus, also within a block or even within a dialect
+ * that supports no blocks at all, there are multiple environments or else the semantic analysis could not
+ * clearly decide if a variable is used before it was declared.
+ *
  * this visitor has to create all entries for the symbol table. therefore it needs to visit
  * all nodes which can create new identifiers, which are declaration statements in language v0.1
  * <p/>

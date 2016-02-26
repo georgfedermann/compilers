@@ -9,6 +9,36 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 public abstract class AstItemVisitorAdapter implements AstItemVisitor {
 
     @Override
+    public void leaveBlock(Block block) {
+
+    }
+
+    @Override
+    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
+
+    }
+
+    @Override
+    public boolean proceedWithBlock(Block block) {
+        return false;
+    }
+
+    @Override
+    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitBlock(Block block) {
+
+    }
+
+    @Override
+    public void visitConditionalStatement(ConditionalStatement conditionalStatement) {
+
+    }
+
+    @Override
     public boolean proceedWithPrintStatement(PrintStatement printStatement) {
         return false;
     }

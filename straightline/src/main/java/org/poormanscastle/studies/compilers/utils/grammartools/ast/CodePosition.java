@@ -19,11 +19,29 @@ public final class CodePosition {
 
     private final int endColumn;
 
+    /**
+     * create a CodePosition object for a symbol found in source code.
+     *
+     * @param beginLine
+     * @param beginColumn
+     * @param endLine
+     * @param endColumn
+     */
     private CodePosition(int beginLine, int beginColumn, int endLine, int endColumn) {
         this.beginLine = beginLine;
         this.beginColumn = beginColumn;
         this.endLine = endLine;
         this.endColumn = endColumn;
+    }
+
+    /**
+     * create a CodePosition object representing the very start of a source code file.
+     */
+    private CodePosition() {
+        beginLine = 0;
+        beginColumn = 0;
+        endLine = 0;
+        endColumn = 0;
     }
 
     @Override
@@ -49,6 +67,15 @@ public final class CodePosition {
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * create a CodePosition representing the very start of a source code file.
+     *
+     * @return
+     */
+    public static CodePosition createZeroPosition() {
+        return new CodePosition();
     }
 
     public int getBeginLine() {

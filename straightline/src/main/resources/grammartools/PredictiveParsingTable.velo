@@ -61,12 +61,12 @@ overflow: scroll;
 <td>$nonterminalSymbol.isNullable()</td>
 <td>
 #foreach($firstSymbol in $nonterminalSymbol.getFirstSet())
-$firstSymbol.getId()
+$firstSymbol.getId()&nbsp;
 #end
 </td>
 <td>
 #foreach($followSymbol in $nonterminalSymbol.getFollowSet())
-$followSymbol.getId()
+$followSymbol.getId()&nbsp;
 #end
 </td>
 #foreach($terminalSymbol in $grammar.terminalSymbols)

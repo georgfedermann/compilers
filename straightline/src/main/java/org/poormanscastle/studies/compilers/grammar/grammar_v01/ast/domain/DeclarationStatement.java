@@ -18,7 +18,7 @@ public final class DeclarationStatement extends AbstractAstItem implements State
     private final String id;
 
     /**
-     * Expression may remain {@code null} if the declaration statement has no implicit initialization.
+     * Expression may remain {@code null} if the declaration statement has no initialization part.
      */
     private final Expression expression;
 

@@ -6,8 +6,12 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 1st version of a symbol table for the still straightline language v0.1
+ * 1st version of a symbol table for the still straightline language v0.1.
  * <p/>
+ * even a simple sequence of declaration statements will create multiple environments.
+ * Along with a sequence of declaration statements, different identifiers and their bindings will
+ * become available.
+ *
  * Created by 02eex612 on 19.02.2016.
  */
 public class SymbolTable {

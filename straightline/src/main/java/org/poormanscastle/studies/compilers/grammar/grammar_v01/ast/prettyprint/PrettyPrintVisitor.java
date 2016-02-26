@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AssignmentStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitor;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitorAdapter;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BinaryOperatorExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BooleanExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DecimalExpression;
@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkState;
  * <p/>
  * Created by 02eex612 on 18.02.2016.
  */
-public class PrettyPrintVisitor implements AstItemVisitor {
+public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     private static long sequence = 0;
 

@@ -47,6 +47,9 @@ public class Interpreter extends AstItemVisitorAdapter {
         this.symbolTable = symbolTable;
     }
 
+
+
+
     @Override
     public void visitPrintStatement(PrintStatement printStatement) {
         expressionList = new LinkedList<>();

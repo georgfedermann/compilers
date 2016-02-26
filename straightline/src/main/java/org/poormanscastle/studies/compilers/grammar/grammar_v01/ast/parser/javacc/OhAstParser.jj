@@ -59,7 +59,9 @@ TOKEN : {
     < OR : "|" > |
     < LET : "=" > |
     < TYPE : "int" | "double" | "boolean" | "text" > |
-    < BOOL : "true" | "false" >
+    < BOOL : "true" | "false" > |
+    < IF : "if" > |
+    < ELSE : "else" >
 }
 
 /* Separators */
@@ -108,34 +110,24 @@ SKIP : {
 }
 
 Program P() :
-{ Statement statement;
-    StatementList statementList; }
+{ StatementList statementList; }
 {
-    statement = S() statementList = PPrime()
+    statementList = PPrime() <EOF>
     {
-        return new ProgramImpl(statement.getCodePosition(), statementList == null ? statement :
-            new PairStatementList(statement.getCodePosition(), statement, statementList));
+        return new ProgramImpl(statementList == null ? CodePosition.createZeroPosition() : statementList.getCodePosition(),
+            statementList);
     }
 }
 
 StatementList PPrime() :
-{ StatementList statementList; }
-{
-    <SEMICOLON> statementList = PPrimePrime()
-    {
-        return statementList;
-    }
-}
-
-StatementList PPrimePrime() :
 { Statement statement; StatementList statementList; }
 {
     (
-        statement = S() statementList = PPrime()
+        statement = S() <SEMICOLON> statementList = PPrimePrime()
         {
             return statementList == null ?
-                new LastStatementList(statement.getCodePosition(), statement) :
-                new PairStatementList(statement.getCodePosition(), statement, statementList);
+                new LastStatementList(statement) :
+                new PairStatementList(statement, statementList);
         }
     )?
     { return null; }
@@ -158,6 +150,57 @@ Statement S() :
     {
         return statement;
     }
+    |
+    statement = B()
+    {
+        return statement;
+    }
+    |
+    statement = CS()
+    {
+        return statement;
+    }
+}
+
+Statement B() :
+{ StatementList statementList; }
+{
+    <LBRACE> BPrime() <RBRACE>
+}
+
+StatementList BPrime() :
+{ Statement statement; StatementList statementList; }
+{
+    (
+        statement = S() <SEMICOLON> statementList = BPrime()
+        {
+            return statementList == null ?
+                new LastStatementList(statement) :
+                new PairStatementList(statement, statementList);
+        }
+    )?
+    { return null; }
+}
+
+Statement CS() :
+{ Expression expression; Statement ifStatement; Statement elseStatement; }
+{
+    <IF> expression = E() ifStatement = S() elseStatement = CSPrime()
+    {
+
+    }
+}
+
+Statement CSPrime() :
+{ Statement statement; }
+{
+    (
+        <ELSE> statement = S()
+        {
+            return statement;
+        }
+    )?
+    { return null; }
 }
 
 Statement DS() :

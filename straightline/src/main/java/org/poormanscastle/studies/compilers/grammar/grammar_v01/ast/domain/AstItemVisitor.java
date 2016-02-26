@@ -106,4 +106,16 @@ public interface AstItemVisitor {
 
     boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression);
 
+    boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement);
+
+    void visitConditionalStatement(ConditionalStatement conditionalStatement);
+
+    void leaveConditionalStatement(ConditionalStatement conditionalStatement);
+
+    boolean proceedWithBlock(Block block);
+
+    void visitBlock(Block block);
+
+    void leaveBlock(Block block);
+
 }

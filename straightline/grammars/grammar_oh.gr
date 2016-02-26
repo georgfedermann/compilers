@@ -129,6 +129,8 @@ terminals_start
 >=
 (
 )
+{
+}
 +
 -
 *
@@ -137,6 +139,8 @@ and
 bool
 dec
 id
+if
+else
 not
 num
 or
@@ -144,8 +148,6 @@ print
 text
 type
 xor
-{
-}
 terminals_end
 ***********************************************************************
 
@@ -158,11 +160,16 @@ P' ->
 S -> DS
 S -> AS
 S -> PS
+S -> CS
 
 S -> B
 B -> { B' }
 B' -> S ; B'
 B' ->
+
+CS -> if E S CS'
+CS' -> else S
+CS' ->
 
 DS -> type id DS'
 DS' -> = E

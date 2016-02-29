@@ -17,7 +17,8 @@ public class PrettyPrintVisitorTest {
 //        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
 //        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
 //        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/mixedTypes.prog")).P();
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
+//        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/BlockScopeTest1.oh")).P();
         assertNotNull(program);
         PrettyPrintVisitor printer = new PrettyPrintVisitor();
         printer.initialize();

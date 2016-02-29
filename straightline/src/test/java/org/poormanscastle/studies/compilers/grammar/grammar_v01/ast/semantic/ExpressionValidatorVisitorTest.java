@@ -221,4 +221,24 @@ public class ExpressionValidatorVisitorTest {
         Assert.assertFalse(expressionValidator.isAstValid());
     }
 
+    @Test
+    public void testBlockScope1() throws Exception {
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/BlockScopeTest1.oh")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
+        } else {
+            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+        }
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
+        if (program.handleProceedWith(expressionValidator)) {
+            program.accept(expressionValidator);
+        } else {
+            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+        }
+        Assert.assertFalse(expressionValidator.isAstValid());
+    }
+
 }

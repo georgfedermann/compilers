@@ -5,5 +5,5 @@ print(a);       // should print "Hello, World!"
   print(a);     // should print "Hello, World!"
   int a = 5;    // should not result in an exception, that the identifier was already declared
   print(a);     // should print 5
-}
+};
 print(a);       // should print "Hello, World!"

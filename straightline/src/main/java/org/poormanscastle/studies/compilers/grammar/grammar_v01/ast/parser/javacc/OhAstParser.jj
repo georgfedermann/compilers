@@ -165,10 +165,11 @@ Statement S() :
 Statement B() :
 { StatementList statementList; }
 {
-    <LBRACE> statementList = BPrime() <RBRACE>
-    {
-        return statementList;
-    }
+    (    <LBRACE> statementList = BPrime() <RBRACE>
+        {
+            return new Block(statementList);
+        }
+    )?
 }
 
 StatementList BPrime() :

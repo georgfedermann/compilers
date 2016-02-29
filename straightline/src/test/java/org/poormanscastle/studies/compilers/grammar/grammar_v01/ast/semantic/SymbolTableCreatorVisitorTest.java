@@ -5,7 +5,7 @@ import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

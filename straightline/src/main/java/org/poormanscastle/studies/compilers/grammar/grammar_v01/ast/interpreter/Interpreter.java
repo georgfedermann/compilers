@@ -21,7 +21,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Progr
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.TextExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.UnaryOperatorExpression;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 import com.google.common.collect.Lists;
 

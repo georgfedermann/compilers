@@ -8,7 +8,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Progr
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.ExpressionValidatorVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

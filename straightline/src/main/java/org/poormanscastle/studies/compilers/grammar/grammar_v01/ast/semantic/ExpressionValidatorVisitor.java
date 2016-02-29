@@ -20,7 +20,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Unary
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.UnaryOperatorExpression;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 import static com.google.common.base.Preconditions.checkState;
 

@@ -1,9 +1,11 @@
-package org.poormanscastle.studies.compilers.utils.grammartools.ast;
+package org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 
 /**
  * 1st version of a symbol table for the still straightline language v0.1.

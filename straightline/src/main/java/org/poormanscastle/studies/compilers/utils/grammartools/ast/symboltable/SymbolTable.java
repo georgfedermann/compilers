@@ -50,18 +50,20 @@ public class SymbolTable {
     }
 
     public Binding getBinding(Symbol symbol) {
-        for(Environment environment : environments){
-            if(environment.contains(symbol)){
-                return environment.getSymbol();
+        for (Environment environment : environments) {
+            if (environment.contains(symbol)) {
+                return environment.getSymbol(symbol);
             }
         }
-
-
-        return bindings.get(symbol);
+        return null;
     }
 
     public int getSize() {
-        return bindings.size();
+        int result = 0;
+        for (Environment environment : environments) {
+            result += environment.getSize();
+        }
+        return result;
     }
 
 }

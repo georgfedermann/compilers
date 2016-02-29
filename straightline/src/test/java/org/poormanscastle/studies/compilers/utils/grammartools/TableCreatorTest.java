@@ -18,11 +18,4 @@ public class TableCreatorTest {
         assertEquals(LL1TableCreator.class, creator.getClass());
     }
 
-    @Test
-    public void testGetTableCreatorLR0() throws Exception {
-        // TODO implement LR0TableCreator
-//        TableCreator creator = TableCreator.getTableCreator(GrammarFlavor.LR0);
-//        assertNotNull(creator);
-//        assertEquals(LR0TableCreator.class, creator.getClass());
-    }
 }

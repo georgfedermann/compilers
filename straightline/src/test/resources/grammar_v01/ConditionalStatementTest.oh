@@ -1,0 +1,31 @@
+// tests conditional statements together with blocks and block scopes
+int x1 = 1;
+int x2 = 2;
+int x3 = 3;
+
+boolean b1 = true;
+boolean b2 = false;
+boolean c1 = false;
+boolean c2 = false;
+boolean c3 = false;
+
+if (b1){
+  c1 = true;
+} else {
+  c1 = false;
+}
+
+if(!b2){
+  c2 = true;
+} else {
+  c2 = false;
+}
+
+if(b2){
+
+} else {
+  c3 = true;
+}
+
+// if this program works well, all values are true now.
+print ( c1, c2, c3 );

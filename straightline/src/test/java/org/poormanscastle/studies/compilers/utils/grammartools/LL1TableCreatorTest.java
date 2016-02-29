@@ -23,7 +23,7 @@ public class LL1TableCreatorTest {
         TableCreator creator = TableCreator.getTableCreator(GrammarFlavor.LL1);
         String table = creator.createTable(grammar);
         assertNotNull(table);
-        assertEquals(8215, table.length());
+        assertEquals(8965, table.length());
         assertFalse(StringUtils.isBlank(table));
 
         FileOutputStream outputStream = new FileOutputStream(new File("grammartools/predictiveParserTableGrammar01.html"));

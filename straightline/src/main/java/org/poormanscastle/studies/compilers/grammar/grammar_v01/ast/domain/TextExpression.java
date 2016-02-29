@@ -17,7 +17,8 @@ public final class TextExpression extends AbstractExpression implements Expressi
     public TextExpression(CodePosition codePosition, String value) {
         super(codePosition);
         checkArgument(!StringUtils.isBlank(value));
-        // TODO string literals are delimted with quotes. JavaCC handles the quotes through. I remove all quotes here.
+        // string literals are delimted with quotes. JavaCC hands the quotes through. I remove all quotes here.
+        // TODO maybe keep escaped quotes
         this.value = value.replaceAll("\"", "");
         setState(ExpressionState.VALID);
     }

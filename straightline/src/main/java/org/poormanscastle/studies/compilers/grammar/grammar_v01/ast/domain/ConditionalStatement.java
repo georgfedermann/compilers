@@ -2,6 +2,8 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Created by 02eex612 on 26.02.2016.
  */
@@ -18,9 +20,15 @@ public class ConditionalStatement extends AbstractAstItem implements Statement {
 
     public ConditionalStatement(CodePosition codePosition, Expression condition, Statement thenStatement, Statement elseStatement) {
         super(codePosition);
+        checkNotNull(condition);
+        checkNotNull(thenStatement);
         this.condition = condition;
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;
+    }
+
+    public ConditionalStatement(Expression condition, Statement thenStatement, Statement elseStatement) {
+        this(condition.getCodePosition(), condition, thenStatement, elseStatement);
     }
 
     @Override
@@ -31,13 +39,13 @@ public class ConditionalStatement extends AbstractAstItem implements Statement {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitConditionalStatement(this);
-        if(condition.handleProceedWith(visitor)){
+        if (condition.handleProceedWith(visitor)) {
             condition.accept(visitor);
         }
-        if(thenStatement.handleProceedWith(visitor)){
+        if (thenStatement.handleProceedWith(visitor)) {
             thenStatement.accept(visitor);
         }
-        if(elseStatement != null && elseStatement.handleProceedWith(visitor)){
+        if (elseStatement != null && elseStatement.handleProceedWith(visitor)) {
             elseStatement.accept(visitor);
         }
         visitor.leaveConditionalStatement(this);

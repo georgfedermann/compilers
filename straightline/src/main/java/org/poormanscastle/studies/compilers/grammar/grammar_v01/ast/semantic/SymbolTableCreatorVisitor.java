@@ -5,7 +5,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Decla
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.LastStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.PairStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.ProgramImpl;
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 /**
  * the statement below is actually not right:

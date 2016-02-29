@@ -17,7 +17,6 @@ public class LL1GrammarTest {
 
     @Test
     public void testGrammar_0_2() throws Exception {
-        // TODO move this test to GrammarTest
         Grammar grammar = Grammar.createGrammar(GrammarFlavor.LL1);
         GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar01.gr"), grammar);
         assertNotNull(grammar);
@@ -35,7 +34,6 @@ public class LL1GrammarTest {
 
     @Test
     public void testGrammar_3_10() throws Exception {
-        // TODO move this test to GrammarTest
         Grammar grammar = Grammar.createGrammar(GrammarFlavor.LL1);
         GrammarReader.readGrammar(TestUtils.getTestdataAsInputStream("/grammartools/grammar3.10.gr"), grammar);
         assertNotNull(grammar);

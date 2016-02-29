@@ -148,6 +148,7 @@ print
 text
 type
 xor
+$
 terminals_end
 ***********************************************************************
 
@@ -167,7 +168,7 @@ B -> { B' }
 B' -> S ; B'
 B' ->
 
-CS -> if E S CS'
+CS -> if ( E ) S CS'
 CS' -> else S
 CS' ->
 

@@ -123,7 +123,7 @@ StatementList PPrime() :
 { Statement statement; StatementList statementList; }
 {
     (
-        statement = S() <SEMICOLON> statementList = PPrimePrime()
+        statement = S() <SEMICOLON> statementList = PPrime()
         {
             return statementList == null ?
                 new LastStatementList(statement) :
@@ -165,7 +165,10 @@ Statement S() :
 Statement B() :
 { StatementList statementList; }
 {
-    <LBRACE> BPrime() <RBRACE>
+    <LBRACE> statementList = BPrime() <RBRACE>
+    {
+        return statementList;
+    }
 }
 
 StatementList BPrime() :
@@ -183,11 +186,11 @@ StatementList BPrime() :
 }
 
 Statement CS() :
-{ Expression expression; Statement ifStatement; Statement elseStatement; }
+{ Expression condition; Statement thenStatement; Statement elseStatement; }
 {
-    <IF> expression = E() ifStatement = S() elseStatement = CSPrime()
+    <IF> <LPAREN> condition = E() <RPAREN> thenStatement = S() elseStatement = CSPrime()
     {
-
+        return new ConditionalStatement(condition, thenStatement, elseStatement);
     }
 }
 
@@ -195,7 +198,7 @@ Statement CSPrime() :
 { Statement statement; }
 {
     (
-        <ELSE> statement = S()
+        LOOKAHEAD(1) <ELSE> statement = S()
         {
             return statement;
         }

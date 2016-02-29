@@ -27,7 +27,7 @@ public class Environment {
     public Binding addSymbol(String name, String type) {
         Symbol symbol = Symbol.getSymbol(name);
         if (bindings.containsKey(symbol)) {
-            throw new RuntimeException(StringUtils.join("Symbol already in symbol table:", symbol));
+            throw new RuntimeException(StringUtils.join("Symbol already in Symboltable:", symbol));
         }
         Binding binding = new Binding(type);
         bindings.put(symbol, binding);

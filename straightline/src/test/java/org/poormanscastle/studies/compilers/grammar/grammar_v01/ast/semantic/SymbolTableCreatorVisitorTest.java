@@ -43,4 +43,18 @@ public class SymbolTableCreatorVisitorTest {
         assertEquals("BOOLEAN", symbolTable.getBinding(Symbol.getSymbol("anotherTry")).getDeclaredType());
         assertEquals("BOOLEAN", symbolTable.getBinding(Symbol.getSymbol("k")).getDeclaredType());
     }
+
+    @Test
+    public void testBlockScope1() throws Exception {
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/BlockScopeTest1.oh")).P();
+        assertNotNull(program);
+        SymbolTableCreatorVisitor visitor = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(visitor)) {
+            program.accept(visitor);
+        }
+        assertTrue(visitor.isAstValid());
+        SymbolTable symbolTable = visitor.getSymbolTable();
+        assertEquals(1, symbolTable.getSize());
+        assertEquals("TEXT", symbolTable.getBinding(Symbol.getSymbol("a")).getDeclaredType());
+    }
 }

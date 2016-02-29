@@ -1,6 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic;
 
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitorAdapter;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.LastStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.PairStatementList;
@@ -13,7 +14,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.S
  * A variable can only be used after it's been declared. Thus, also within a block or even within a dialect
  * that supports no blocks at all, there are multiple environments or else the semantic analysis could not
  * clearly decide if a variable is used before it was declared.
- *
+ * <p/>
  * this visitor has to create all entries for the symbol table. therefore it needs to visit
  * all nodes which can create new identifiers, which are declaration statements in language v0.1
  * <p/>
@@ -61,4 +62,18 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         return true;
     }
 
+    @Override
+    public boolean proceedWithBlock(Block block) {
+        return true;
+    }
+
+    @Override
+    public void leaveBlock(Block block) {
+        symbolTable.endScope();
+    }
+
+    @Override
+    public void visitBlock(Block block) {
+        symbolTable.newScope();
+    }
 }

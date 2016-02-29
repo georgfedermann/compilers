@@ -5,6 +5,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Assig
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitorAdapter;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BinaryOperator;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BinaryOperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.ExpressionState;
@@ -100,6 +101,11 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
 
     @Override
     public boolean proceedWithIdExpression(IdExpression idExpression) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithBlock(Block block) {
         return true;
     }
 

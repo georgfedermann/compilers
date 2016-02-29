@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AssignmentStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitorAdapter;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BinaryOperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BooleanExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DeclarationStatement;
@@ -124,6 +125,22 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     @Override
     public void leavePairStatementList(PairStatementList pairStatementList) {
         itemStack.pop();
+    }
+
+    @Override
+    public void leaveBlock(Block block) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithBlock(Block block) {
+        return true;
+    }
+
+    @Override
+    public void visitBlock(Block block) {
+       addItem("Block", "");
+        addBufferLine();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.poormanscastle.studies.compilers.utils.grammartools;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1TableCreator;
 import org.poormanscastle.studies.compilers.utils.grammartools.lr.LR0TableCreator;
 
@@ -28,7 +29,7 @@ public interface TableCreator {
         } else if (flavor == GrammarFlavor.LR0) {
             return new LR0TableCreator();
         } else {
-            throw new RuntimeException(StringUtils.join("Unsupported GrammarFlavor: ", flavor));
+            throw new CompilerException(StringUtils.join("Unsupported GrammarFlavor: ", flavor));
         }
     }
 

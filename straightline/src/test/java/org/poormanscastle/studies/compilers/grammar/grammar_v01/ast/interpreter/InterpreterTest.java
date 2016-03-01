@@ -9,9 +9,9 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javac
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.ExpressionValidatorVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -31,14 +31,14 @@ public class InterpreterTest {
         if (program.handleProceedWith(symbolTableCreator)) {
             program.accept(symbolTableCreator);
         } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+            throw new CompilerException("SymbolTableCreatorVisitor was not accepted by AST");
         }
         SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
         assertTrue(expressionValidator.isAstValid());
 
@@ -46,7 +46,7 @@ public class InterpreterTest {
         if (program.handleProceedWith(interpreter)) {
             program.accept(interpreter);
         } else {
-            throw new RuntimeException("Interpreter was not accepted by AST");
+            throw new CompilerException("Interpreter was not accepted by AST");
         }
         assertEquals("0 9 3 true false true false false 0 9 false John Connor Walter White ", systemOutRule.getLog());
     }
@@ -59,14 +59,14 @@ public class InterpreterTest {
         if (program.handleProceedWith(symbolTableCreator)) {
             program.accept(symbolTableCreator);
         } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+            throw new CompilerException("SymbolTableCreatorVisitor was not accepted by AST");
         }
         SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
         assertTrue(expressionValidator.isAstValid());
 
@@ -74,7 +74,7 @@ public class InterpreterTest {
         if (program.handleProceedWith(interpreter)) {
             program.accept(interpreter);
         } else {
-            throw new RuntimeException("Interpreter was not accepted by AST");
+            throw new CompilerException("Interpreter was not accepted by AST");
         }
         assertEquals("Der Umfang ist  94.2 ", systemOutRule.getLog());
     }
@@ -87,14 +87,14 @@ public class InterpreterTest {
         if (program.handleProceedWith(symbolTableCreator)) {
             program.accept(symbolTableCreator);
         } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+            throw new CompilerException("SymbolTableCreatorVisitor was not accepted by AST");
         }
         SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
         assertTrue(expressionValidator.isAstValid());
 
@@ -102,7 +102,7 @@ public class InterpreterTest {
         if (program.handleProceedWith(interpreter)) {
             program.accept(interpreter);
         } else {
-            throw new RuntimeException("Interpreter was not accepted by AST");
+            throw new CompilerException("Interpreter was not accepted by AST");
         }
         assertEquals("Hello, World! Hello, World! Hello, World! ", systemOutRule.getLog());
     }
@@ -115,14 +115,14 @@ public class InterpreterTest {
         if (program.handleProceedWith(symbolTableCreator)) {
             program.accept(symbolTableCreator);
         } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
+            throw new CompilerException("SymbolTableCreatorVisitor was not accepted by AST");
         }
         SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
         assertTrue(expressionValidator.isAstValid());
 
@@ -130,7 +130,7 @@ public class InterpreterTest {
         if (program.handleProceedWith(interpreter)) {
             program.accept(interpreter);
         } else {
-            throw new RuntimeException("Interpreter was not accepted by AST");
+            throw new CompilerException("Interpreter was not accepted by AST");
         }
     }
 }

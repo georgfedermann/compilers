@@ -6,12 +6,11 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -24,44 +23,28 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testValidateProgram1() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
-        }
-
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("testprogram1.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST ?!");
         }
         assertTrue(expressionValidator.isAstValid());
     }
 
     @Test
     public void testUndeclaredIdentifier() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredId.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
-        }
-
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("UndeclaredId.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST ?!");
         }
         assertFalse(expressionValidator.isAstValid());
 
@@ -77,22 +60,14 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifierInAssignmentStm() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/UndeclaredIdAssignmentStatement.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
-        }
-
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("UndeclaredIdAssignmentStatement.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST ?!");
         }
         assertFalse(expressionValidator.isAstValid());
         assertEquals("Error at begin line/column 2/5; end line/column 2/5: variable b may not have been declared.\n", systemErrRule.getLog());
@@ -100,22 +75,14 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testInvalidNotOperand() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/InvalidNotOperand.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
-        }
-
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("InvalidNotOperand.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST ?!");
         }
         assertFalse(expressionValidator.isAstValid());
 
@@ -128,42 +95,28 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testDeclarationWithoutAssignment() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/DeclarationWithoutAssignment.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST ");
-        }
+        Program program = TestUtils.loadProgram("DeclarationWithoutAssignment.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
-        ExpressionValidatorVisitor expressionValidatorVisitor = new ExpressionValidatorVisitor(symbolTableCreator.getSymbolTable());
+        ExpressionValidatorVisitor expressionValidatorVisitor = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidatorVisitor)) {
             program.accept(expressionValidatorVisitor);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
         assertTrue(expressionValidatorVisitor.isAstValid());
     }
 
     @Test
     public void testAssignDoubleValueToIntVariable() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignDoubleValueToIntVariableBug.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
-        }
-
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("assignDoubleValueToIntVariableBug.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST ?!");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST ?!");
         }
         assertFalse(expressionValidator.isAstValid());
 
@@ -176,16 +129,8 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testAssignIntToTextVariable() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST !?");
-        }
-
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("assignIntToText.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
 
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
@@ -203,42 +148,30 @@ public class ExpressionValidatorVisitorTest {
 
     @Test
     public void testIntToText_v01() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/assignIntToText.prog")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
-        }
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("assignIntToText.prog");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
+
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
         Assert.assertFalse(expressionValidator.isAstValid());
     }
 
     @Test
     public void testBlockScope1() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/BlockScopeTest1.oh")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(symbolTableCreator)) {
-            program.accept(symbolTableCreator);
-        } else {
-            throw new RuntimeException("SymbolTableCreatorVisitor was not accepted by AST");
-        }
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
+        Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
+        SymbolTable symbolTable = TestUtils.getSymbolTableForProgram(program);
+
         ExpressionValidatorVisitor expressionValidator = new ExpressionValidatorVisitor(symbolTable);
         if (program.handleProceedWith(expressionValidator)) {
             program.accept(expressionValidator);
         } else {
-            throw new RuntimeException("ExpressionValidatorVisitor was not accepted by AST");
+            throw new CompilerException("ExpressionValidatorVisitor was not accepted by AST");
         }
-        Assert.assertFalse(expressionValidator.isAstValid());
+        Assert.assertTrue(expressionValidator.isAstValid());
     }
 
 }

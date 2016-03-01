@@ -1,5 +1,6 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic;
 
+import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitorAdapter;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DeclarationStatement;
@@ -7,6 +8,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.LastS
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.PairStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.ProgramImpl;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
  * the statement below is actually not right:
@@ -27,18 +29,19 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     private SymbolTable symbolTable = new SymbolTable();
 
-    @Override
-    public boolean isAstValid() {
-        return true;
-    }
-
     public SymbolTable getSymbolTable() {
         return symbolTable;
     }
 
     @Override
     public void visitDeclarationStatement(DeclarationStatement declarationStatement) {
-        symbolTable.addSymbol(declarationStatement.getId(), declarationStatement.getType().name());
+        try {
+            symbolTable.addSymbol(declarationStatement.getId(), declarationStatement.getType().name());
+        } catch (CompilerException e) {
+            System.err.print(StringUtils.join("Error at ", declarationStatement.getCodePosition(),
+                    ": variable ", declarationStatement.getId(), " was already declared in this scope.\n"));
+            invalidateAst();
+        }
     }
 
     @Override

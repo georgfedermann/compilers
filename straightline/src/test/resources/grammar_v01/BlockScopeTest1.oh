@@ -1,4 +1,4 @@
-// test correcting scoping of the oh language
+// test correct scoping of the oh language
 text a = "Hello, World!";
 print(a);       // should print "Hello, World!"
 {

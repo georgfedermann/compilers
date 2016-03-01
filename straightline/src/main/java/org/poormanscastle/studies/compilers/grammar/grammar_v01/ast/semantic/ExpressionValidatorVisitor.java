@@ -48,8 +48,6 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
      */
     private SymbolTable symbolTable;
 
-    private boolean astIsValid = true;
-
     public ExpressionValidatorVisitor(SymbolTable symbolTable) {
         this.symbolTable = symbolTable;
     }
@@ -122,7 +120,7 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
+            invalidateAst();
         }
     }
 
@@ -145,7 +143,7 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
+            invalidateAst();
         }
     }
 
@@ -156,15 +154,10 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitDeclarationStatement(DeclarationStatement declarationStatement) {
-        String errMsg = "";
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId()));
-        if (binding == null) {
-            errMsg = StringUtils.join("Error at ", declarationStatement.getCodePosition(),
-                    ": variable ", declarationStatement.getId(), " may not have been declared.");
-        }
-        if (!StringUtils.isBlank(errMsg)) {
-            System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
+        if (symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId())) == null) {
+            System.err.println(StringUtils.join("Error at ", declarationStatement.getCodePosition(),
+                    ": variable ", declarationStatement.getId(), " may not have been declared."));
+            invalidateAst();
         }
     }
 
@@ -189,7 +182,7 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
+            invalidateAst();
         }
     }
 
@@ -215,7 +208,7 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
+            invalidateAst();
         }
     }
 
@@ -246,12 +239,8 @@ public class ExpressionValidatorVisitor extends AstItemVisitorAdapter {
         }
         if (!StringUtils.isBlank(errMsg)) {
             System.err.print(StringUtils.join(errMsg, "\n"));
-            astIsValid = false;
+            invalidateAst();
         }
     }
 
-    @Override
-    public boolean isAstValid() {
-        return astIsValid;
-    }
 }

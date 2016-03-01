@@ -1,12 +1,15 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -16,16 +19,26 @@ import static org.junit.Assert.assertTrue;
  */
 public class SymbolTableCreatorVisitorTest {
 
+    @Rule
+    public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
+
+    SymbolTableCreatorVisitor symbolTableCreator;
+
+    @Before
+    public void init() {
+        symbolTableCreator = new SymbolTableCreatorVisitor();
+    }
+
     @Test
     public void testGetSymbolTable() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/testprogram1.prog")).P();
+        Program program = TestUtils.loadProgram("testprogram1.prog");
         assertNotNull(program);
-        SymbolTableCreatorVisitor visitor = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(visitor)) {
-            program.accept(visitor);
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
         }
-        assertTrue(visitor.isAstValid());
-        SymbolTable symbolTable = visitor.getSymbolTable();
+        assertTrue(symbolTableCreator.isAstValid());
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         assertNotNull(symbolTable);
         assertEquals(13, symbolTable.getSize());
         assertEquals("INT", symbolTable.getBinding(Symbol.getSymbol("a")).getDeclaredType());
@@ -42,19 +55,29 @@ public class SymbolTableCreatorVisitorTest {
         assertEquals("TEXT", symbolTable.getBinding(Symbol.getSymbol("nameEvil")).getDeclaredType());
         assertEquals("BOOLEAN", symbolTable.getBinding(Symbol.getSymbol("anotherTry")).getDeclaredType());
         assertEquals("BOOLEAN", symbolTable.getBinding(Symbol.getSymbol("k")).getDeclaredType());
+        assertTrue(symbolTableCreator.isAstValid());
     }
 
     @Test
     public void testBlockScope1() throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream("/grammar_v01/BlockScopeTest1.oh")).P();
-        assertNotNull(program);
-        SymbolTableCreatorVisitor visitor = new SymbolTableCreatorVisitor();
-        if (program.handleProceedWith(visitor)) {
-            program.accept(visitor);
+        Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        if (program.handleProceedWith(symbolTableCreator)) {
+            program.accept(symbolTableCreator);
         }
-        assertTrue(visitor.isAstValid());
-        SymbolTable symbolTable = visitor.getSymbolTable();
+
+        assertTrue(symbolTableCreator.isAstValid());
+
+        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         assertEquals(1, symbolTable.getSize());
         assertEquals("TEXT", symbolTable.getBinding(Symbol.getSymbol("a")).getDeclaredType());
+    }
+
+    @Test
+    public void testBlockScope2() throws Exception {
+        Program program = TestUtils.loadProgram("BlockScopeTest2.oh");
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        assertEquals("Error at begin line/column 7/14; end line/column 7/14: variable a was already declared in this scope.\n",systemErrRule.getLog());
     }
 }

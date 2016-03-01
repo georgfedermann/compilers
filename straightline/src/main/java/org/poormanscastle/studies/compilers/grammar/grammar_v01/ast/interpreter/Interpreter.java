@@ -128,11 +128,6 @@ public class Interpreter extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean isAstValid() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean proceedWithProgramImpl(ProgramImpl program) {
         return true;
     }

@@ -1,0 +1,10 @@
+// test scoping in oh language
+text a = "Hello, World!";
+print(a);
+{
+  print(a);
+  int a = 5;
+  double a = 6; // should result in an exception since the identifier was already declared in this scope
+  print(a);
+};
+print(a);       

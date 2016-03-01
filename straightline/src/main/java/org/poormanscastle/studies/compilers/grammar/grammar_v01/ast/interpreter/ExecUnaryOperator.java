@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.UnaryOperator;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
  * Created by 02eex612 on 23.02.2016.
@@ -22,7 +23,7 @@ public interface ExecUnaryOperator {
                     default:
                 }
             default:
-                throw new RuntimeException(StringUtils.join("Unsupported unary operator: ", operator));
+                throw new CompilerException(StringUtils.join("Unsupported unary operator: ", operator));
         }
     }
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
  * Created by georg on 13.02.16.
@@ -58,17 +59,17 @@ public abstract class AbstractGrammar implements Grammar {
 
     public Symbol addSymbol(Symbol symbol) {
         if (symbols.containsKey(symbol.getId())) {
-            throw new RuntimeException(StringUtils.join("Symbol already defined: ", symbol));
+            throw new CompilerException(StringUtils.join("Symbol already defined: ", symbol));
         }
         return symbols.put(symbol.getId(), symbol);
     }
 
     public void addTerminalSymbol(Symbol terminalSymbol) {
         if (terminalSymbols.contains(terminalSymbol)) {
-            throw new RuntimeException(StringUtils.join("Terminal symbol already defined: ", terminalSymbol));
+            throw new CompilerException(StringUtils.join("Terminal symbol already defined: ", terminalSymbol));
         }
         if (symbols.containsKey(terminalSymbol.getId())) {
-            throw new RuntimeException(StringUtils.join("Symbol already defined: ", terminalSymbol));
+            throw new CompilerException(StringUtils.join("Symbol already defined: ", terminalSymbol));
         }
         terminalSymbols.add(terminalSymbol);
         addSymbol(terminalSymbol);

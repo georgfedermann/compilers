@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 import org.poormanscastle.studies.compilers.utils.grammartools.ll1.LL1Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.lr.LR0Grammar;
 
@@ -58,7 +59,7 @@ public interface Grammar {
         } else if (flavor == GrammarFlavor.LR0) {
             return new LR0Grammar();
         } else {
-            throw new RuntimeException(StringUtils.join("No implementation for grammar flavor available: ", flavor));
+            throw new CompilerException(StringUtils.join("No implementation for grammar flavor available: ", flavor));
         }
     }
 }

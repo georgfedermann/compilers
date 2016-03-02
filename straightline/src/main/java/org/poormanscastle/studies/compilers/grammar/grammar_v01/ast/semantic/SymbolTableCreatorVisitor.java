@@ -192,7 +192,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         } else if (lhs.getValueType() != rhs.getValueType() && !Type.areTypesCompatible(lhs.getValueType(), rhs.getValueType())) {
             binaryOperatorExpression.setState(ExpressionState.OPERANDS_INCOMPATIBLE);
             System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
-                    ": the oerand types ", lhs.getValueType(), " and ", rhs.getValueType(), " are incompatible.\n"));
+                    ": the operand types ", lhs.getValueType(), " and ", rhs.getValueType(), " are incompatible.\n"));
             invalidateAst();
         } else {
             binaryOperatorExpression.setState(ExpressionState.VALID);

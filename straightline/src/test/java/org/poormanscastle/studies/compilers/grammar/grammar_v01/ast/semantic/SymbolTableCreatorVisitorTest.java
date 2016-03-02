@@ -141,22 +141,12 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testAssignIntToTextVariable() throws Exception {
-        Program program = TestUtils.loadProgram("assignIntToText.prog");
+        Program program = TestUtils.loadProgram("AssignIntToText.prog");
         program.accept(symbolTableCreator);
-
         assertFalse(symbolTableCreator.isAstValid());
         String expectedErrorMessage =
                 "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n";
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
-    }
-
-    @Test
-    public void testIntToText_v01() throws Exception {
-        Program program = TestUtils.loadProgram("assignIntToText.prog");
-        program.accept(symbolTableCreator);
-        String expectedErrorMessage = "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n";
-        assertEquals(expectedErrorMessage, systemErrRule.getLog());
-        assertFalse(symbolTableCreator.isAstValid());
     }
 
 }

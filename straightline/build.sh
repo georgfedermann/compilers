@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-TOOLS_TARGET_PATH=/d/02eex612/Projects/ProjectHit/sources/compilers/straightline/grammars/
+#TOOLS_TARGET_PATH=/d/02eex612/Projects/ProjectHit/sources/compilers/straightline/grammars/
+TOOLS_TARGET_PATH=/Users/georg/sources/projects/compilers/straightline/grammars/
 TOOLS_JAR_NAME=slt-jar-with-dependencies.jar
 
 TARGET_FOLDER=target/

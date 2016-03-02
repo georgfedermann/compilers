@@ -1,5 +1,8 @@
 package org.poormanscastle.studies.compilers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -10,8 +13,6 @@ import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javac
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by georg on 21.12.15.
@@ -43,6 +44,7 @@ public class TestUtils {
         }
         SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
         checkNotNull(symbolTable);
+        checkState(symbolTableCreator.isAstValid());
         return symbolTable;
     }
 

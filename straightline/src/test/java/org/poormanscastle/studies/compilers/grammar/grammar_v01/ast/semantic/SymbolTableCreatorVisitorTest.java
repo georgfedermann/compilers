@@ -78,6 +78,85 @@ public class SymbolTableCreatorVisitorTest {
         Program program = TestUtils.loadProgram("BlockScopeTest2.oh");
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
-        assertEquals("Error at begin line/column 7/14; end line/column 7/14: variable a was already declared in this scope.\n",systemErrRule.getLog());
+        assertEquals("Error at begin line/column 7/14; end line/column 7/14: variable a was already declared in this scope.\n", systemErrRule.getLog());
     }
+
+
+    @Test
+    public void testUndeclaredIdentifier() throws Exception {
+        Program program = TestUtils.loadProgram("UndeclaredId.prog");
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+
+        String exptectedErrMsg =
+                "Error at begin line/column 5/5; end line/column 5/5: variable b may not have been declared.\n" +
+                        "Error at begin line/column 11/21; end line/column 11/21: variable b may not have been declared.\n" +
+                        "Error at begin line/column 12/20; end line/column 12/20: variable b may not have been declared.\n" +
+                        "Error at begin line/column 18/11; end line/column 18/11: variable b may not have been declared.\n" +
+                        "Error at begin line/column 18/48; end line/column 18/48: variable b may not have been declared.\n" +
+                        "Error at begin line/column 18/62; end line/column 18/62: variable b may not have been declared.\n";
+        assertEquals(exptectedErrMsg, systemErrRule.getLog());
+    }
+
+
+    @Test
+    public void testUndeclaredIdentifierInAssignmentStm() throws Exception {
+        Program program = TestUtils.loadProgram("UndeclaredIdAssignmentStatement.prog");
+        program.accept(symbolTableCreator);
+
+        assertFalse(symbolTableCreator.isAstValid());
+        assertEquals("Error at begin line/column 2/5; end line/column 2/5: variable b may not have been declared.\n", systemErrRule.getLog());
+    }
+
+    @Test
+    public void testInvalidNotOperand() throws Exception {
+        Program program = TestUtils.loadProgram("InvalidNotOperand.prog");
+        program.accept(symbolTableCreator);
+
+        assertFalse(symbolTableCreator.isAstValid());
+        String expectedErrorMessage =
+                "Error at begin line/column 3/14; end line/column 3/14: operator ! is incompatible with operand type DOUBLE.\n" +
+                        "Error at begin line/column 4/10; end line/column 4/13: the type BOOLEAN cannot be assigned to INT.\n";
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testDeclarationWithoutAssignment() throws Exception {
+        Program program = TestUtils.loadProgram("DeclarationWithoutAssignment.prog");
+        program.accept(symbolTableCreator);
+
+        assertTrue(symbolTableCreator.isAstValid());
+    }
+
+    @Test
+    public void testAssignDoubleValueToIntVariable() throws Exception {
+        Program program = TestUtils.loadProgram("assignDoubleValueToIntVariableBug.prog");
+        program.accept(symbolTableCreator);
+
+        assertFalse(symbolTableCreator.isAstValid());
+        String expectedErrorMessage =
+                "Error at begin line/column 6/9; end line/column 6/9: the type DOUBLE cannot be assigned to INT.\n";
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testAssignIntToTextVariable() throws Exception {
+        Program program = TestUtils.loadProgram("assignIntToText.prog");
+        program.accept(symbolTableCreator);
+
+        assertFalse(symbolTableCreator.isAstValid());
+        String expectedErrorMessage =
+                "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n";
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testIntToText_v01() throws Exception {
+        Program program = TestUtils.loadProgram("assignIntToText.prog");
+        program.accept(symbolTableCreator);
+        String expectedErrorMessage = "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n";
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+        assertFalse(symbolTableCreator.isAstValid());
+    }
+
 }

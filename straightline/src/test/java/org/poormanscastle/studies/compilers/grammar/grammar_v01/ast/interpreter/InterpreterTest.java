@@ -6,7 +6,7 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.ExpressionValidatorVisitor;
+//import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.ExpressionValidatorVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  * Created by 02eex612 on 23.02.2016.
  */
 public class InterpreterTest {
-
+/*
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
@@ -133,4 +133,5 @@ public class InterpreterTest {
             throw new CompilerException("Interpreter was not accepted by AST");
         }
     }
+    */
 }

@@ -7,6 +7,7 @@ import java.util.Stack;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AssignmentStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.AstItemVisitorAdapter;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BinaryOperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.BooleanExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.DeclarationStatement;
@@ -48,7 +49,10 @@ public class Interpreter extends AstItemVisitorAdapter {
     }
 
 
-
+    @Override
+    public boolean proceedWithBlock(Block block) {
+        return true;
+    }
 
     @Override
     public void visitPrintStatement(PrintStatement printStatement) {

@@ -2,6 +2,11 @@ package org.poormanscastle.studies.compilers.utils.grammartools;
 
 import java.io.IOException;
 
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.ParseException;
+import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.prettyprint.PrettyPrintVisitor;
+
 /**
  * GrammarTools is meant to be used as cmd line tool to work with grammars.
  * <p/>
@@ -19,20 +24,31 @@ public class GrammarTools {
         do {
             String arg = args[counter++];
             if ("v".equals(arg)) {
-                printVersion();
+                GrammarTools.printVersion();
             }
             if ("h".equals(arg)) {
-                printHelp();
+                GrammarTools.printHelp();
             }
             if ("c".equals(arg)) {
                 if (!(counter < (args.length))) {
                     System.out.println("Please define what command has to be executed.");
-                    printHelp();
+                    GrammarTools.printHelp();
                     return;
                 }
                 System.out.print(createTableVisualization(args[counter++]));
             }
+            if ("a".equals(arg)) {
+                String visualization = GrammarTools.createAstVisualization();
+                System.out.println(visualization);
+            }
         } while (counter < args.length);
+    }
+
+    private static String createAstVisualization() throws IOException, ParseException {
+        Program program = new OhAstParser(System.in).P();
+        PrettyPrintVisitor prettyPrinter = new PrettyPrintVisitor();
+        program.accept(prettyPrinter);
+        return prettyPrinter.serialize();
     }
 
     private static String createTableVisualization(String grammarFlavor) throws IOException {
@@ -50,8 +66,9 @@ public class GrammarTools {
         System.out.println("  -h  print this help.");
         System.out.println("  -v  print version information.");
         System.out.println("  -c  create parser table visualization. One of the following options is required:");
-        System.out.println("      LL1: create LL(0) parser tree visualization.");
+        System.out.println("      LL1: create LL(X) parser tree visualization.");
         System.out.println("      LR0: create LR(0) parser tree state engine visualization.");
+        System.out.println("  -a  create AST diagram for Oh program in dot format. Program data is read from the std input.");
     }
 
     private static void printVersion() {

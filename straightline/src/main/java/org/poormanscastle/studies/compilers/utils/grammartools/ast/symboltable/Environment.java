@@ -9,7 +9,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
- * an environment is a collections of symbols that have been declared and are known
+ * an environment is a collection of symbols that have been declared and are known
  * in the current scope. Environments can be nested und thus symbols can be
  * inherited to nested environments. Environments can also be referenced as is the
  * case with e.g. static class members: T.b the field b in class T. So T is a kind

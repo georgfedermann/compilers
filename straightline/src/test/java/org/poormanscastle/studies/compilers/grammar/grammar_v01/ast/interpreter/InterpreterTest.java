@@ -92,12 +92,7 @@ public class InterpreterTest {
     @Test
     public void testBlockScopeTest1() throws Exception {
         Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        program.accept(symbolTableCreator);
-        assertTrue(symbolTableCreator.isAstValid());
-        SymbolTable symbolTable = symbolTableCreator.getSymbolTable();
-
-        Interpreter interpreter = new Interpreter(symbolTable);
+        SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
         assertEquals("Hello, World! Hello, World! 5 Hello, World! ", systemOutRule.getLog());
     }

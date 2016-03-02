@@ -3,6 +3,8 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
 import java.util.Arrays;
 import java.util.List;
 
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
+
 /**
  * Created by 02eex612 on 17.02.2016.
  */
@@ -37,7 +39,7 @@ public enum UnaryOperator implements Operator {
             case UNARY:
                 return operandType;
             default:
-                throw new RuntimeException("Unsupported Operator Category.");
+                throw new CompilerException("Unsupported Operator Category.");
         }
     }
 }

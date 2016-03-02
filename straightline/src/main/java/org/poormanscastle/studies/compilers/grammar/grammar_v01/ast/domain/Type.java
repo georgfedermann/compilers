@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
  * Created by 02eex612 on 18.02.2016.
@@ -124,7 +125,7 @@ public enum Type {
             case 8:
                 return Type.TEXT;
             default:
-                throw new RuntimeException(StringUtils.join("The two types ", lhsType, " and ", rhsType, " are incompatible."));
+                throw new CompilerException(StringUtils.join("The two types ", lhsType, " and ", rhsType, " are incompatible."));
         }
     }
 

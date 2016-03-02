@@ -34,6 +34,8 @@ public class SymbolTable {
      *
      * @param name
      * @param type
+     * @return {@code true} if the new symbol was registered successfully registered with the SymbolTable,
+     * {@code false} if there already was a symbol with that name in the current scope or other errors occurred.
      */
     public Binding addSymbol(String name, String type) {
         checkState(!environments.isEmpty());

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
  * reads an input stream and tries to recognize grammars in the character patterns.
@@ -70,7 +71,7 @@ public final class GrammarReader {
                     // or something expected is missing.
                     break;
                 default:
-                    throw new RuntimeException("What the heck, what state is this machine in?");
+                    throw new CompilerException("What the heck, what state is this machine in?");
             }
         }
         return grammar.initialize();

@@ -139,7 +139,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitBlock(Block block) {
-       addItem("Block", "");
+        addItem("Block", "");
         addBufferLine();
     }
 
@@ -366,8 +366,4 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
         }
     }
 
-    @Override
-    public boolean isAstValid() {
-        return true;
-    }
 }

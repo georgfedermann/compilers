@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+CMD_HOME=/d/02eex612/Projects/ProjectHit/sources/compilers/straightline/grammars/
+JAR_NAME=slt-jar-with-dependencies.jar
+
 ARGS=
-while getopts ":vhc:" opt; do
+while getopts "avhc:" opt; do
   case $opt in
     v)
       # echo "-v was triggered!" >&2
@@ -15,6 +18,9 @@ while getopts ":vhc:" opt; do
       # echo "-c was triggered!" >&2
       ARGS="c $OPTARG $ARGS"
       ;;
+    a)
+      ARGS="a $ARGS"
+      ;;
     :)
       # echo "Option -$OPTARG requires an argument." >&2
       ARGS="c invalid"
@@ -26,7 +32,6 @@ while getopts ":vhc:" opt; do
   esac
 done
 
-# echo $ARGS
-
-java -cp slt-jar-with-dependencies.jar org.poormanscastle.studies.compilers.utils.grammartools.GrammarTools $ARGS
+#echo $ARGS
+java -cp "${CMD_HOME}slt-jar-with-dependencies.jar" org.poormanscastle.studies.compilers.utils.grammartools.GrammarTools $ARGS
 

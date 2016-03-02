@@ -8,6 +8,17 @@ package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain;
  */
 public abstract class AstItemVisitorAdapter implements AstItemVisitor {
 
+    private boolean astIsValid = true;
+
+    protected void invalidateAst() {
+        astIsValid = false;
+    }
+
+    @Override
+    public final boolean isAstValid() {
+        return astIsValid;
+    }
+
     @Override
     public void leaveBlock(Block block) {
 

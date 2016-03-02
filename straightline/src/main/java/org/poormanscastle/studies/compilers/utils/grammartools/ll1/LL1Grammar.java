@@ -16,6 +16,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.AbstractGrammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.Grammar;
 import org.poormanscastle.studies.compilers.utils.grammartools.Production;
 import org.poormanscastle.studies.compilers.utils.grammartools.Symbol;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
 /**
  * Created by georg on 09.02.16.
@@ -32,10 +33,10 @@ public class LL1Grammar extends AbstractGrammar {
 
     public void addTerminalSymbol(Symbol terminalSymbol) {
         if (terminalSymbols.contains(terminalSymbol)) {
-            throw new RuntimeException(StringUtils.join("TerminalSymbol already defined: ", terminalSymbol));
+            throw new CompilerException(StringUtils.join("TerminalSymbol already defined: ", terminalSymbol));
         }
         if (symbols.containsKey(terminalSymbol.getId())) {
-            throw new RuntimeException(StringUtils.join("Symbol already defined: ", terminalSymbol));
+            throw new CompilerException(StringUtils.join("Symbol already defined: ", terminalSymbol));
         }
         terminalSymbols.add(terminalSymbol);
         addSymbol(terminalSymbol);

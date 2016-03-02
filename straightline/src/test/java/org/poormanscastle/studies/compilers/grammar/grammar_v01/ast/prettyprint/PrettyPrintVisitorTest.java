@@ -17,8 +17,8 @@ public class PrettyPrintVisitorTest {
 //        Program program = TestUtils.loadProgram("UndeclaredId.prog");
 //        Program program = TestUtils.loadProgram("mixedTypes.prog");
 //        Program program = TestUtils.loadProgram("assignDoubleValueToIntVariableBug.prog");
-//        Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
-        Program program = TestUtils.loadProgram("BlockScopeTest2.oh");
+        Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
+//        Program program = TestUtils.loadProgram("BlockScopeTest2.oh");
         assertNotNull(program);
         PrettyPrintVisitor printer = new PrettyPrintVisitor();
         printer.initialize();

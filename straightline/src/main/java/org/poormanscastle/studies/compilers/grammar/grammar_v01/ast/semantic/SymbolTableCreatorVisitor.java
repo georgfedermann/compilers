@@ -13,15 +13,13 @@ import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.Compil
 /**
  * the statement below is actually not right:
  * Each new identifier declaration (variable, function name, what ever) creates a new environment.
- * A variable can only be used after it's been declared. Thus, also within a block or even within a dialect
+ * A variable can only be used after it's been declared. Thus, also within a block or even within a language dialect
  * that supports no blocks at all, there are multiple environments or else the semantic analysis could not
  * clearly decide if a variable is used before it was declared.
  * <p/>
- * this visitor has to create all entries for the symbol table. therefore it needs to visit
- * all nodes which can create new identifiers, which are declaration statements in language v0.1
- * <p/>
- * The checking of AssignmentStatements and OperatorExpressions etc. for correctness is done
- * by the next visitor, which uses the symbol table created by this visitor.
+ * SymbolTable management and expression validation have to be merged into one visitor, because environments will be
+ * removed when they go out of scope. Validation has to take place while environments created within the symboltable
+ * are still valid.
  * <p/>
  * Created by 02eex612 on 19.02.2016.
  */

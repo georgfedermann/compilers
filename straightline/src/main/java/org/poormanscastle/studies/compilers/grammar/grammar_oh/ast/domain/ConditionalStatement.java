@@ -42,6 +42,10 @@ public class ConditionalStatement extends AbstractAstItem implements Statement {
         if (condition.handleProceedWith(visitor)) {
             condition.accept(visitor);
         }
+        // the decision, whether the Statements thenStatement and elseStatement shall be visited is a difficult one
+        // and cannot be decided in Statement.proceedWith(visitor).
+        // SymbolTableCreator/ExpressionValidator will have to visit them in any case. Interpreter will only want
+        // to visit one or none based on the value of condition and if there is an elseStatement.
         if (thenStatement.handleProceedWith(visitor)) {
             thenStatement.accept(visitor);
         }
@@ -50,4 +54,17 @@ public class ConditionalStatement extends AbstractAstItem implements Statement {
         }
         visitor.leaveConditionalStatement(this);
     }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public Statement getElseStatement() {
+        return elseStatement;
+    }
+
+    public Statement getThenStatement() {
+        return thenStatement;
+    }
+
 }

@@ -1,13 +1,17 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AssignmentStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AstItemVisitorAdapter;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.BinaryOperator;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.BinaryOperatorExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Block;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ExpressionState;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
@@ -16,9 +20,6 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Progra
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperator;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AssignmentStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.BinaryOperator;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
@@ -183,16 +184,16 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
             invalidateAst();
             // this errMsg just vaguely repeats what was earlier reported more specifically for the sub expression
             // errMsg = StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(), ": One or more sub expressions are invalid.");
-        } else if (lhs.getValueType() == rhs.getValueType() && !operator.supportsType(lhs.getValueType())) {
+        } else if (!Type.areTypesCompatible(lhs.getValueType(), rhs.getValueType())) {
+            binaryOperatorExpression.setState(ExpressionState.OPERANDS_INCOMPATIBLE);
+            System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
+                    ": the operand types ", lhs.getValueType(), " and ", rhs.getValueType(), " are incompatible.\n"));
+            invalidateAst();
+        } else if (!operator.supportsType(lhs.getValueType())) {
             binaryOperatorExpression.setState(ExpressionState.OPERATOR_INCOMPATIBLE);
             System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
                     ": operator ", operator.getLabel(), " is incompatible with operand types ", lhs.getValueType(),
                     " and ", rhs.getValueType(), ".\n"));
-            invalidateAst();
-        } else if (lhs.getValueType() != rhs.getValueType() && !Type.areTypesCompatible(lhs.getValueType(), rhs.getValueType())) {
-            binaryOperatorExpression.setState(ExpressionState.OPERANDS_INCOMPATIBLE);
-            System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
-                    ": the operand types ", lhs.getValueType(), " and ", rhs.getValueType(), " are incompatible.\n"));
             invalidateAst();
         } else {
             binaryOperatorExpression.setState(ExpressionState.VALID);
@@ -212,6 +213,26 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     @Override
     public void leaveBlock(Block block) {
         symbolTable.endScope();
+    }
+
+    @Override
+    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitConditionalStatement(ConditionalStatement conditionalStatement) {
+        checkState(conditionalStatement.getCondition().getState() == ExpressionState.NOT_DETERMINED_YET);
+    }
+
+    @Override
+    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
+        Expression condition = conditionalStatement.getCondition();
+        if (condition.getState() == ExpressionState.VALID && Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+            System.err.print(StringUtils.join("Error ast ", condition.getCodePosition(),
+                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
+            invalidateAst();
+        }
     }
 
     @Override

@@ -118,4 +118,16 @@ public interface AstItemVisitor {
 
     void leaveBlock(Block block);
 
+    boolean proceedWithThenStatement(ThenStatement thenStatement);
+
+    void visitThenStatement(ThenStatement thenStatement);
+
+    void leaveThenStatement(ThenStatement thenStatement);
+
+    boolean proceedWithElseStatement(ElseStatement elseStatement);
+
+    void visitElseStatement(ElseStatement elseStatement);
+
+    void leaveElseStatement(ElseStatement elseStatement);
+    
 }

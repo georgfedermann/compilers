@@ -31,7 +31,10 @@ public final class BinaryOperatorExpression extends AbstractExpression implement
 
     @Override
     public Type getValueType() {
-        checkState(getState() == ExpressionState.VALID);
+        // validity is tracked during expression validation, but e.g. not any more during interpretation phase.
+        // therefore the next check has to be done by the ExpressionValidator, and is not an invariant to the Expression.
+        // TODO is this correct?
+        // checkState(getState() == ExpressionState.VALID);
         checkNotNull(lhs.getValueType());
         checkNotNull(rhs.getValueType());
         checkNotNull(operator);

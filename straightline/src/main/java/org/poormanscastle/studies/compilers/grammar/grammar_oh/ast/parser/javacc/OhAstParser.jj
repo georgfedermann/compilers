@@ -20,9 +20,9 @@ options{
 }
 
 PARSER_BEGIN(OhAstParser)
-package org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc;
+package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc;
 
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.*;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.*;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 public class OhAstParser{
@@ -133,6 +133,8 @@ StatementList PPrime() :
     { return null; }
 }
 
+/* TODO check this out: why does the conditional statement go missing in the generated parser if statement = CS()
+ comes after statement = B() ? */
 Statement S() :
 { Statement statement; }
 {
@@ -151,12 +153,12 @@ Statement S() :
         return statement;
     }
     |
-    statement = B()
+    statement = CS()
     {
         return statement;
     }
     |
-    statement = CS()
+    statement = B()
     {
         return statement;
     }

@@ -5,23 +5,24 @@ import java.util.List;
 import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AssignmentStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AstItemVisitorAdapter;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.BinaryOperatorExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.BooleanExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.NumExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AssignmentStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.BinaryOperatorExpression;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.NumExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -92,6 +93,22 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leavePrintStatement(PrintStatement printStatement) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitConditionalStatement(ConditionalStatement conditionalStatement) {
+        addItem("If", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
         itemStack.pop();
     }
 

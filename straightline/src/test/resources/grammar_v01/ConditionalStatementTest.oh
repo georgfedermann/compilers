@@ -28,4 +28,4 @@ if(b2){
 }
 
 // if this program works well, all values are true now.
-print ( c1, c2, c3 );
+print ( c1, " ", c2, " ", c3, " " );

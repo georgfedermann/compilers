@@ -2,10 +2,10 @@ package org.poormanscastle.studies.compilers.utils.grammartools;
 
 import java.io.IOException;
 
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.ParseException;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.prettyprint.PrettyPrintVisitor;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.OhAstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.ParseException;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.prettyprint.PrettyPrintVisitor;
 
 /**
  * GrammarTools is meant to be used as cmd line tool to work with grammars.

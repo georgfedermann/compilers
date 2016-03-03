@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-CMD_HOME=/d/02eex612/Projects/ProjectHit/sources/compilers/straightline/grammars/
+#CMD_HOME=/d/02eex612/Projects/ProjectHit/sources/compilers/straightline/grammars/
+CMD_HOME=/Users/georg/sources/projects/compilers/straightline/grammars/
 JAR_NAME=slt-jar-with-dependencies.jar
 
 ARGS=
@@ -33,5 +34,5 @@ while getopts "avhc:" opt; do
 done
 
 #echo $ARGS
-java -cp "${CMD_HOME}slt-jar-with-dependencies.jar" org.poormanscastle.studies.compilers.utils.grammartools.GrammarTools $ARGS
+java -cp "${CMD_HOME}${JAR_NAME}" org.poormanscastle.studies.compilers.utils.grammartools.GrammarTools $ARGS
 

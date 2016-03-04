@@ -3,13 +3,15 @@ package org.poormanscastle.studies.compilers.utils.grammartools;
 import java.io.IOException;
 
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter.SmallTimeInterpreter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.ParseException;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.prettyprint.PrettyPrintVisitor;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.SymbolTableCreatorVisitor;
 
 /**
  * GrammarTools is meant to be used as cmd line tool to work with grammars.
- * <p/>
+ * <p>
  * Created by 02eex612 on 17.02.2016.
  */
 public class GrammarTools {
@@ -41,7 +43,20 @@ public class GrammarTools {
                 String visualization = GrammarTools.createAstVisualization();
                 System.out.println(visualization);
             }
+            if ("e".equals(arg)) {
+                GrammarTools.executeProgram();
+            }
         } while (counter < args.length);
+    }
+
+    private static void executeProgram() throws IOException, ParseException {
+        Program program = new OhAstParser(System.in).P();
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        program.accept(symbolTableCreator);
+        if (symbolTableCreator.isAstValid()) {
+            program.accept(new SmallTimeInterpreter());
+        }
+        System.out.println();
     }
 
     private static String createAstVisualization() throws IOException, ParseException {
@@ -69,6 +84,7 @@ public class GrammarTools {
         System.out.println("      LL1: create LL(X) parser tree visualization.");
         System.out.println("      LR0: create LR(0) parser tree state engine visualization.");
         System.out.println("  -a  create AST diagram for Oh program in dot format. Program data is read from the std input.");
+        System.out.println("  -e  execute Oh program.");
     }
 
     private static void printVersion() {

@@ -1,0 +1,13 @@
+// simple test program to check whether oh program execution works
+print("Hello, World! ");
+double pi = 3.1415;
+int radius = 4;
+double umfang = 2 * radius * pi;
+print("Der Umfang betraegt ", umfang, "u. ");
+
+boolean b = true;
+
+if (b)
+  print("pi smaller than radius. ")
+else
+  print("pi greater or equal to radius. ");

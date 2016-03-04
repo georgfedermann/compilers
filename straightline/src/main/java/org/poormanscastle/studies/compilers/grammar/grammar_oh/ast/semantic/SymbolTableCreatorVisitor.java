@@ -117,9 +117,9 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
             System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
                     ": variable ", assignmentStatement.getId(), " may not have been declared.\n"));
             invalidateAst();
-        } else if (!Type.areTypesCompatible(lhsType, rhs.getValueType())) {
-            System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": the operand types ",
-                    lhsType, " and ", rhs.getValueType(), " are incompatible.\n"));
+        } else if (!Type.isRhsAssignableToLhs(lhsType, rhs.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": the type ",
+                    rhs.getValueType(), " cannot be assigned to ", lhsType, ".\n"));
             invalidateAst();
         }
     }
@@ -230,7 +230,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     @Override
     public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
         Expression condition = conditionalStatement.getCondition();
-        if (condition.getState() == ExpressionState.VALID && Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+        if (condition.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
             System.err.print(StringUtils.join("Error ast ", condition.getCodePosition(),
                     ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
             invalidateAst();

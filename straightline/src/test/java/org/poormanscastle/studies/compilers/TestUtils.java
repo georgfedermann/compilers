@@ -29,9 +29,16 @@ public class TestUtils {
      * @param fileName
      * @return
      */
-    public static Program loadProgram(String fileName) throws Exception {
+    public static Program loadProgram(String fileName, boolean validate) throws Exception {
         Program program = new OhAstParser(TestUtils.getTestdataAsInputStream(StringUtils.join("/grammar_v01/", fileName))).P();
         checkNotNull(program);
+        if (validate) {
+            SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+            program.accept(symbolTableCreator);
+            if (!symbolTableCreator.isAstValid()) {
+                throw new RuntimeException();
+            }
+        }
         return program;
     }
 

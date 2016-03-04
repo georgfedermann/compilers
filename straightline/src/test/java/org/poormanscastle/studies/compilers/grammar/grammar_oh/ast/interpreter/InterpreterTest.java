@@ -20,7 +20,7 @@ public class InterpreterTest {
 
     @Test
     public void testProgram1_v01() throws Exception {
-        Program program = TestUtils.loadProgram("testprogram1.prog");
+        Program program = TestUtils.loadProgram("testprogram1.prog", true);
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
         assertEquals("0 9 3 true false true false false 0 9 false John Connor Walter White", systemOutRule.getLog());
@@ -28,7 +28,7 @@ public class InterpreterTest {
 
     @Test
     public void testMixedTypes_v01() throws Exception {
-        Program program = TestUtils.loadProgram("mixedTypes.prog");
+        Program program = TestUtils.loadProgram("mixedTypes.prog", true);
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
         assertEquals("Der Umfang ist 94.2", systemOutRule.getLog());
@@ -36,7 +36,7 @@ public class InterpreterTest {
 
     @Test
     public void testHelloWorld_v01() throws Exception {
-        Program program = TestUtils.loadProgram("HelloWorld_v0.1.prog");
+        Program program = TestUtils.loadProgram("HelloWorld_v0.1.prog", true);
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
         assertEquals("Hello, World! Hello, World! Hello, World!", systemOutRule.getLog());
@@ -44,7 +44,7 @@ public class InterpreterTest {
 
     @Test
     public void testEmptyProgram() throws Exception {
-        Program program = TestUtils.loadProgram("ProgramWithoutStatements.prog");
+        Program program = TestUtils.loadProgram("ProgramWithoutStatements.prog", true);
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         // the following should just not throw any exception, thus indicating that
         // the interpreter system can handle programs empty of statements.
@@ -53,7 +53,7 @@ public class InterpreterTest {
 
     @Test
     public void testBlockScopeTest1() throws Exception {
-        Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
+        Program program = TestUtils.loadProgram("BlockScopeTest1.oh", true);
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
         assertEquals("Hello, World! Hello, World! 5 Hello, World!", systemOutRule.getLog());
@@ -61,7 +61,7 @@ public class InterpreterTest {
 
     @Test
     public void testConditionalStatement() throws Exception {
-        Program program = TestUtils.loadProgram("ConditionalStatementTest.oh");
+        Program program = TestUtils.loadProgram("ConditionalStatementTest.oh", true);
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
         assertEquals("executing if statement; Not Hello, World! true true true", systemOutRule.getLog());

@@ -56,6 +56,7 @@ public class GrammarTools {
         if (symbolTableCreator.isAstValid()) {
             program.accept(new SmallTimeInterpreter());
         }
+        System.out.println();
     }
 
     private static String createAstVisualization() throws IOException, ParseException {

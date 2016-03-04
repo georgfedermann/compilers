@@ -1,16 +1,16 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 /**
  * evaluates to a string value.
- * <p/>
+ * <p>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class TextExpression extends AbstractExpression implements Expression {
+public final class TextExpression extends AbstractExpression<String> {
 
     private final String value;
 
@@ -23,8 +23,14 @@ public final class TextExpression extends AbstractExpression implements Expressi
         setState(ExpressionState.VALID);
     }
 
+    @Override
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public void setValue(String value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

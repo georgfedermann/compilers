@@ -21,6 +21,9 @@ public class ElseStatement extends AbstractAstItem implements Statement {
         this(parentStatement.getCodePosition(), parentStatement, nestedStatement);
     }
 
+    public ConditionalStatement getParentStatement() {
+        return parentStatement;
+    }
 
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
@@ -30,7 +33,7 @@ public class ElseStatement extends AbstractAstItem implements Statement {
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitElseStatement(this);
-        if(nestedStatement.handleProceedWith(visitor)){
+        if (nestedStatement.handleProceedWith(visitor)) {
             nestedStatement.accept(visitor);
         }
         visitor.leaveElseStatement(this);

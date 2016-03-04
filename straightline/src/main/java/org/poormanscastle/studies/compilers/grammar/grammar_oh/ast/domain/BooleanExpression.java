@@ -1,13 +1,13 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
-
 import static com.google.common.base.Preconditions.checkArgument;
+
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * Created by 02eex612 on 17.02.2016.
  */
-public final class BooleanExpression extends AbstractExpression implements Expression {
+public final class BooleanExpression extends AbstractExpression<Boolean> {
 
     private final Boolean value;
 
@@ -18,8 +18,14 @@ public final class BooleanExpression extends AbstractExpression implements Expre
         setState(ExpressionState.VALID);
     }
 
+    @Override
     public Boolean getValue() {
         return value;
+    }
+
+    @Override
+    public void setValue(Boolean value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

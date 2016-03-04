@@ -1,15 +1,15 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
-
 import static com.google.common.base.Preconditions.checkArgument;
+
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * evaluates to a floating point value.
- * <p/>
+ * <p>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class DecimalExpression extends AbstractExpression implements Expression {
+public final class DecimalExpression extends AbstractExpression<Double> {
 
     private final Double value;
 
@@ -25,8 +25,14 @@ public final class DecimalExpression extends AbstractExpression implements Expre
         return Type.DOUBLE;
     }
 
+    @Override
     public Double getValue() {
         return value;
+    }
+
+    @Override
+    public void setValue(Double value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

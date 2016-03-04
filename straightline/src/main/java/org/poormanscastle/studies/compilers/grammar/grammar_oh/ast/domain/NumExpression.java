@@ -1,15 +1,15 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
-
 import static com.google.common.base.Preconditions.checkArgument;
+
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * evaluates to an integer expression.
- * <p/>
+ * <p>
  * Created by 02eex612 on 17.02.2016.
  */
-public final class NumExpression extends AbstractExpression implements Expression {
+public final class NumExpression extends AbstractExpression<Integer> {
 
     private final Integer value;
 
@@ -25,8 +25,14 @@ public final class NumExpression extends AbstractExpression implements Expressio
         return Type.INT;
     }
 
+    @Override
     public Integer getValue() {
         return value;
+    }
+
+    @Override
+    public void setValue(Integer value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

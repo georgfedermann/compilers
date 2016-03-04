@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AssignmentStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AstItemVisitorAdapter;
@@ -8,6 +10,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Binary
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ExpressionState;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
@@ -17,6 +20,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairEx
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperator;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
@@ -25,29 +29,27 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * Each new identifier declaration (variable, function name, what ever) creates a new environment.
  * A variable can only be used after it's been declared. Thus, also within a block or even within a language dialect
  * that supports no blocks at all, there are multiple environments or else the semantic analysis could not
  * clearly decide if a variable is used before it was declared.
- * <p/>
+ * <p>
  * SymbolTable management and expression validation have to be merged into one visitor, because environments will be
  * removed when they go out of scope. Validation has to take place while environments created within the symboltable
  * are still valid.
- * <p/>
+ * <p>
  * this visitor searches for expression subtrees and having found one visits all subexpressions and tests the operands
  * for compatibility.
- * <p/>
+ * <p>
  * Expressions are valid if both operands are of the same type, or the types of the operands are compatible,
  * and the types of the operands are compatible with the operator.
- * <p/>
+ * <p>
  * Expressions can only be validated after all sub expressions have been checked. Thus, the evaluation logic can only
  * be implemented in the leaveSomething-methods(). There, the state of the subexpressions will be checked, as well as
  * their respective value types. This collected information will be used for the validation logic of the current
  * expression.
- * <p/>
+ * <p>
  * Created by 02eex612 on 19.02.2016.
  */
 public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
@@ -233,6 +235,16 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
                     ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
             invalidateAst();
         }
+    }
+
+    @Override
+    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
+        return true;
     }
 
     @Override

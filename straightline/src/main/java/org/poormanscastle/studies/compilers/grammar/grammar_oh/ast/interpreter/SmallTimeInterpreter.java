@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -12,6 +14,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Boolea
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
@@ -21,6 +24,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairSt
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
@@ -29,12 +33,10 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.S
 
 import com.google.common.collect.Lists;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * SmallTimeInterpreter sits directly on the semantic analysis phase of the compiler and uses the symboltable's
  * environments to manage its variables and scopes.
- * <p/>
+ * <p>
  * Created by 02eex612 on 02.03.2016.
  */
 public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
@@ -142,6 +144,7 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
                 binaryOperatorExpression.getLhs(), binaryOperatorExpression.getRhs()).execute(lhsValue, rhsValue);
         checkNotNull(result);
         operandStack.push(result);
+        binaryOperatorExpression.setValue(result);
     }
 
     @Override
@@ -155,6 +158,7 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         Object result = ExecUnaryOperator.getExecUnaryOperator(unaryOperatorExpression.getOperator(),
                 unaryOperatorExpression.getExpression()).execute(operandStack.pop());
         operandStack.push(result);
+        unaryOperatorExpression.setValue(result);
     }
 
     @Override
@@ -188,7 +192,9 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         Binding binding = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId()));
         idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));
         // interpreter part:
-        operandStack.push(symbolTable.getBinding(Symbol.getSymbol(idExpression.getId())).getValue());
+        Object value = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId())).getValue();
+        operandStack.push(value);
+        idExpression.setValue(value);
     }
 
     @Override
@@ -209,6 +215,18 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
     @Override
     public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
         return true;
+    }
+
+    @Override
+    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
+        // the cast is safe or the program would not have passed expression validation.
+        return (Boolean) thenStatement.getParentStatement().getCondition().getValue();
+    }
+
+    @Override
+    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
+        // the cast is safe or the program would not have passed expression validation.
+        return !(Boolean) elseStatement.getParentStatement().getCondition().getValue();
     }
 
     @Override

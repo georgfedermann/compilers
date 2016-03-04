@@ -1,18 +1,20 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
+
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * Created by 02eex612 on 17.02.2016.
  */
-public final class UnaryOperatorExpression extends AbstractExpression implements Expression {
+public final class UnaryOperatorExpression extends AbstractExpression<Object> {
 
     private final UnaryOperator operator;
 
     private final Expression expression;
+
+    private Object value;
 
     public UnaryOperatorExpression(CodePosition codePosition, UnaryOperator operator, Expression expression) {
         super(codePosition);
@@ -24,6 +26,16 @@ public final class UnaryOperatorExpression extends AbstractExpression implements
 
     public UnaryOperatorExpression(UnaryOperator operator, Expression expression) {
         this(expression.getCodePosition(), operator, expression);
+    }
+
+    @Override
+    public Object getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(Object value) {
+        this.value = value;
     }
 
     public UnaryOperator getOperator() {

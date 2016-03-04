@@ -13,6 +13,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Boolea
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
@@ -22,6 +23,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairSt
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -109,6 +111,38 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitThenStatement(ThenStatement thenStatement) {
+        addItem("Then", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveThenStatement(ThenStatement thenStatement) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitElseStatement(ElseStatement elseStatement) {
+        addItem("Else", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveElseStatement(ElseStatement elseStatement) {
         itemStack.pop();
     }
 

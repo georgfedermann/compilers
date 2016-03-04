@@ -17,8 +17,8 @@ target
 straightline/grammartools/*
 
 # grammar artefacts
-straightline/grammars/*.html
-straightline/grammars/*.dot
-straightline/grammars/*.pdf
-straightline/grammars/*.svg
+*.html
+*.dot
+*.pdf
+*.svg
 

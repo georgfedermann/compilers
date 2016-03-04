@@ -30,6 +30,36 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
+    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitThenStatement(ThenStatement thenStatement) {
+
+    }
+
+    @Override
+    public void leaveThenStatement(ThenStatement thenStatement) {
+
+    }
+
+    @Override
+    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitElseStatement(ElseStatement elseStatement) {
+
+    }
+
+    @Override
+    public void leaveElseStatement(ElseStatement elseStatement) {
+
+    }
+
+    @Override
     public boolean proceedWithBlock(Block block) {
         return false;
     }

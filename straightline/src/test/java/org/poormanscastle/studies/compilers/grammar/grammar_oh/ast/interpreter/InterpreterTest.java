@@ -60,11 +60,11 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testConditionalStatement() throws Exception{
+    public void testConditionalStatement() throws Exception {
         Program program = TestUtils.loadProgram("ConditionalStatementTest.oh");
         SmallTimeInterpreter interpreter = new SmallTimeInterpreter();
         program.accept(interpreter);
-
+        assertEquals("executing if statement; Not Hello, World! true true true", systemOutRule.getLog());
     }
 
 }

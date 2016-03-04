@@ -5,7 +5,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 /**
  * Created by 02eex612 on 22.02.2016.
  */
-public abstract class AbstractExpression extends AbstractAstItem implements Expression {
+public abstract class AbstractExpression<T> extends AbstractAstItem implements Expression<T> {
 
     private ExpressionState state = ExpressionState.NOT_DETERMINED_YET;
 

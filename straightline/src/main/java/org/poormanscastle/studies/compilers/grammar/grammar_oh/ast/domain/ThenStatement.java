@@ -32,6 +32,10 @@ public class ThenStatement extends AbstractAstItem implements Statement {
         this(parentStatement.getCodePosition(), parentStatement, nestedStatement);
     }
 
+    public ConditionalStatement getParentStatement() {
+        return parentStatement;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithThenStatement(this);

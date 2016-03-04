@@ -1,0 +1,4 @@
+// test conditional statement
+int a = 3;
+int b = 4;
+if (true) print("hallo");

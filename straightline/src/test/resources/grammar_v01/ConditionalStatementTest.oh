@@ -11,21 +11,34 @@ boolean c3 = false;
 
 if (b1){
   c1 = true;
+  print("executing if statement; ");
 } else {
   c1 = false;
-}
+  print("executing else statement; ");
+};
 
 if(!b2){
   c2 = true;
 } else {
   c2 = false;
-}
+};
 
 if(b2){
-
+  print("executing if statement; ");
 } else {
   c3 = true;
-}
+};
+
+if(b1)
+  if(b2)
+    print("Hello, World! ")
+  else
+    print("Not Hello, World! ");
+
+if(b1){
+    if(b2)
+        print("Hello, World! ");
+} else print("Not Hello, World! ");
 
 // if this program works well, all values are true now.
-print ( c1, c2, c3 );
+print ( c1, " ", c2, " ", c3 );

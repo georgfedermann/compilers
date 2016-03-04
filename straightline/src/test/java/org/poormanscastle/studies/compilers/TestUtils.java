@@ -8,9 +8,9 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.domain.Program;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.parser.javacc.OhAstParser;
-import org.poormanscastle.studies.compilers.grammar.grammar_v01.ast.semantic.SymbolTableCreatorVisitor;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.OhAstParser;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.SymbolTableCreatorVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
 

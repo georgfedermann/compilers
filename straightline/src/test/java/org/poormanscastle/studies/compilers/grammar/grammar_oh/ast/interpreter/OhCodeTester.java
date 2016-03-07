@@ -54,4 +54,11 @@ public class OhCodeTester {
         assertEquals("okokscope0scope4scope0", systemOutRule.getLog());
     }
 
+    @Test
+    public void testBinaryOperators() throws Exception {
+        Program program = TestUtils.loadOhProgram("BinaryOperatorTest");
+        program.accept(interpreter);
+        assertEquals("16-11=5. 2+3=5. 15/3=5. 16/3=5. 3*2-1=5. 3<4=true. 3<=4=true. 3<=2=false. 3==3=true. 3==4=false. 3!=4=true. 3!=3=false. 3>3=false. 3>2=true. true=true. false=false. !true=false. !false=true. true==true=true. true==false=false. true!=true=false. true!=false=true. true&true=true. true&false=false. false&false=false. true|true=true. true|false=true. false|false=false. true^true=false. false^false=false. true^false=true. 6.6/2=3.3. 3.3*2=6.6. 3.4+1.1=4.5. 3.7-1.2=2.5. 3.3==3.3 true. 3.3==17.5 false. 3.5<7.6 true. 3.5<=3.5 true. 3.5<=17.6 true. 3.95<=1.7125 false. 3.5>2 true. 3.5>=3.5 true. 3.5>=1.2 true. 3.5>=17.0 false. 3.5!=3.5=false. 3.5!=35=true. Hello==Hello true. Hello!=Hello false. Hello!=World true. Hello,+World!= Hello, World!", systemOutRule.getLog());
+    }
+
 }

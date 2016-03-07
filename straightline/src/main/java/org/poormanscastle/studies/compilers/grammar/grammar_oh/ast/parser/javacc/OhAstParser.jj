@@ -368,6 +368,12 @@ Expression T6Prime(Expression lhs) :
             return new BinaryOperatorExpression(lhs, BinaryOperator.EQ,
                 t6PrimeExpression != null ? t6PrimeExpression : rhs );
         }
+        |
+        <NEQ> rhs = T5() t6PrimeExpression = T6Prime(rhs)
+        {
+            return new BinaryOperatorExpression(lhs, BinaryOperator.NEQ,
+                t6PrimeExpression != null ? t6PrimeExpression : rhs);
+        }
     )?
     { return null; }
 }
@@ -512,5 +518,10 @@ Expression F() :
     valueToken = <TEXT>
     {
         return new TextExpression(CodePosition.createFromToken(valueToken), valueToken.image);
+    }
+    |
+    <LPAREN> expression = E() <RPAREN>
+    {
+        return expression;
     }
 }

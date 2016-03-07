@@ -31,7 +31,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testGetSymbolTable() throws Exception {
-        Program program = TestUtils.loadProgram("testprogram1.prog", false);
+        Program program = TestUtils.loadTestProgram("testprogram1.prog", false);
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -60,7 +60,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testBlockScope1() throws Exception {
-        Program program = TestUtils.loadProgram("BlockScopeTest1.oh", false);
+        Program program = TestUtils.loadTestProgram("BlockScopeTest1.oh", false);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
             program.accept(symbolTableCreator);
@@ -75,7 +75,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testBlockScope2() throws Exception {
-        Program program = TestUtils.loadProgram("BlockScopeTest2.oh", false);
+        Program program = TestUtils.loadTestProgram("BlockScopeTest2.oh", false);
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
         assertEquals("Error at begin line/column 7/14; end line/column 7/14: variable a was already declared in this scope.\n", systemErrRule.getLog());
@@ -84,7 +84,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifier() throws Exception {
-        Program program = TestUtils.loadProgram("UndeclaredId.prog", false);
+        Program program = TestUtils.loadTestProgram("UndeclaredId.prog", false);
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
 
@@ -101,7 +101,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifierInAssignmentStm() throws Exception {
-        Program program = TestUtils.loadProgram("UndeclaredIdAssignmentStatement.prog", false);
+        Program program = TestUtils.loadTestProgram("UndeclaredIdAssignmentStatement.prog", false);
         program.accept(symbolTableCreator);
 
         assertFalse(symbolTableCreator.isAstValid());
@@ -110,7 +110,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testInvalidNotOperand() throws Exception {
-        Program program = TestUtils.loadProgram("InvalidNotOperand.prog", false);
+        Program program = TestUtils.loadTestProgram("InvalidNotOperand.prog", false);
         program.accept(symbolTableCreator);
 
         assertFalse(symbolTableCreator.isAstValid());
@@ -122,7 +122,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testDeclarationWithoutAssignment() throws Exception {
-        Program program = TestUtils.loadProgram("DeclarationWithoutAssignment.prog", false);
+        Program program = TestUtils.loadTestProgram("DeclarationWithoutAssignment.prog", false);
         program.accept(symbolTableCreator);
 
         assertTrue(symbolTableCreator.isAstValid());
@@ -130,7 +130,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testAssignDoubleValueToIntVariable() throws Exception {
-        Program program = TestUtils.loadProgram("assignDoubleValueToIntVariableBug.prog", false);
+        Program program = TestUtils.loadTestProgram("assignDoubleValueToIntVariableBug.prog", false);
         program.accept(symbolTableCreator);
 
         assertFalse(symbolTableCreator.isAstValid());
@@ -141,7 +141,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testAssignIntToTextVariable() throws Exception {
-        Program program = TestUtils.loadProgram("AssignIntToText.prog", false);
+        Program program = TestUtils.loadTestProgram("AssignIntToText.prog", false);
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
         String expectedErrorMessage =

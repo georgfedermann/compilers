@@ -1,0 +1,86 @@
+// TestIfConditionExpressions.oh
+// tests various expressions in the If Condition
+
+boolean yes = true;
+boolean no = false;
+int a = 7;
+int b = 8;
+double c = 7.0;
+double d = 8.7485;
+
+if(true){
+  print("ok");
+};
+
+if(!false){
+  print("ok");
+};
+
+if(yes){
+  print("ok");
+};
+
+if(!no){
+  print("ok");
+};
+
+if(yes & true){
+  print("ok");
+};
+
+if(!(no|false)){
+  print("ok");
+};
+
+if(yes|no){
+  print("ok");
+};
+
+if(!yes){
+  print("nok");
+};
+
+if(no|false){
+  print("nok");
+};
+
+if(a==7){
+  print("ok");
+};
+
+if(a==b|b==8){
+  print("ok");
+};
+
+if(a==b|b==9){
+  print("nok");
+};
+
+if(a<=b){
+  print("ok");
+};
+
+if(b<=a){
+  print("nok");
+};
+
+if(a<b){
+  print("ok");
+};
+
+if(b<a){
+  print("nok");
+};
+
+if(a<=7){
+  print("ok");
+};
+
+if(a>=7){
+  print("ok");
+};
+
+if(a!=b){
+  print("ok");
+};
+

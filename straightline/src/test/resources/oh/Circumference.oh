@@ -1,0 +1,6 @@
+// Circumference.oh
+// do some declaration, assignments and calculations
+int diameter = 15;
+double pi = 3.14;
+double circumference = diameter * pi;
+print("Given the diameter ", diameter, " and the pi approximation ", pi, ", the circumference is ", circumference, ".");

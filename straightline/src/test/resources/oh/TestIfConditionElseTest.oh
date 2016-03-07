@@ -1,0 +1,23 @@
+// TestIfConditionElseTest.oh
+// tests correct execution of else branches
+
+boolean yes = true;
+boolean no = false;
+text a = "scope0";
+
+if(no){
+  print("nok");
+} else {
+  print("ok");
+};
+
+if(yes) print("ok") else print("nok");
+
+if(no){
+  print("nok");
+} else {
+  print(a);
+  text a = "scope4";
+  print(a);
+};
+print(a);

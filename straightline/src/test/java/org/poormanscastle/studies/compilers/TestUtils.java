@@ -1,8 +1,5 @@
 package org.poormanscastle.studies.compilers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -13,6 +10,10 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.SymbolTableCreatorVisitor;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Created by georg on 21.12.15.
@@ -29,10 +30,35 @@ public class TestUtils {
      * @param fileName
      * @return
      */
-    public static Program loadProgram(String fileName) throws Exception {
-        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream(StringUtils.join("/grammar_v01/", fileName))).P();
+    public static Program loadTestProgram(String fileName, boolean validate) throws Exception {
+        return loadProgram("/grammar_v01/", fileName, validate);
+    }
+
+    /**
+     * programs are expected to reside in files in resources/grammar_v01/
+     *
+     * @param fileName
+     * @return
+     */
+    public static Program loadProgram(String path, String fileName, boolean validate) throws Exception {
+        checkNotNull(path);
+        checkArgument(!StringUtils.isEmpty(fileName));
+        Program program = new OhAstParser(TestUtils.getTestdataAsInputStream(StringUtils.join(
+                path.endsWith("/") ? path : StringUtils.join(path, "/"), fileName))).P();
         checkNotNull(program);
+        if (validate) {
+            SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+            program.accept(symbolTableCreator);
+            if (!symbolTableCreator.isAstValid()) {
+                throw new RuntimeException();
+            }
+        }
         return program;
+    }
+
+
+    public static Program loadOhProgram(String fileName) throws Exception {
+        return TestUtils.loadProgram("/oh/", fileName.endsWith(".oh") ? fileName : StringUtils.join(fileName, ".oh"), true);
     }
 
     public static SymbolTable getSymbolTableForProgram(Program program) {

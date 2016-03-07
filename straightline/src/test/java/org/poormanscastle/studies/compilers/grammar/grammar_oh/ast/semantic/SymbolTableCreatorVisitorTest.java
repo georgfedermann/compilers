@@ -1,5 +1,10 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic;
 
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -8,11 +13,6 @@ import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
-
-import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by 02eex612 on 19.02.2016.
@@ -31,7 +31,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testGetSymbolTable() throws Exception {
-        Program program = TestUtils.loadProgram("testprogram1.prog");
+        Program program = TestUtils.loadTestProgram("testprogram1.prog", false);
         assertNotNull(program);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
@@ -60,7 +60,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testBlockScope1() throws Exception {
-        Program program = TestUtils.loadProgram("BlockScopeTest1.oh");
+        Program program = TestUtils.loadTestProgram("BlockScopeTest1.oh", false);
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         if (program.handleProceedWith(symbolTableCreator)) {
             program.accept(symbolTableCreator);
@@ -75,7 +75,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testBlockScope2() throws Exception {
-        Program program = TestUtils.loadProgram("BlockScopeTest2.oh");
+        Program program = TestUtils.loadTestProgram("BlockScopeTest2.oh", false);
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
         assertEquals("Error at begin line/column 7/14; end line/column 7/14: variable a was already declared in this scope.\n", systemErrRule.getLog());
@@ -84,7 +84,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifier() throws Exception {
-        Program program = TestUtils.loadProgram("UndeclaredId.prog");
+        Program program = TestUtils.loadTestProgram("UndeclaredId.prog", false);
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
 
@@ -101,7 +101,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testUndeclaredIdentifierInAssignmentStm() throws Exception {
-        Program program = TestUtils.loadProgram("UndeclaredIdAssignmentStatement.prog");
+        Program program = TestUtils.loadTestProgram("UndeclaredIdAssignmentStatement.prog", false);
         program.accept(symbolTableCreator);
 
         assertFalse(symbolTableCreator.isAstValid());
@@ -110,7 +110,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testInvalidNotOperand() throws Exception {
-        Program program = TestUtils.loadProgram("InvalidNotOperand.prog");
+        Program program = TestUtils.loadTestProgram("InvalidNotOperand.prog", false);
         program.accept(symbolTableCreator);
 
         assertFalse(symbolTableCreator.isAstValid());
@@ -122,7 +122,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testDeclarationWithoutAssignment() throws Exception {
-        Program program = TestUtils.loadProgram("DeclarationWithoutAssignment.prog");
+        Program program = TestUtils.loadTestProgram("DeclarationWithoutAssignment.prog", false);
         program.accept(symbolTableCreator);
 
         assertTrue(symbolTableCreator.isAstValid());
@@ -130,7 +130,7 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testAssignDoubleValueToIntVariable() throws Exception {
-        Program program = TestUtils.loadProgram("assignDoubleValueToIntVariableBug.prog");
+        Program program = TestUtils.loadTestProgram("assignDoubleValueToIntVariableBug.prog", false);
         program.accept(symbolTableCreator);
 
         assertFalse(symbolTableCreator.isAstValid());
@@ -141,11 +141,12 @@ public class SymbolTableCreatorVisitorTest {
 
     @Test
     public void testAssignIntToTextVariable() throws Exception {
-        Program program = TestUtils.loadProgram("AssignIntToText.prog");
+        Program program = TestUtils.loadTestProgram("AssignIntToText.prog", false);
         program.accept(symbolTableCreator);
         assertFalse(symbolTableCreator.isAstValid());
         String expectedErrorMessage =
-                "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n";
+                "Error at begin line/column 3/13; end line/column 3/13: the type INT cannot be assigned to TEXT.\n" +
+                        "Error at begin line/column 5/8; end line/column 5/8: the type INT cannot be assigned to TEXT.\n";
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
     }
 

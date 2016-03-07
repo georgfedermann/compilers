@@ -35,6 +35,10 @@ public class ConditionalStatement extends AbstractAstItem implements Statement {
         this(condition.getCodePosition(), condition, thenStatement, elseStatement);
     }
 
+    public ConditionalStatement(Expression condition, Statement thenStatement) {
+        this(condition.getCodePosition(), condition, thenStatement, null);
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithConditionalStatement(this);

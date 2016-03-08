@@ -1,0 +1,5 @@
+// SimpleFor.oh
+// testing basic functionality of for loop
+
+for(int a = 0; a < 10; a = a + 1) print(a, " ");
+for(a = 10; a >= 0; a = a - 1) print(a, " ");

@@ -14,6 +14,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Condit
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
@@ -177,6 +178,22 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leaveWhileBody(WhileBody whileBody) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithForStatement(ForStatement forStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitForStatement(ForStatement forStatement) {
+        addItem("For", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveForStatement(ForStatement forStatement) {
         itemStack.pop();
     }
 

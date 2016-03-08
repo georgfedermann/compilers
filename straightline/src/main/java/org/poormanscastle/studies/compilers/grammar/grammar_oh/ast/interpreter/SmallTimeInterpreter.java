@@ -13,6 +13,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Condit
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
@@ -243,6 +244,28 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
             whileBody.getParentStatement().getCondition().accept(this);
         }
         return false;
+    }
+
+    @Override
+    public boolean proceedWithForStatement(ForStatement forStatement) {
+        forStatement.getInitializationStatement().accept(this);
+        forStatement.getCondition().accept(this);
+        while ((Boolean) forStatement.getCondition().getValue()) {
+            forStatement.getForBody().accept(this);
+            forStatement.getIncrementStatement().accept(this);
+            forStatement.getCondition().accept(this);
+        }
+        return false;
+    }
+
+    @Override
+    public void visitForStatement(ForStatement forStatement) {
+        super.visitForStatement(forStatement);
+    }
+
+    @Override
+    public void leaveForStatement(ForStatement forStatement) {
+        super.leaveForStatement(forStatement);
     }
 
     @Override

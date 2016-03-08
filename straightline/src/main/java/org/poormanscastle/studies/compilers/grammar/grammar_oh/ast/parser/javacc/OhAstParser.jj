@@ -61,7 +61,8 @@ TOKEN : {
     < TYPE : "int" | "double" | "boolean" | "text" > |
     < BOOL : "true" | "false" > |
     < IF : "if" > |
-    < ELSE : "else" >
+    < ELSE : "else" > |
+    < WHILE : "while" >
 }
 
 /* Separators */
@@ -159,6 +160,11 @@ Statement S() :
         return statement;
     }
     |
+    statement = WS()
+    {
+        return statement;
+    }
+    |
     statement = B()
     {
         return statement;
@@ -187,6 +193,15 @@ StatementList BPrime() :
         }
     )?
     { return null; }
+}
+
+Statement WS() :
+{ Expression condition; Statement whileBody; }
+{
+    <WHILE> <LPAREN> condition = E() <RPAREN> whileBody = S()
+    {
+        return new WhileStatement(condition, whileBody);
+    }
 }
 
 Statement CS() :

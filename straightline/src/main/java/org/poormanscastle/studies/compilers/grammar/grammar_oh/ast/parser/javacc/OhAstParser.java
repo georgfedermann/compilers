@@ -24,6 +24,7 @@ public class OhAstParser implements OhAstParserConstants {
     case PRINT:
     case TYPE:
     case IF:
+    case WHILE:
     case SEMICOLON:
     case LBRACE:
     case ID:{
@@ -67,6 +68,11 @@ public class OhAstParser implements OhAstParserConstants {
 {if ("" != null) return statement;}
       break;
       }
+    case WHILE:{
+      statement = WS();
+{if ("" != null) return statement;}
+      break;
+      }
     default:
       jj_la1[1] = jj_gen;
       statement = B();
@@ -96,6 +102,7 @@ public class OhAstParser implements OhAstParserConstants {
     case PRINT:
     case TYPE:
     case IF:
+    case WHILE:
     case SEMICOLON:
     case LBRACE:
     case ID:{
@@ -112,6 +119,16 @@ public class OhAstParser implements OhAstParserConstants {
       ;
     }
 {if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Statement WS() throws ParseException {Expression condition; Statement whileBody;
+    jj_consume_token(WHILE);
+    jj_consume_token(LPAREN);
+    condition = E();
+    jj_consume_token(RPAREN);
+    whileBody = S();
+{if ("" != null) return new WhileStatement(condition, whileBody);}
     throw new Error("Missing return statement in function");
   }
 
@@ -561,7 +578,7 @@ public class OhAstParser implements OhAstParserConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x43280002,0x40280002,0x2000000,0x43280002,0x400000,0x40000,0x800000,0x20000,0x10000,0x8000,0x6000,0x6000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0x78100014,0x78100004,};
+      jj_la1_0 = new int[] {0x86a80002,0x80a80002,0x4000000,0x86a80002,0x400000,0x40000,0x1000000,0x20000,0x10000,0x8000,0x6000,0x6000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0xf0100014,0xf0100004,};
    }
    private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
@@ -681,7 +698,7 @@ public class OhAstParser implements OhAstParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[38];
+    boolean[] la1tokens = new boolean[39];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -698,7 +715,7 @@ public class OhAstParser implements OhAstParserConstants {
         }
       }
     }
-    for (int i = 0; i < 38; i++) {
+    for (int i = 0; i < 39; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

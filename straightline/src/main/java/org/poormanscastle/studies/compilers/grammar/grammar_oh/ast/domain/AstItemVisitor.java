@@ -129,5 +129,17 @@ public interface AstItemVisitor {
     void visitElseStatement(ElseStatement elseStatement);
 
     void leaveElseStatement(ElseStatement elseStatement);
-    
+
+    boolean proceedWithWhileStatement(WhileStatement whileStatement);
+
+    void visitWhileStatement(WhileStatement whileStatement);
+
+    void leaveWhileStatement(WhileStatement whileStatement);
+
+    boolean proceedWithWhileBody(WhileBody whileBody);
+
+    void visitWhileBody(WhileBody whileBody);
+
+    void leaveWhileBody(WhileBody whileBody);
+
 }

@@ -25,11 +25,6 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
-    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
-
-    }
-
-    @Override
     public boolean proceedWithThenStatement(ThenStatement thenStatement) {
         return false;
     }
@@ -65,17 +60,50 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
-    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
-        return false;
-    }
-
-    @Override
     public void visitBlock(Block block) {
 
     }
 
     @Override
+    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
+        return false;
+    }
+
+    @Override
     public void visitConditionalStatement(ConditionalStatement conditionalStatement) {
+    }
+
+    @Override
+    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
+    }
+
+    @Override
+    public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitWhileStatement(WhileStatement whileStatement) {
+
+    }
+
+    @Override
+    public void leaveWhileStatement(WhileStatement whileStatement) {
+
+    }
+
+    @Override
+    public boolean proceedWithWhileBody(WhileBody whileBody) {
+        return false;
+    }
+
+    @Override
+    public void visitWhileBody(WhileBody whileBody) {
+
+    }
+
+    @Override
+    public void leaveWhileBody(WhileBody whileBody) {
 
     }
 
@@ -86,12 +114,10 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
 
     @Override
     public void visitPrintStatement(PrintStatement printStatement) {
-
     }
 
     @Override
     public void leavePrintStatement(PrintStatement printStatement) {
-
     }
 
     @Override

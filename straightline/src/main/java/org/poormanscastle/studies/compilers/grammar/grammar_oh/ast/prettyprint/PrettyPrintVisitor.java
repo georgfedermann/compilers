@@ -25,6 +25,8 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Progra
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileBody;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileStatement;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -143,6 +145,38 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leaveElseStatement(ElseStatement elseStatement) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitWhileStatement(WhileStatement whileStatement) {
+        addItem("While", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveWhileStatement(WhileStatement whileStatement) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithWhileBody(WhileBody whileBody) {
+        return true;
+    }
+
+    @Override
+    public void visitWhileBody(WhileBody whileBody) {
+        addItem("WhileBody", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveWhileBody(WhileBody whileBody) {
         itemStack.pop();
     }
 

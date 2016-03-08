@@ -1,7 +1,5 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -27,16 +25,20 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextEx
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileBody;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileStatement;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 import com.google.common.collect.Lists;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * SmallTimeInterpreter sits directly on the semantic analysis phase of the compiler and uses the symboltable's
  * environments to manage its variables and scopes.
- * <p>
+ * <p/>
  * Created by 02eex612 on 02.03.2016.
  */
 public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
@@ -227,6 +229,20 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
     public boolean proceedWithElseStatement(ElseStatement elseStatement) {
         // the cast is safe or the program would not have passed expression validation.
         return !(Boolean) elseStatement.getParentStatement().getCondition().getValue();
+    }
+
+    @Override
+    public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithWhileBody(WhileBody whileBody) {
+        while ((Boolean) whileBody.getParentStatement().getCondition().getValue()) {
+            whileBody.accept(this);
+            whileBody.getParentStatement().getCondition().accept(this);
+        }
+        return false;
     }
 
     @Override

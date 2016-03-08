@@ -22,6 +22,8 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenSt
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperator;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileBody;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileStatement;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
@@ -58,6 +60,11 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     public SymbolTable getSymbolTable() {
         return symbolTable;
+    }
+
+    @Override
+    public boolean proceedWithProgramImpl(ProgramImpl program) {
+        return true;
     }
 
     @Override
@@ -180,7 +187,6 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         Expression lhs = binaryOperatorExpression.getLhs(), rhs = binaryOperatorExpression.getRhs();
         BinaryOperator operator = binaryOperatorExpression.getOperator();
 
-        String errMsg = "";
         if (lhs.getState() != ExpressionState.VALID || rhs.getState() != ExpressionState.VALID) {
             binaryOperatorExpression.setState(ExpressionState.OPERANDS_INVALID);
             invalidateAst();
@@ -226,7 +232,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
         Expression condition = conditionalStatement.getCondition();
         if (condition.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
-            System.err.print(StringUtils.join("Error ast ", condition.getCodePosition(),
+            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
                     ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
             invalidateAst();
         }
@@ -243,7 +249,22 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean proceedWithProgramImpl(ProgramImpl program) {
+    public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveWhileStatement(WhileStatement whileStatement) {
+        Expression condition = whileStatement.getCondition();
+        if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
+                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
+            invalidateAst();
+        }
+    }
+
+    @Override
+    public boolean proceedWithWhileBody(WhileBody whileBody) {
         return true;
     }
 

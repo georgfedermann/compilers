@@ -108,6 +108,21 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
+    public boolean proceedWithForStatement(ForStatement forStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitForStatement(ForStatement forStatement) {
+
+    }
+
+    @Override
+    public void leaveForStatement(ForStatement forStatement) {
+
+    }
+
+    @Override
     public boolean proceedWithPrintStatement(PrintStatement printStatement) {
         return false;
     }

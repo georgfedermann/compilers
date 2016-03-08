@@ -11,6 +11,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Declar
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ExpressionState;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
@@ -256,6 +257,21 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     @Override
     public void leaveWhileStatement(WhileStatement whileStatement) {
         Expression condition = whileStatement.getCondition();
+        if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
+                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
+            invalidateAst();
+        }
+    }
+
+    @Override
+    public boolean proceedWithForStatement(ForStatement forStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveForStatement(ForStatement forStatement) {
+        Expression condition = forStatement.getCondition();
         if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
             System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
                     ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));

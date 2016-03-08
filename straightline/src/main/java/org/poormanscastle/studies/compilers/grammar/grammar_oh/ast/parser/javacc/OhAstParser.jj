@@ -62,7 +62,8 @@ TOKEN : {
     < BOOL : "true" | "false" > |
     < IF : "if" > |
     < ELSE : "else" > |
-    < WHILE : "while" >
+    < WHILE : "while" > |
+    < FOR : "for" >
 }
 
 /* Separators */
@@ -165,6 +166,11 @@ Statement S() :
         return statement;
     }
     |
+    statement = FS()
+    {
+        return statement;
+    }
+    |
     statement = B()
     {
         return statement;
@@ -201,6 +207,15 @@ Statement WS() :
     <WHILE> <LPAREN> condition = E() <RPAREN> whileBody = S()
     {
         return new WhileStatement(condition, whileBody);
+    }
+}
+
+Statement FS() :
+{ Statement initStatement; Expression condition; Statement incrStatement; Statement body; }
+{
+    <FOR> <LPAREN> initStatement = S() <SEMICOLON> condition = E() <SEMICOLON> incrStatement = S() <RPAREN> body = S()
+    {
+        return new ForStatement(initStatement, condition, incrStatement, body);
     }
 }
 

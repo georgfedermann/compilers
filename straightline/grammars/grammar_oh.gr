@@ -12,6 +12,13 @@ Grammar v0.2 introduces
       if (BooleanExpression) Statement ELSE Statement
   --  Since a Block can appear anywhere a Statement can appear, this is equivalent to
       if (BooleanExpression) Block ELSE Block
+- While Loop
+  --  syntax
+      while(Expression) Statement
+- For Loop
+  --  syntax
+      for ( Statement; BooleanExpression; Statement ) ForBody
+
 
 Grammar_v0.1.gr introduces
 - data types
@@ -91,6 +98,8 @@ S -> type id
 S -> type id = E
 S -> id = E
 S -> print ( EL )
+S -> if(E) S else S
+S -> while(E) S
 
 EL -> E
 EL -> EL, E
@@ -138,15 +147,17 @@ terminals_start
 and
 bool
 dec
+else
+for
 id
 if
-else
 not
 num
 or
 print
 text
 type
+while
 xor
 $
 terminals_end
@@ -158,10 +169,12 @@ P -> P' $
 P' -> S ; P'
 P' ->
 
-S -> DS
 S -> AS
-S -> PS
 S -> CS
+S -> DS
+S -> FS
+S -> PS
+S -> WS
 
 S -> B
 B -> { B' }
@@ -171,6 +184,10 @@ B' ->
 CS -> if ( E ) S CS'
 CS' -> else S
 CS' ->
+
+FS -> for ( S ; E ; S ) S
+
+WS -> while ( E ) S
 
 DS -> type id DS'
 DS' -> = E

@@ -142,4 +142,10 @@ public interface AstItemVisitor {
 
     void leaveWhileBody(WhileBody whileBody);
 
+    boolean proceedWithForStatement(ForStatement forStatement);
+
+    void visitForStatement(ForStatement forStatement);
+
+    void leaveForStatement(ForStatement forStatement);
+
 }

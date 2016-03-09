@@ -178,6 +178,7 @@ S -> DS
 S -> FS
 S -> PS
 S -> WS
+S -> FUNC_DEF
 
 S -> B
 B -> { B' }
@@ -240,12 +241,11 @@ F -> dec
 F -> bool
 F -> text
 F -> ( E )
-F -> FC
+F -> FUNC_CALL
 
-FC -> id ( EL )
+FUNC_CALL -> id ( EL )
 
-
-FUNCTION -> type id ( PL ) B
+FUNC_DEF -> type id ( PL ) B
 PL -> PARAMETER PL'
 PL ->
 PL' -> , PARAMETER PL'

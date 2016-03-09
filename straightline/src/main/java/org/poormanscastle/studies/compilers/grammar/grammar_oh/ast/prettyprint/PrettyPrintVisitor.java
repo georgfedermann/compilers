@@ -75,7 +75,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     public String serialize() {
         buffer.append("}");
         String result = buffer.toString();
-        StringBuffer labelDefinitions = new StringBuffer();
+        StringBuilder labelDefinitions = new StringBuilder();
         for (StackItem stackItem : stackItems) {
             labelDefinitions.append(StringUtils.join(stackItem.getId(), " [label=\"", stackItem.getLabel(), "\"];\n"));
         }

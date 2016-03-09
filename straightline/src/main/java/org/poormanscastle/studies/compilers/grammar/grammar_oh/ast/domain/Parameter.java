@@ -17,16 +17,12 @@ public final class Parameter extends AbstractAstItem {
 
     private final Type type;
 
-    private final Object value;
-
-    public Parameter(CodePosition codePosition, String name, Type type, Object value) {
+    public Parameter(CodePosition codePosition, String name, Type type) {
         super(codePosition);
         checkArgument(!StringUtils.isBlank(name));
         checkNotNull(type);
-        checkNotNull(value);
         this.name = name;
         this.type = type;
-        this.value = value;
     }
 
     public String getName() {
@@ -35,10 +31,6 @@ public final class Parameter extends AbstractAstItem {
 
     public Type getType() {
         return type;
-    }
-
-    public Object getValue() {
-        return value;
     }
 
     @Override

@@ -13,12 +13,23 @@ public final class Function extends AbstractAstItem {
 
     private final Statement functionBody;
 
-    public Function(CodePosition codePosition, Statement functionBody, ParameterList parameterList) {
+    private final String id;
+
+    public Function(CodePosition codePosition, String id, Statement functionBody, ParameterList parameterList) {
         super(codePosition);
         checkNotNull(functionBody);
         checkNotNull(parameterList);
+        this.id = id;
         this.functionBody = functionBody;
         this.parameterList = parameterList;
+    }
+
+    public Function(String id, Statement functionBody, ParameterList parameterList) {
+        this(functionBody.getCodePosition(), id, functionBody, parameterList);
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override

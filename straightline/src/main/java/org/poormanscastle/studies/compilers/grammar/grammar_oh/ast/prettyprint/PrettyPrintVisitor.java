@@ -15,12 +15,16 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Decima
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastParameterList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.NumExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairParameterList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Parameter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
@@ -422,8 +426,8 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
-        itemStack.pop();
+    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        return true;
     }
 
     @Override
@@ -433,8 +437,71 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithFunction(Function function) {
         return true;
+    }
+
+    @Override
+    public void visitFunction(Function function) {
+        addItem("Function", StringUtils.join(function.getId(), "()"));
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveFunction(Function function) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithParameter(Parameter parameter) {
+        return true;
+    }
+
+    @Override
+    public void visitParameter(Parameter parameter) {
+        addItem("Parameter", parameter.getName());
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveParameter(Parameter parameter) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
+        return true;
+    }
+
+    @Override
+    public void visitPairParameterList(PairParameterList pairParameterList) {
+        addItem("PairParameterList", "");
+    }
+
+    @Override
+    public void leavePairParameterList(PairParameterList pairParameterList) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
+        return true;
+    }
+
+    @Override
+    public void visitLastParameterList(LastParameterList lastParameterList) {
+        addItem("LastParameterList", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveLastParameterList(LastParameterList lastParameterList) {
+        itemStack.pop();
     }
 
     /**

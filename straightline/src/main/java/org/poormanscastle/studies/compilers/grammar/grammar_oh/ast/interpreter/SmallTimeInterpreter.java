@@ -62,10 +62,16 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
      */
     private final SymbolTable symbolTable;
 
+    /**
+     * FunctionSpace is used to store functions for quick retrieval when they are called in code.
+     */
+    private final FunctionSpace functionSpace;
+
     public SmallTimeInterpreter() {
         symbolTable = new SymbolTable();
         expressionList = new LinkedList<>();
         operandStack = new Stack<>();
+        functionSpace = new FunctionSpace();
     }
 
     @Override

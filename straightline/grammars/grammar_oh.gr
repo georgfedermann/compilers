@@ -1,6 +1,9 @@
 This grammmar is an object of study to learn hands-on about compiler implementation.
 It is increasingle losely based on Grammar3.1.gr from Andrew Appel's book Modern Compiler Implementation with Java.
 
+Grammar v03 introduces
+- Functions and Function Calls
+
 Grammar v0.2 introduces
 - Blocks
   --  Blocks can be used to structure programs
@@ -237,12 +240,18 @@ F -> dec
 F -> bool
 F -> text
 F -> ( E )
-F -> FUNCTION
+F -> FC
+
+FC -> id ( EL )
+
 
 FUNCTION -> type id ( PL ) B
-PL -> type id PL'
-PL' -> , type id
+PL -> PARAMETER PL'
+PL ->
+PL' -> , PARAMETER PL'
 PL' ->
+
+PARAMETER -> type id
 
 productions_end
 ***********************************************************************

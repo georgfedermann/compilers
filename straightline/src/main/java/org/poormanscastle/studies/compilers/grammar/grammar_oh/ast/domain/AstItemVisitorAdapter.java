@@ -344,4 +344,64 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
         return false;
     }
+
+    @Override
+    public boolean proceedWithFunction(Function function) {
+        return false;
+    }
+
+    @Override
+    public void visitFunction(Function function) {
+
+    }
+
+    @Override
+    public void leaveFunction(Function function) {
+
+    }
+
+    @Override
+    public boolean proceedWithParameter(Parameter parameter) {
+        return false;
+    }
+
+    @Override
+    public void visitParameter(Parameter parameter) {
+
+    }
+
+    @Override
+    public void leaveParameter(Parameter parameter) {
+
+    }
+
+    @Override
+    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
+        return false;
+    }
+
+    @Override
+    public void visitPairParameterList(PairParameterList pairParameterList) {
+
+    }
+
+    @Override
+    public void leavePairParameterList(PairParameterList pairParameterList) {
+
+    }
+
+    @Override
+    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
+        return false;
+    }
+
+    @Override
+    public void visitLastParameterList(LastParameterList lastParameterList) {
+
+    }
+
+    @Override
+    public void leaveLastParameterList(LastParameterList lastParameterList) {
+
+    }
 }

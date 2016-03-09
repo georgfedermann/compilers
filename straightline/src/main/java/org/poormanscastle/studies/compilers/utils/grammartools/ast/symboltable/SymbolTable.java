@@ -49,6 +49,8 @@ public class SymbolTable {
     public void endScope() {
         checkState(!environments.isEmpty());
         environments.remove(0);
+        // Environment sigma0 is always there:
+        checkState(!environments.isEmpty());
     }
 
     public Binding getBinding(Symbol symbol) {

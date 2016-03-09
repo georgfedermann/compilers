@@ -21,9 +21,9 @@ import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.Compil
  * <p/>
  * Created by 02eex612 on 29.02.2016.
  */
-public class Environment {
+public final class Environment {
 
-    private Map<Symbol, Binding> bindings = new HashMap<>();
+    private final Map<Symbol, Binding> bindings = new HashMap<>();
 
     public Binding addSymbol(String name, String type) {
         Symbol symbol = Symbol.getSymbol(name);

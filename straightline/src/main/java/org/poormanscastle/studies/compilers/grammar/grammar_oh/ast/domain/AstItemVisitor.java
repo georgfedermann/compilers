@@ -148,4 +148,28 @@ public interface AstItemVisitor {
 
     void leaveForStatement(ForStatement forStatement);
 
+    boolean proceedWithParameter(Parameter parameter);
+
+    void visitParameter(Parameter parameter);
+
+    void leaveParameter(Parameter parameter);
+
+    boolean proceedWithPairParameterList(PairParameterList pairParameterList);
+
+    void visitPairParameterList(PairParameterList pairParameterList);
+
+    void leavePairParameterList(PairParameterList pairParameterList);
+
+    boolean proceedWithLastParameterList(LastParameterList lastParameterList);
+
+    void visitLastParameterList(LastParameterList lastParameterList);
+
+    void leaveLastParameterList(LastParameterList lastParameterList);
+
+    boolean proceedWithFunction(Function function);
+
+    void visitFunction(Function function);
+
+    void leaveFunction(Function function);
+    
 }

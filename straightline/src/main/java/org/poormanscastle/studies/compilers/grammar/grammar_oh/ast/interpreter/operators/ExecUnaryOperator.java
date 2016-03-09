@@ -1,4 +1,4 @@
-package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter;
+package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter.operators;
 
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Expression;

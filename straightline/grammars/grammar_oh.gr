@@ -237,6 +237,12 @@ F -> dec
 F -> bool
 F -> text
 F -> ( E )
+F -> FUNCTION
+
+FUNCTION -> type id ( PL ) B
+PL -> type id PL'
+PL' -> , type id
+PL' ->
 
 productions_end
 ***********************************************************************

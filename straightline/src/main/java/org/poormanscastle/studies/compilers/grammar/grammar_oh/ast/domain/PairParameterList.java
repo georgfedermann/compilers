@@ -21,6 +21,10 @@ public final class PairParameterList extends AbstractAstItem implements Paramete
         this.parameterList = parameterList;
     }
 
+    public PairParameterList(Parameter parameter, ParameterList parameterList) {
+        this(parameter.getCodePosition(), parameter, parameterList);
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithPairParameterList(this);
@@ -29,7 +33,7 @@ public final class PairParameterList extends AbstractAstItem implements Paramete
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitPairParameterList(this);
-        if (parameter.handleProceedWith(visitor)){
+        if (parameter.handleProceedWith(visitor)) {
             parameter.accept(visitor);
         }
         visitor.leavePairParameterList(this);

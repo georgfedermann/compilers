@@ -1,7 +1,9 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -17,17 +19,22 @@ public final class Function extends AbstractAstItem implements Statement {
 
     private final String id;
 
-    public Function(CodePosition codePosition, String id, Statement functionBody, ParameterList parameterList) {
+    private final Type type;
+
+    public Function(CodePosition codePosition, String type, String id, Statement functionBody, ParameterList parameterList) {
         super(codePosition);
         checkNotNull(functionBody);
         checkNotNull(parameterList);
+        checkArgument(!StringUtils.isBlank(type));
+        checkArgument(!StringUtils.isBlank(id));
+        this.type = Type.valueOf(type.toUpperCase());
         this.id = id;
         this.functionBody = functionBody;
         this.parameterList = parameterList;
     }
 
-    public Function(String id, Statement functionBody, ParameterList parameterList) {
-        this(functionBody.getCodePosition(), id, functionBody, parameterList);
+    public Function(String type, String id, Statement functionBody, ParameterList parameterList) {
+        this(functionBody.getCodePosition(), type, id, functionBody, parameterList);
     }
 
     public String getId() {

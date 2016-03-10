@@ -13,20 +13,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Parameter extends AbstractAstItem {
 
-    private final String name;
+    private final String id;
 
     private final Type type;
 
-    public Parameter(CodePosition codePosition, String name, Type type) {
+    public Parameter(CodePosition codePosition, String type, String id) {
         super(codePosition);
-        checkArgument(!StringUtils.isBlank(name));
-        checkNotNull(type);
-        this.name = name;
-        this.type = type;
+        checkArgument(!StringUtils.isBlank(id));
+        checkNotNull(!StringUtils.isBlank(type));
+        this.id = id;
+        this.type = Type.valueOf(type.toUpperCase());
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
     public Type getType() {

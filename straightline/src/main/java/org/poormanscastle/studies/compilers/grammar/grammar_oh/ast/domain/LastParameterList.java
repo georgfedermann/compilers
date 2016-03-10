@@ -17,6 +17,10 @@ public final class LastParameterList extends AbstractAstItem implements Paramete
         this.parameter = parameter;
     }
 
+    public LastParameterList(Parameter parameter) {
+        this(parameter.getCodePosition(), parameter);
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithLastParameterList(this);
@@ -25,7 +29,7 @@ public final class LastParameterList extends AbstractAstItem implements Paramete
     @Override
     public void accept(AstItemVisitor visitor) {
         visitor.visitLastParameterList(this);
-        if(parameter.handleProceedWith(visitor)){
+        if (parameter.handleProceedWith(visitor)) {
             parameter.accept(visitor);
         }
         visitor.leaveLastParameterList(this);

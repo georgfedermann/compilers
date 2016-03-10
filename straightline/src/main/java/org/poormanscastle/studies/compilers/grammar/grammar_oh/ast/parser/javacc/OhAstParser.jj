@@ -177,6 +177,49 @@ Statement S() :
     }
 }
 
+Statement FUNC_DEV() :
+{ Token typeToken, idToken; Function function; ParameterList parameterList; Statement functionBody; }
+{
+    typeToken = <TYPE> idToken = <ID> <LPAREN> parameterList = PL() <RPAREN> functionBody = B()
+    {
+        function = new Function(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image,
+            functionBody, parameterList);
+    }
+}
+
+ParameterList PL() :
+{ Token typeToken, idToken; Parameter parameter; ParameterList parameterList; }
+{
+    (
+        parameter = PARAMETER() parameterList = PLPrime()
+        {
+            return parameterList == null ? new LastParameterList(parameter) :
+                new PairParameterList(parameter, parameterList);
+        }
+    )?
+    {
+        return null;
+    }
+}
+
+ParameterList PLPrime() :
+{ Parameter parameter; ParameterList parameterList; }
+{
+    <COMMA> parameter = PARAMETER() parameterList = PLPrime()
+    {
+        return parameterList == null ? new LastParameterList(parameter) : new PairParameterList(parameter, parameterList);
+    }
+}
+
+Parameter PARAMETER() :
+{ Token typeToken, idToken; }
+{
+    typeToken = <TYPE> idToken = <ID>
+    {
+        return new Parameter(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image);
+    }
+}
+
 Statement B() :
 { StatementList statementList; }
 {

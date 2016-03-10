@@ -464,7 +464,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitParameter(Parameter parameter) {
-        addItem("Parameter", parameter.getName());
+        addItem("Parameter", parameter.getId());
         addBufferLine();
     }
 

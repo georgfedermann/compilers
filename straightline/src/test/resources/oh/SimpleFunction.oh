@@ -1,7 +1,7 @@
 // SimpleFunction.oh
 // tests the functionality of the basic function syntax.
 
-int product(int a, int b){
+function int product(int a, int b){
   int product = a * b;
   return product;
 }

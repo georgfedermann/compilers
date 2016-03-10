@@ -63,7 +63,8 @@ TOKEN : {
     < IF : "if" > |
     < ELSE : "else" > |
     < WHILE : "while" > |
-    < FOR : "for" >
+    < FOR : "for" > |
+    < FUNCTION : "function" >
 }
 
 /* Separators */
@@ -171,18 +172,23 @@ Statement S() :
         return statement;
     }
     |
+    statement = FUNC_DEF()
+    {
+        return statement;
+    }
+    |
     statement = B()
     {
         return statement;
     }
 }
 
-Statement FUNC_DEV() :
+Statement FUNC_DEF() :
 { Token typeToken, idToken; Function function; ParameterList parameterList; Statement functionBody; }
 {
-    typeToken = <TYPE> idToken = <ID> <LPAREN> parameterList = PL() <RPAREN> functionBody = B()
+    <FUNCTION> typeToken = <TYPE> idToken = <ID> <LPAREN> parameterList = PL() <RPAREN> functionBody = B()
     {
-        function = new Function(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image,
+        return new Function(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image,
             functionBody, parameterList);
     }
 }
@@ -205,10 +211,12 @@ ParameterList PL() :
 ParameterList PLPrime() :
 { Parameter parameter; ParameterList parameterList; }
 {
-    <COMMA> parameter = PARAMETER() parameterList = PLPrime()
-    {
-        return parameterList == null ? new LastParameterList(parameter) : new PairParameterList(parameter, parameterList);
-    }
+    (
+        <COMMA> parameter = PARAMETER() parameterList = PLPrime()
+        {
+            return parameterList == null ? new LastParameterList(parameter) : new PairParameterList(parameter, parameterList);
+        }
+    )? { return null; }
 }
 
 Parameter PARAMETER() :
@@ -223,11 +231,10 @@ Parameter PARAMETER() :
 Statement B() :
 { StatementList statementList; }
 {
-    (    <LBRACE> statementList = BPrime() <RBRACE>
+    <LBRACE> statementList = BPrime() <RBRACE>
         {
             return new Block(statementList);
         }
-    )?
 }
 
 StatementList BPrime() :

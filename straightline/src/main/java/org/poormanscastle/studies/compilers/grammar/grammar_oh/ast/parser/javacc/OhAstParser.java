@@ -26,7 +26,7 @@ public class OhAstParser implements OhAstParserConstants {
     case IF:
     case WHILE:
     case FOR:
-    case SEMICOLON:
+    case FUNCTION:
     case LBRACE:
     case ID:{
       statement = S();
@@ -79,27 +79,83 @@ public class OhAstParser implements OhAstParserConstants {
 {if ("" != null) return statement;}
       break;
       }
-    default:
-      jj_la1[1] = jj_gen;
+    case FUNCTION:{
+      statement = FUNC_DEF();
+{if ("" != null) return statement;}
+      break;
+      }
+    case LBRACE:{
       statement = B();
 {if ("" != null) return statement;}
+      break;
+      }
+    default:
+      jj_la1[1] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
     throw new Error("Missing return statement in function");
   }
 
-  final public Statement B() throws ParseException {StatementList statementList;
+  final public Statement FUNC_DEF() throws ParseException {Token typeToken, idToken; Function function; ParameterList parameterList; Statement functionBody;
+    jj_consume_token(FUNCTION);
+    typeToken = jj_consume_token(TYPE);
+    idToken = jj_consume_token(ID);
+    jj_consume_token(LPAREN);
+    parameterList = PL();
+    jj_consume_token(RPAREN);
+    functionBody = B();
+{if ("" != null) return new Function(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image,
+            functionBody, parameterList);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public ParameterList PL() throws ParseException {Token typeToken, idToken; Parameter parameter; ParameterList parameterList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case LBRACE:{
-      jj_consume_token(LBRACE);
-      statementList = BPrime();
-      jj_consume_token(RBRACE);
-{if ("" != null) return new Block(statementList);}
+    case TYPE:{
+      parameter = PARAMETER();
+      parameterList = PLPrime();
+{if ("" != null) return parameterList == null ? new LastParameterList(parameter) :
+                new PairParameterList(parameter, parameterList);}
       break;
       }
     default:
       jj_la1[2] = jj_gen;
       ;
     }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public ParameterList PLPrime() throws ParseException {Parameter parameter; ParameterList parameterList;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case COMMA:{
+      jj_consume_token(COMMA);
+      parameter = PARAMETER();
+      parameterList = PLPrime();
+{if ("" != null) return parameterList == null ? new LastParameterList(parameter) : new PairParameterList(parameter, parameterList);}
+      break;
+      }
+    default:
+      jj_la1[3] = jj_gen;
+      ;
+    }
+{if ("" != null) return null;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Parameter PARAMETER() throws ParseException {Token typeToken, idToken;
+    typeToken = jj_consume_token(TYPE);
+    idToken = jj_consume_token(ID);
+{if ("" != null) return new Parameter(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Statement B() throws ParseException {StatementList statementList;
+    jj_consume_token(LBRACE);
+    statementList = BPrime();
+    jj_consume_token(RBRACE);
+{if ("" != null) return new Block(statementList);}
     throw new Error("Missing return statement in function");
   }
 
@@ -110,7 +166,7 @@ public class OhAstParser implements OhAstParserConstants {
     case IF:
     case WHILE:
     case FOR:
-    case SEMICOLON:
+    case FUNCTION:
     case LBRACE:
     case ID:{
       statement = S();
@@ -122,7 +178,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -173,7 +229,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[5] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -199,7 +255,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[6] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -242,7 +298,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[7] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -267,7 +323,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[8] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -292,7 +348,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[9] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -317,7 +373,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[10] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -353,14 +409,14 @@ public class OhAstParser implements OhAstParserConstants {
         break;
         }
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[11] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[12] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -414,14 +470,14 @@ public class OhAstParser implements OhAstParserConstants {
         break;
         }
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[14] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -457,14 +513,14 @@ public class OhAstParser implements OhAstParserConstants {
         break;
         }
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[15] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[16] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -500,14 +556,14 @@ public class OhAstParser implements OhAstParserConstants {
         break;
         }
       default:
-        jj_la1[16] = jj_gen;
+        jj_la1[17] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[18] = jj_gen;
       ;
     }
 {if ("" != null) return null;}
@@ -533,7 +589,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -575,7 +631,7 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -591,7 +647,7 @@ public class OhAstParser implements OhAstParserConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[20];
+  final private int[] jj_la1 = new int[21];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -599,10 +655,10 @@ public class OhAstParser implements OhAstParserConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xda80002,0x1a80002,0x8000000,0xda80002,0x400000,0x40000,0x2000000,0x20000,0x10000,0x8000,0x6000,0x6000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0xe0100014,0xe0100004,};
+      jj_la1_0 = new int[] {0x13a80002,0x13a80002,0x80000,0x4000000,0x13a80002,0x400000,0x40000,0x4000000,0x20000,0x10000,0x8000,0x6000,0x6000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0xc0100014,0xc0100004,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x1,0x1,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,};
+      jj_la1_1 = new int[] {0x2,0x2,0x0,0x0,0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3,0x3,};
    }
 
   /** Constructor with InputStream. */
@@ -616,7 +672,7 @@ public class OhAstParser implements OhAstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -630,7 +686,7 @@ public class OhAstParser implements OhAstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -640,7 +696,7 @@ public class OhAstParser implements OhAstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -650,7 +706,7 @@ public class OhAstParser implements OhAstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -659,7 +715,7 @@ public class OhAstParser implements OhAstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -668,7 +724,7 @@ public class OhAstParser implements OhAstParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -719,12 +775,12 @@ public class OhAstParser implements OhAstParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[40];
+    boolean[] la1tokens = new boolean[41];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 21; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -736,7 +792,7 @@ public class OhAstParser implements OhAstParserConstants {
         }
       }
     }
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 41; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

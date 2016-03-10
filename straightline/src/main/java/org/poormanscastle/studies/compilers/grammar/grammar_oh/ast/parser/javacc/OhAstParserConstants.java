@@ -59,23 +59,25 @@ public interface OhAstParserConstants {
   /** RegularExpression Id. */
   int FOR = 24;
   /** RegularExpression Id. */
-  int COMMA = 25;
+  int FUNCTION = 25;
   /** RegularExpression Id. */
-  int SEMICOLON = 26;
+  int COMMA = 26;
   /** RegularExpression Id. */
-  int LBRACE = 27;
+  int SEMICOLON = 27;
   /** RegularExpression Id. */
-  int RBRACE = 28;
+  int LBRACE = 28;
   /** RegularExpression Id. */
-  int NUM = 29;
+  int RBRACE = 29;
   /** RegularExpression Id. */
-  int DEC = 30;
+  int NUM = 30;
   /** RegularExpression Id. */
-  int TEXT = 31;
+  int DEC = 31;
   /** RegularExpression Id. */
-  int ID = 32;
+  int TEXT = 32;
   /** RegularExpression Id. */
-  int END_OF_SINGLE_LINE_COMMENT = 34;
+  int ID = 33;
+  /** RegularExpression Id. */
+  int END_OF_SINGLE_LINE_COMMENT = 35;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -109,6 +111,7 @@ public interface OhAstParserConstants {
     "\"else\"",
     "\"while\"",
     "\"for\"",
+    "\"function\"",
     "\",\"",
     "\";\"",
     "\"{\"",
@@ -119,7 +122,7 @@ public interface OhAstParserConstants {
     "<ID>",
     "\"//\"",
     "<END_OF_SINGLE_LINE_COMMENT>",
-    "<token of kind 35>",
+    "<token of kind 36>",
     "\" \"",
     "\"\\n\"",
     "\"\\r\"",

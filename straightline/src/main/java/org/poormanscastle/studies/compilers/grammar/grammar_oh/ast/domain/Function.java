@@ -5,9 +5,11 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * functions are like statements that only get executed on function calls.
+ * <p/>
  * Created by 02eex612 on 09.03.2016.
  */
-public final class Function extends AbstractAstItem {
+public final class Function extends AbstractAstItem implements Statement {
 
     private final ParameterList parameterList;
 

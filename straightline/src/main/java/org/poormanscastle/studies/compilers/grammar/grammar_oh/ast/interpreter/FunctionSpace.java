@@ -10,6 +10,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * functions reside in the ast and only get executed on function calls.
+ * <p/>
+ * the FunctionSpace entity maps function names to function references,
+ * thus providing a lookup table from function names to function addresses in the
+ * AST, later IR tree, later assembler labels of function code.
+ * <p/>
  * Created by 02eex612 on 09.03.2016.
  */
 public final class FunctionSpace {

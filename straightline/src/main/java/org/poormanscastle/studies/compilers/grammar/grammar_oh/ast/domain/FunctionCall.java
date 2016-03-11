@@ -56,6 +56,18 @@ public class FunctionCall extends AbstractExpression<Object> {
         return valueType;
     }
 
+    public void setValueType(Type type) {
+        valueType = type;
+    }
+
+    public String getFunctionId() {
+        return functionId;
+    }
+
+    public ExpressionList getArgumentList() {
+        return argumentList;
+    }
+
     @Override
     public void setValue(Object value) {
         this.value = value;

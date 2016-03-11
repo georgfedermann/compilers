@@ -466,7 +466,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitFunctionCall(FunctionCall functionCall) {
-        addItem("CALL", "");
+        addItem("CALL", StringUtils.join(functionCall.getFunctionId(), "()"));
         addBufferLine();
     }
 

@@ -361,6 +361,36 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return false;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+
+    }
+
+    @Override
+    public boolean proceedWith(ReturnStatement returnStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitReturnStatement(ReturnStatement returnStatement) {
+
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
+
+    }
+
+    @Override
     public boolean proceedWithParameter(Parameter parameter) {
         return false;
     }

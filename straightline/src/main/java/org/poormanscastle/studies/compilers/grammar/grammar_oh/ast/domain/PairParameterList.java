@@ -36,6 +36,9 @@ public final class PairParameterList extends AbstractAstItem implements Paramete
         if (parameter.handleProceedWith(visitor)) {
             parameter.accept(visitor);
         }
+        if (parameterList.handleProceedWith(visitor)) {
+            parameterList.accept(visitor);
+        }
         visitor.leavePairParameterList(this);
     }
 }

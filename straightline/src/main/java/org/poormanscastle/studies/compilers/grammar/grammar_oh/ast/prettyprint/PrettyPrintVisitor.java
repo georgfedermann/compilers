@@ -16,6 +16,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Declar
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.FunctionCall;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastParameterList;
@@ -27,6 +28,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairSt
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Parameter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ReturnStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
@@ -448,12 +450,44 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitFunction(Function function) {
-        addItem("Function", StringUtils.join(function.getId(), "()"));
+        addItem("Func", StringUtils.join(function.getId(), "()"));
         addBufferLine();
     }
 
     @Override
     public void leaveFunction(Function function) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return true;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+        addItem("CALL", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWith(ReturnStatement returnStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitReturnStatement(ReturnStatement returnStatement) {
+        addItem("RETURN", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
         itemStack.pop();
     }
 
@@ -464,7 +498,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitParameter(Parameter parameter) {
-        addItem("Parameter", parameter.getId());
+        addItem("Param", StringUtils.join(parameter.getType(), " ", parameter.getId()));
         addBufferLine();
     }
 
@@ -480,7 +514,8 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitPairParameterList(PairParameterList pairParameterList) {
-        addItem("PairParameterList", "");
+        addItem("PairParamList", "");
+        addBufferLine();
     }
 
     @Override
@@ -495,7 +530,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitLastParameterList(LastParameterList lastParameterList) {
-        addItem("LastParameterList", "");
+        addItem("LastParamList", "");
         addBufferLine();
     }
 

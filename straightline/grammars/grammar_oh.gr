@@ -152,12 +152,14 @@ bool
 dec
 else
 for
+function
 id
 if
 not
 num
 or
 print
+return
 text
 type
 while
@@ -177,8 +179,9 @@ S -> CS
 S -> DS
 S -> FS
 S -> PS
+S -> RS
 S -> WS
-S -> FUNC_DEF
+S -> FD
 
 S -> B
 B -> { B' }
@@ -188,6 +191,8 @@ B' ->
 CS -> if ( E ) S CS'
 CS' -> else S
 CS' ->
+
+RS -> return E
 
 FS -> for ( S ; E ; S ) S
 
@@ -241,17 +246,17 @@ F -> dec
 F -> bool
 F -> text
 F -> ( E )
-F -> FUNC_CALL
+F -> FC
 
-FUNC_CALL -> id ( EL )
+FC -> id ( EL )
 
-FUNC_DEF -> type id ( PL ) B
-PL -> PARAMETER PL'
+FD -> function type id ( PL ) B
+PL -> PM PL'
 PL ->
-PL' -> , PARAMETER PL'
+PL' -> , PM PL'
 PL' ->
 
-PARAMETER -> type id
+PM -> type id
 
 productions_end
 ***********************************************************************

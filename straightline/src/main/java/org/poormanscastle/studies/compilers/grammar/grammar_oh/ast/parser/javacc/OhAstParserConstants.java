@@ -13,71 +13,73 @@ public interface OhAstParserConstants {
   /** RegularExpression Id. */
   int PRINT = 1;
   /** RegularExpression Id. */
-  int LPAREN = 2;
+  int AND = 2;
   /** RegularExpression Id. */
-  int RPAREN = 3;
+  int BOOL = 3;
   /** RegularExpression Id. */
-  int NOT = 4;
+  int DIV = 4;
   /** RegularExpression Id. */
-  int TIMES = 5;
+  int ELSE = 5;
   /** RegularExpression Id. */
-  int DIV = 6;
+  int EQ = 6;
   /** RegularExpression Id. */
-  int PLUS = 7;
+  int FOR = 7;
   /** RegularExpression Id. */
-  int MINUS = 8;
+  int FUNCTION = 8;
   /** RegularExpression Id. */
-  int LT = 9;
+  int GT = 9;
   /** RegularExpression Id. */
-  int LTE = 10;
+  int GTE = 10;
   /** RegularExpression Id. */
-  int GT = 11;
+  int IF = 11;
   /** RegularExpression Id. */
-  int GTE = 12;
+  int LET = 12;
   /** RegularExpression Id. */
-  int EQ = 13;
+  int LPAREN = 13;
   /** RegularExpression Id. */
-  int NEQ = 14;
+  int LT = 14;
   /** RegularExpression Id. */
-  int XOR = 15;
+  int LTE = 15;
   /** RegularExpression Id. */
-  int AND = 16;
+  int NEQ = 16;
   /** RegularExpression Id. */
-  int OR = 17;
+  int NOT = 17;
   /** RegularExpression Id. */
-  int LET = 18;
+  int MINUS = 18;
   /** RegularExpression Id. */
-  int TYPE = 19;
+  int OR = 19;
   /** RegularExpression Id. */
-  int BOOL = 20;
+  int PLUS = 20;
   /** RegularExpression Id. */
-  int IF = 21;
+  int RETURN = 21;
   /** RegularExpression Id. */
-  int ELSE = 22;
+  int RPAREN = 22;
   /** RegularExpression Id. */
-  int WHILE = 23;
+  int TIMES = 23;
   /** RegularExpression Id. */
-  int FOR = 24;
+  int TYPE = 24;
   /** RegularExpression Id. */
-  int FUNCTION = 25;
+  int XOR = 25;
   /** RegularExpression Id. */
-  int COMMA = 26;
+  int WHILE = 26;
   /** RegularExpression Id. */
-  int SEMICOLON = 27;
+  int COMMA = 27;
   /** RegularExpression Id. */
-  int LBRACE = 28;
+  int SEMICOLON = 28;
   /** RegularExpression Id. */
-  int RBRACE = 29;
+  int LBRACE = 29;
   /** RegularExpression Id. */
-  int NUM = 30;
+  int RBRACE = 30;
   /** RegularExpression Id. */
-  int DEC = 31;
+  int NUM = 31;
   /** RegularExpression Id. */
-  int TEXT = 32;
+  int DEC = 32;
   /** RegularExpression Id. */
-  int ID = 33;
+  int TEXT = 33;
   /** RegularExpression Id. */
-  int END_OF_SINGLE_LINE_COMMENT = 35;
+  int ID = 34;
+  /** RegularExpression Id. */
+  int END_OF_SINGLE_LINE_COMMENT = 36;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -88,30 +90,31 @@ public interface OhAstParserConstants {
   String[] tokenImage = {
     "<EOF>",
     "\"print\"",
-    "\"(\"",
-    "\")\"",
-    "\"!\"",
-    "\"*\"",
-    "\"/\"",
-    "\"+\"",
-    "\"-\"",
-    "\"<\"",
-    "\"<=\"",
-    "\">\"",
-    "\">=\"",
-    "\"==\"",
-    "\"!=\"",
-    "\"^\"",
     "\"&\"",
-    "\"|\"",
-    "\"=\"",
-    "<TYPE>",
     "<BOOL>",
-    "\"if\"",
+    "\"/\"",
     "\"else\"",
-    "\"while\"",
+    "\"==\"",
     "\"for\"",
     "\"function\"",
+    "\">\"",
+    "\">=\"",
+    "\"if\"",
+    "\"=\"",
+    "\"(\"",
+    "\"<\"",
+    "\"<=\"",
+    "\"!=\"",
+    "\"!\"",
+    "\"-\"",
+    "\"|\"",
+    "\"+\"",
+    "\"return\"",
+    "\")\"",
+    "\"*\"",
+    "<TYPE>",
+    "\"^\"",
+    "\"while\"",
     "\",\"",
     "\";\"",
     "\"{\"",
@@ -122,7 +125,7 @@ public interface OhAstParserConstants {
     "<ID>",
     "\"//\"",
     "<END_OF_SINGLE_LINE_COMMENT>",
-    "<token of kind 36>",
+    "<token of kind 37>",
     "\" \"",
     "\"\\n\"",
     "\"\\r\"",

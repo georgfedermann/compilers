@@ -171,5 +171,17 @@ public interface AstItemVisitor {
     void visitFunction(Function function);
 
     void leaveFunction(Function function);
-    
+
+    boolean proceedWith(ReturnStatement returnStatement);
+
+    void visitReturnStatement(ReturnStatement returnStatement);
+
+    void leaveReturnStatement(ReturnStatement returnStatement);
+
+    boolean proceedWithFunctionCall(FunctionCall functionCall);
+
+    void visitFunctionCall(FunctionCall functionCall);
+
+    void leaveFunctionCall(FunctionCall functionCall);
+
 }

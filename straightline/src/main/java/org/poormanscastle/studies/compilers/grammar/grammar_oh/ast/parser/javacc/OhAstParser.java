@@ -22,11 +22,12 @@ public class OhAstParser implements OhAstParserConstants {
   final public StatementList PPrime() throws ParseException {Statement statement; StatementList statementList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PRINT:
-    case TYPE:
-    case IF:
-    case WHILE:
     case FOR:
     case FUNCTION:
+    case IF:
+    case RETURN:
+    case TYPE:
+    case WHILE:
     case LBRACE:
     case ID:{
       statement = S();
@@ -80,12 +81,17 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     case FUNCTION:{
-      statement = FUNC_DEF();
+      statement = FD();
 {if ("" != null) return statement;}
       break;
       }
     case LBRACE:{
       statement = B();
+{if ("" != null) return statement;}
+      break;
+      }
+    case RETURN:{
+      statement = RS();
 {if ("" != null) return statement;}
       break;
       }
@@ -97,7 +103,14 @@ public class OhAstParser implements OhAstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Statement FUNC_DEF() throws ParseException {Token typeToken, idToken; Function function; ParameterList parameterList; Statement functionBody;
+  final public Statement RS() throws ParseException {Expression expression;
+    jj_consume_token(RETURN);
+    expression = E();
+{if ("" != null) return new ReturnStatement(expression);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Statement FD() throws ParseException {Token typeToken, idToken; Function function; ParameterList parameterList; Statement functionBody;
     jj_consume_token(FUNCTION);
     typeToken = jj_consume_token(TYPE);
     idToken = jj_consume_token(ID);
@@ -110,10 +123,19 @@ public class OhAstParser implements OhAstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
+  final public FunctionCall FC() throws ParseException {Token idToken; ExpressionList expressionList;
+    idToken = jj_consume_token(ID);
+    jj_consume_token(LPAREN);
+    expressionList = EL();
+    jj_consume_token(RPAREN);
+{if ("" != null) return new FunctionCall(idToken.image, expressionList);}
+    throw new Error("Missing return statement in function");
+  }
+
   final public ParameterList PL() throws ParseException {Token typeToken, idToken; Parameter parameter; ParameterList parameterList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case TYPE:{
-      parameter = PARAMETER();
+      parameter = PM();
       parameterList = PLPrime();
 {if ("" != null) return parameterList == null ? new LastParameterList(parameter) :
                 new PairParameterList(parameter, parameterList);}
@@ -131,7 +153,7 @@ public class OhAstParser implements OhAstParserConstants {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case COMMA:{
       jj_consume_token(COMMA);
-      parameter = PARAMETER();
+      parameter = PM();
       parameterList = PLPrime();
 {if ("" != null) return parameterList == null ? new LastParameterList(parameter) : new PairParameterList(parameter, parameterList);}
       break;
@@ -144,7 +166,7 @@ public class OhAstParser implements OhAstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Parameter PARAMETER() throws ParseException {Token typeToken, idToken;
+  final public Parameter PM() throws ParseException {Token typeToken, idToken;
     typeToken = jj_consume_token(TYPE);
     idToken = jj_consume_token(ID);
 {if ("" != null) return new Parameter(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image);}
@@ -162,11 +184,12 @@ public class OhAstParser implements OhAstParserConstants {
   final public StatementList BPrime() throws ParseException {Statement statement; StatementList statementList;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PRINT:
-    case TYPE:
-    case IF:
-    case WHILE:
     case FOR:
     case FUNCTION:
+    case IF:
+    case RETURN:
+    case TYPE:
+    case WHILE:
     case LBRACE:
     case ID:{
       statement = S();
@@ -432,10 +455,10 @@ public class OhAstParser implements OhAstParserConstants {
 
   final public Expression T5Prime(Expression lhs) throws ParseException {Expression rhs, t5PrimeExpression;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case LT:
-    case LTE:
     case GT:
-    case GTE:{
+    case GTE:
+    case LT:
+    case LTE:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case LT:{
         jj_consume_token(LT);
@@ -493,8 +516,8 @@ public class OhAstParser implements OhAstParserConstants {
 
   final public Expression T4Prime(Expression lhs) throws ParseException {Expression rhs, t4PrimeExpression;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case PLUS:
-    case MINUS:{
+    case MINUS:
+    case PLUS:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case PLUS:{
         jj_consume_token(PLUS);
@@ -536,8 +559,8 @@ public class OhAstParser implements OhAstParserConstants {
 
   final public Expression T3Prime(Expression lhs) throws ParseException {Expression rhs, t3PrimeExpression;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case TIMES:
-    case DIV:{
+    case DIV:
+    case TIMES:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case TIMES:{
         jj_consume_token(TIMES);
@@ -572,8 +595,8 @@ public class OhAstParser implements OhAstParserConstants {
 
   final public Expression T2() throws ParseException {Expression f;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case LPAREN:
     case BOOL:
+    case LPAREN:
     case NUM:
     case DEC:
     case TEXT:
@@ -596,46 +619,72 @@ public class OhAstParser implements OhAstParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression F() throws ParseException {Token valueToken; Expression expression;
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case ID:{
-      valueToken = jj_consume_token(ID);
+  final public Expression F() throws ParseException {Token valueToken; Expression expression; FunctionCall functionCall; ExpressionList expressionList;
+    if (jj_2_1(2)) {
+      functionCall = FC();
+{if ("" != null) return functionCall;}
+    } else {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ID:{
+        valueToken = jj_consume_token(ID);
 {if ("" != null) return new IdExpression(CodePosition.createFromToken(valueToken), valueToken.image);}
-      break;
-      }
-    case NUM:{
-      valueToken = jj_consume_token(NUM);
+        break;
+        }
+      case NUM:{
+        valueToken = jj_consume_token(NUM);
 {if ("" != null) return new NumExpression(CodePosition.createFromToken(valueToken), Integer.parseInt(valueToken.image));}
-      break;
-      }
-    case DEC:{
-      valueToken = jj_consume_token(DEC);
+        break;
+        }
+      case DEC:{
+        valueToken = jj_consume_token(DEC);
 {if ("" != null) return new DecimalExpression(CodePosition.createFromToken(valueToken), Double.parseDouble(valueToken.image));}
-      break;
-      }
-    case BOOL:{
-      valueToken = jj_consume_token(BOOL);
+        break;
+        }
+      case BOOL:{
+        valueToken = jj_consume_token(BOOL);
 {if ("" != null) return new BooleanExpression(CodePosition.createFromToken(valueToken), Boolean.parseBoolean(valueToken.image));}
-      break;
-      }
-    case TEXT:{
-      valueToken = jj_consume_token(TEXT);
+        break;
+        }
+      case TEXT:{
+        valueToken = jj_consume_token(TEXT);
 {if ("" != null) return new TextExpression(CodePosition.createFromToken(valueToken), valueToken.image);}
-      break;
-      }
-    case LPAREN:{
-      jj_consume_token(LPAREN);
-      expression = E();
-      jj_consume_token(RPAREN);
+        break;
+        }
+      case LPAREN:{
+        jj_consume_token(LPAREN);
+        expression = E();
+        jj_consume_token(RPAREN);
 {if ("" != null) return expression;}
-      break;
+        break;
+        }
+      default:
+        jj_la1[20] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
-    default:
-      jj_la1[20] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
     }
     throw new Error("Missing return statement in function");
+  }
+
+  private boolean jj_2_1(int xla)
+ {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_1(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(0, xla); }
+  }
+
+  private boolean jj_3R_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1()
+ {
+    if (jj_3R_1()) return true;
+    return false;
   }
 
   /** Generated Token Manager. */
@@ -646,6 +695,8 @@ public class OhAstParser implements OhAstParserConstants {
   /** Next token. */
   public Token jj_nt;
   private int jj_ntk;
+  private Token jj_scanpos, jj_lastpos;
+  private int jj_la;
   private int jj_gen;
   final private int[] jj_la1 = new int[21];
   static private int[] jj_la1_0;
@@ -655,11 +706,14 @@ public class OhAstParser implements OhAstParserConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x13a80002,0x13a80002,0x80000,0x4000000,0x13a80002,0x400000,0x40000,0x4000000,0x20000,0x10000,0x8000,0x6000,0x6000,0x1e00,0x1e00,0x180,0x180,0x60,0x60,0xc0100014,0xc0100004,};
+      jj_la1_0 = new int[] {0x25200982,0x25200982,0x1000000,0x8000000,0x25200982,0x20,0x1000,0x8000000,0x80000,0x4,0x2000000,0x10040,0x10040,0xc600,0xc600,0x140000,0x140000,0x800010,0x800010,0x80022008,0x80002008,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x2,0x2,0x0,0x0,0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3,0x3,};
+      jj_la1_1 = new int[] {0x4,0x4,0x0,0x0,0x4,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x7,0x7,};
    }
+  final private JJCalls[] jj_2_rtns = new JJCalls[1];
+  private boolean jj_rescan = false;
+  private int jj_gc = 0;
 
   /** Constructor with InputStream. */
   public OhAstParser(java.io.InputStream stream) {
@@ -673,6 +727,7 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -687,6 +742,7 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Constructor. */
@@ -697,6 +753,7 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -707,6 +764,7 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Constructor with generated Token Manager. */
@@ -716,6 +774,7 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -725,6 +784,7 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -734,11 +794,45 @@ public class OhAstParser implements OhAstParserConstants {
     jj_ntk = -1;
     if (token.kind == kind) {
       jj_gen++;
+      if (++jj_gc > 100) {
+        jj_gc = 0;
+        for (int i = 0; i < jj_2_rtns.length; i++) {
+          JJCalls c = jj_2_rtns[i];
+          while (c != null) {
+            if (c.gen < jj_gen) c.first = null;
+            c = c.next;
+          }
+        }
+      }
       return token;
     }
     token = oldToken;
     jj_kind = kind;
     throw generateParseException();
+  }
+
+  @SuppressWarnings("serial")
+  static private final class LookaheadSuccess extends java.lang.Error { }
+  final private LookaheadSuccess jj_ls = new LookaheadSuccess();
+  private boolean jj_scan_token(int kind) {
+    if (jj_scanpos == jj_lastpos) {
+      jj_la--;
+      if (jj_scanpos.next == null) {
+        jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
+      } else {
+        jj_lastpos = jj_scanpos = jj_scanpos.next;
+      }
+    } else {
+      jj_scanpos = jj_scanpos.next;
+    }
+    if (jj_rescan) {
+      int i = 0; Token tok = token;
+      while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
+      if (tok != null) jj_add_error_token(kind, i);
+    }
+    if (jj_scanpos.kind != kind) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) throw jj_ls;
+    return false;
   }
 
 
@@ -771,11 +865,38 @@ public class OhAstParser implements OhAstParserConstants {
   private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
   private int[] jj_expentry;
   private int jj_kind = -1;
+  private int[] jj_lasttokens = new int[100];
+  private int jj_endpos;
+
+  private void jj_add_error_token(int kind, int pos) {
+    if (pos >= 100) return;
+    if (pos == jj_endpos + 1) {
+      jj_lasttokens[jj_endpos++] = kind;
+    } else if (jj_endpos != 0) {
+      jj_expentry = new int[jj_endpos];
+      for (int i = 0; i < jj_endpos; i++) {
+        jj_expentry[i] = jj_lasttokens[i];
+      }
+      jj_entries_loop: for (java.util.Iterator<?> it = jj_expentries.iterator(); it.hasNext();) {
+        int[] oldentry = (int[])(it.next());
+        if (oldentry.length == jj_expentry.length) {
+          for (int i = 0; i < jj_expentry.length; i++) {
+            if (oldentry[i] != jj_expentry[i]) {
+              continue jj_entries_loop;
+            }
+          }
+          jj_expentries.add(jj_expentry);
+          break jj_entries_loop;
+        }
+      }
+      if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
+    }
+  }
 
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[41];
+    boolean[] la1tokens = new boolean[42];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -792,13 +913,16 @@ public class OhAstParser implements OhAstParserConstants {
         }
       }
     }
-    for (int i = 0; i < 41; i++) {
+    for (int i = 0; i < 42; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
         jj_expentries.add(jj_expentry);
       }
     }
+    jj_endpos = 0;
+    jj_rescan_token();
+    jj_add_error_token(0, 0);
     int[][] exptokseq = new int[jj_expentries.size()][];
     for (int i = 0; i < jj_expentries.size(); i++) {
       exptokseq[i] = jj_expentries.get(i);
@@ -812,6 +936,41 @@ public class OhAstParser implements OhAstParserConstants {
 
   /** Disable tracing. */
   final public void disable_tracing() {
+  }
+
+  private void jj_rescan_token() {
+    jj_rescan = true;
+    for (int i = 0; i < 1; i++) {
+    try {
+      JJCalls p = jj_2_rtns[i];
+      do {
+        if (p.gen > jj_gen) {
+          jj_la = p.arg; jj_lastpos = jj_scanpos = p.first;
+          switch (i) {
+            case 0: jj_3_1(); break;
+          }
+        }
+        p = p.next;
+      } while (p != null);
+      } catch(LookaheadSuccess ls) { }
+    }
+    jj_rescan = false;
+  }
+
+  private void jj_save(int index, int xla) {
+    JJCalls p = jj_2_rtns[index];
+    while (p.gen > jj_gen) {
+      if (p.next == null) { p = p.next = new JJCalls(); break; }
+      p = p.next;
+    }
+    p.gen = jj_gen + xla - jj_la; p.first = token; p.arg = xla;
+  }
+
+  static final class JJCalls {
+    int gen;
+    Token first;
+    int arg;
+    JJCalls next;
   }
 
 }

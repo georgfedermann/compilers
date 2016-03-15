@@ -5,7 +5,7 @@ JAR_HOME=/Users/georg/sources/projects/compilers/straightline/grammars/
 JAR_NAME=slt-jar-with-dependencies.jar
 
 ARGS=
-while getopts "aehvc:" opt; do
+while getopts "aehvwc:" opt; do
   case $opt in
     v)
       # echo "-v was triggered!" >&2
@@ -24,6 +24,9 @@ while getopts "aehvc:" opt; do
       ;;
     e)
       ARGS="e $ARGS"
+      ;;
+    w)
+      ARGS="w $ARGS"
       ;;
     :)
       # echo "Option -$OPTARG requires an argument." >&2

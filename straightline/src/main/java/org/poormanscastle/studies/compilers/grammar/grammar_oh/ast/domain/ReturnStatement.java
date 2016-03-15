@@ -25,9 +25,13 @@ public class ReturnStatement extends AbstractAstItem implements Statement {
         this(expression.getCodePosition(), expression);
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
-        return visitor.proceedWith(this);
+        return visitor.proceedWithReturnStatement(this);
     }
 
     @Override

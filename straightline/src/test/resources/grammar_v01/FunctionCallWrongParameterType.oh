@@ -1,0 +1,8 @@
+// FunctionCallWrongParameterType.oh
+
+function int sum(int a, int b){
+  return a + b;
+};
+
+int sum = sum(3.5, 4.7);
+print("The sum is ", sum);

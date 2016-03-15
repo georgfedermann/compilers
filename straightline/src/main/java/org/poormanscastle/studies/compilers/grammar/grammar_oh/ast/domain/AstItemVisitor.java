@@ -172,7 +172,7 @@ public interface AstItemVisitor {
 
     void leaveFunction(Function function);
 
-    boolean proceedWith(ReturnStatement returnStatement);
+    boolean proceedWithReturnStatement(ReturnStatement returnStatement);
 
     void visitReturnStatement(ReturnStatement returnStatement);
 

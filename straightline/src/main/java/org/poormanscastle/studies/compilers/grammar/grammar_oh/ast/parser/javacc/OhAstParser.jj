@@ -173,6 +173,7 @@ Statement S() :
         return statement;
     }
     |
+    /* this is bad. function definition is not a statement, must be moved to P -> FD; S or something */
     statement = FD()
     {
         return statement;

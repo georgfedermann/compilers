@@ -376,7 +376,7 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
-    public boolean proceedWith(ReturnStatement returnStatement) {
+    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
         return false;
     }
 

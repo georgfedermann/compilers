@@ -14,6 +14,8 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Decima
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.FunctionCall;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
@@ -22,6 +24,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairEx
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ReturnStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
@@ -32,15 +35,24 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter.o
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter.operators.ExecUnaryOperator;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.FunctionDeclaration;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
 
 import com.google.common.collect.Lists;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * SmallTimeInterpreter sits directly on the semantic analysis phase of the compiler and uses the symboltable's
  * environments to manage its variables and scopes.
+ * <p/>
+ * when a function
+ * gets called, a new environment will be added to the symbol table,
+ * the function definition will be looked up in the function space, its parameters will
+ * be assigned the values from the argument expressions and added to the function's environment.
+ * after function execution, the function's environment will be discarded and control will return
+ * to the call point.
  * <p/>
  * Created by 02eex612 on 02.03.2016.
  */
@@ -58,20 +70,19 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
 
     /**
      * The SmallTimeInterpreter mimicks the behavior of the compiler's semantic phase's SymbolTableCreator to keep
-     * track of identifiers, their types, scopes and values.
+     * track of local identifiers, their types, scopes and values. the interpreter expects functions declarations to
+     * be already added to the symbol table in a previous semantic scanner sweep.
      */
     private final SymbolTable symbolTable;
 
-    /**
-     * FunctionSpace is used to store functions for quick retrieval when they are called in code.
-     */
     private final FunctionSpace functionSpace;
 
-    public SmallTimeInterpreter() {
-        symbolTable = new SymbolTable();
+    public SmallTimeInterpreter(SymbolTable symbolTable) {
+        this.symbolTable = symbolTable;
+        symbolTable.clearAllButFunctionTable();
+        functionSpace = new FunctionSpace();
         expressionList = new LinkedList<>();
         operandStack = new Stack<>();
-        functionSpace = new FunctionSpace();
     }
 
     @Override
@@ -170,6 +181,54 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
                 unaryOperatorExpression.getExpression()).execute(operandStack.pop());
         operandStack.push(result);
         unaryOperatorExpression.setValue(result);
+    }
+
+    @Override
+    public boolean proceedWithFunction(Function function) {
+        functionSpace.addFunction(function);
+        return false;
+    }
+
+    @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return true;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+        expressionList.clear();
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+        // when a function gets called, a new environment will be added to the symbol table,
+        // the function definition will be looked up in the function space, its parameters will
+        // be assigned the values from the argument expressions and added to the function's environment.
+        // after function execution, the function's environment will be discarded and control will return
+        // to the call point.
+        List<Object> args = Lists.reverse(expressionList);
+        symbolTable.newScope();
+        FunctionDeclaration funcDecl = symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId());
+        List<String> params = funcDecl.getParameterNames();
+        checkState(args.size() == params.size());
+        for (int c = 0; c < params.size(); c++) {
+            String param = params.get(c);
+            symbolTable.addSymbol(param, funcDecl.getParameterBindings().get(Symbol.getSymbol(param)).getDeclaredType());
+            symbolTable.getBinding(Symbol.getSymbol(param)).setValue(args.get(c));
+        }
+        Function function = functionSpace.lookupFunction(functionCall.getFunctionId());
+        function.accept(this);
+        symbolTable.endScope();
+    }
+
+    @Override
+    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
+        operandStack.push(returnStatement.getExpression().getValue());
     }
 
     @Override

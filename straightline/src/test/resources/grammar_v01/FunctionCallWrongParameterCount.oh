@@ -1,0 +1,9 @@
+// FunctionCallWrongParameterCount.oh
+
+function int sum(int a, int b){
+  return a + b;
+};
+
+int sum = sum(15, 14, 21);
+print("The sum is ", sum);
+

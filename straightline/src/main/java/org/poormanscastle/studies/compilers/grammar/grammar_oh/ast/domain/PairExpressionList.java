@@ -25,6 +25,10 @@ public final class PairExpressionList extends AbstractAstItem implements Express
         this(expression.getCodePosition(), expression, expressionList);
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithPairExpressionList(this);

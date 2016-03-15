@@ -1,0 +1,9 @@
+// Recursion.oh
+
+function int hell(int arg){
+  if(arg == 0) return 0;
+  return hell(arg - 1);
+};
+
+print(hell(10));
+

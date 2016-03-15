@@ -1,8 +1,12 @@
 package org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Parameter;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 
@@ -21,12 +25,43 @@ public class SymbolTable {
 
     private List<Environment> environments = new LinkedList<>();
 
+    private Map<String, FunctionDeclaration> functionTable = new HashMap<>();
+
     /**
      * initializies the SymbolTable and adds the sigma zero environment.
      */
     public SymbolTable() {
         checkState(environments.isEmpty());
         newScope();
+    }
+
+    /**
+     * called by the symbol table creator visitor when a function is found in the AST.
+     *
+     * @param function
+     */
+    public void addFunctionDeclaration(Function function, List<Parameter> parameters) {
+        List<String> parameterNames = new LinkedList<>();
+        Map<Symbol, Binding> parameterBindings = new HashMap<>();
+        for (Parameter parameter : parameters) {
+            parameterNames.add(parameter.getId());
+            parameterBindings.put(Symbol.getSymbol(parameter.getId()), new Binding(parameter.getType().name()));
+        }
+        functionTable.put(function.getId(), new FunctionDeclaration(function.getId(),
+                function.getValueType().name(), parameterNames, parameterBindings));
+    }
+
+    public void clearAllButFunctionTable() {
+        environments = new LinkedList<>();
+        newScope();
+    }
+
+    public FunctionDeclaration lookupFunctionDeclaration(String functionId) {
+        return functionTable.get(functionId);
+    }
+
+    public boolean isFunctionDeclared(String functionId) {
+        return functionTable.containsKey(functionId);
     }
 
     /**

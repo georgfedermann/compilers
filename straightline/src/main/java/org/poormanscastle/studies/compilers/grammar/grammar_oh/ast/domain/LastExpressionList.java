@@ -17,6 +17,10 @@ public final class LastExpressionList extends AbstractAstItem implements Express
         this.expression = expression;
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
     public LastExpressionList(Expression expression) {
         this(expression.getCodePosition(), expression);
     }

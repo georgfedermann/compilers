@@ -11,10 +11,10 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.Symb
 
 /**
  * GrammarTools is meant to be used as cmd line tool to work with grammars.
- * <p>
+ * <p/>
  * Created by 02eex612 on 17.02.2016.
  */
-public class GrammarTools {
+public final class GrammarTools {
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
@@ -27,25 +27,24 @@ public class GrammarTools {
             String arg = args[counter++];
             if ("v".equals(arg)) {
                 GrammarTools.printVersion();
-            }
-            if ("h".equals(arg)) {
+            } else if ("h".equals(arg)) {
                 GrammarTools.printHelp();
-            }
-            if ("c".equals(arg)) {
+            } else if ("c".equals(arg)) {
                 if (!(counter < (args.length))) {
                     System.out.println("Please define what command has to be executed.");
                     GrammarTools.printHelp();
                     return;
                 }
                 System.out.print(createTableVisualization(args[counter++]));
-            }
-            if ("a".equals(arg)) {
+            } else if ("a".equals(arg)) {
                 String visualization = GrammarTools.createAstVisualization();
                 System.out.println(visualization);
-            }
-            if ("e".equals(arg)) {
+            } else if ("e".equals(arg)) {
                 GrammarTools.executeProgram();
+            } else if ("w".equals(arg)) {
+                GrammarTools.validateProgram();
             }
+
         } while (counter < args.length);
     }
 
@@ -54,9 +53,15 @@ public class GrammarTools {
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         program.accept(symbolTableCreator);
         if (symbolTableCreator.isAstValid()) {
-            program.accept(new SmallTimeInterpreter());
+            program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
         }
         System.out.println();
+    }
+
+    private static void validateProgram() throws IOException, ParseException {
+        Program program = new OhAstParser(System.in).P();
+        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+        program.accept(symbolTableCreator);
     }
 
     private static String createAstVisualization() throws IOException, ParseException {
@@ -85,6 +90,7 @@ public class GrammarTools {
         System.out.println("      LR0: create LR(0) parser tree state engine visualization.");
         System.out.println("  -a  create AST diagram for Oh program in dot format. Program data is read from the std input.");
         System.out.println("  -e  execute Oh program.");
+        System.out.println("  -w  validate Oh program.");
     }
 
     private static void printVersion() {

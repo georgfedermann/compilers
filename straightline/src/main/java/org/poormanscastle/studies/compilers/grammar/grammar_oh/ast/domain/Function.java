@@ -41,6 +41,10 @@ public final class Function extends AbstractAstItem implements Statement {
         return id;
     }
 
+    public Type getValueType() {
+        return type;
+    }
+
     @Override
     public boolean handleProceedWith(AstItemVisitor visitor) {
         return visitor.proceedWithFunction(this);

@@ -1,10 +1,5 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic;
 
-import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +8,11 @@ import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
+
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by 02eex612 on 19.02.2016.
@@ -150,4 +150,46 @@ public class SymbolTableCreatorVisitorTest {
         assertEquals(expectedErrorMessage, systemErrRule.getLog());
     }
 
+    @Test
+    public void testIllegalReturnValueTypeTest() throws Exception {
+        Program program = TestUtils.loadTestProgram("IllegalReturnValueType.oh", false);
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        String expectedErrorMessage = "Error at begin line/column 6/10; end line/column 6/16: the type DOUBLE of the return statement is incompatible with the function's declared return value type identifier INT.\n";
+        assertEquals(expectedErrorMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testIllegalParameterCount() throws Exception {
+        Program program = TestUtils.loadTestProgram("FunctionCallWrongParameterCount.oh", false);
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        String expectedErrMessage = "Error at begin line/column 7/15; end line/column 7/16: Illegal arguments: expected (INT,INT) but found (INT,INT,INT).\n";
+        assertEquals(expectedErrMessage, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testIllegalParameterType() throws Exception {
+        Program program = TestUtils.loadTestProgram("FunctionCallWrongParameterType.oh", false);
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        String expErrMsg = "Error at begin line/column 7/15; end line/column 7/17: Illegal arguments: expected (INT,INT) but found (DOUBLE,DOUBLE).\n";
+        assertEquals(expErrMsg, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testFunctionCallUndeclared() throws Exception {
+        Program program = TestUtils.loadTestProgram("FunctionCallUndeclared.oh", false);
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        String expErrMsg = "Error at begin line/column 3/17; end line/column 3/17: the function sum might not have been declared.\n";
+        assertEquals(expErrMsg, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testMultipleValidFunctionsAndCalls() throws Exception {
+        Program program = TestUtils.loadTestProgram("MultipleValidFunctionsAndCalls.oh", false);
+        program.accept(symbolTableCreator);
+        assertTrue(symbolTableCreator.isAstValid());
+    }
 }

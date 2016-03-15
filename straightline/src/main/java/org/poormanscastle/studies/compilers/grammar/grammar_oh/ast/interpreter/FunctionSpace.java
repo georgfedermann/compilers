@@ -26,15 +26,14 @@ public final class FunctionSpace {
         functionSpace = new HashMap<>();
     }
 
-    public void addFunction(String name, Function function) {
-        checkArgument(!StringUtils.isBlank(name));
+    public void addFunction(Function function) {
         checkNotNull(function);
-        functionSpace.put(name, function);
+        functionSpace.put(function.getId(), function);
     }
 
-    public Function getFunction(String name) {
+    public Function lookupFunction(String name) {
         checkArgument(!StringUtils.isBlank(name));
         return functionSpace.get(name);
     }
-    
+
 }

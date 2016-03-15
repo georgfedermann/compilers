@@ -53,7 +53,7 @@ public final class GrammarTools {
         SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
         program.accept(symbolTableCreator);
         if (symbolTableCreator.isAstValid()) {
-            program.accept(new SmallTimeInterpreter());
+            program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
         }
         System.out.println();
     }

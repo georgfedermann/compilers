@@ -42,6 +42,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * SmallTimeInterpreter sits directly on the semantic analysis phase of the compiler and uses the symboltable's
  * environments to manage its variables and scopes.
  * <p/>
+ * when a function
+ * gets called, a new environment will be added to the symbol table,
+ * the function definition will be looked up in the function space, its parameters will
+ * be assigned the values from the argument expressions and added to the function's environment.
+ * after function execution, the function's environment will be discarded and control will return
+ * to the call point.
+ * <p/>
  * Created by 02eex612 on 02.03.2016.
  */
 public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
@@ -58,20 +65,16 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
 
     /**
      * The SmallTimeInterpreter mimicks the behavior of the compiler's semantic phase's SymbolTableCreator to keep
-     * track of identifiers, their types, scopes and values.
+     * track of local identifiers, their types, scopes and values. the interpreter expects functions declarations to
+     * be already added to the symbol table in a previous semantic scanner sweep.
      */
     private final SymbolTable symbolTable;
 
-    /**
-     * FunctionSpace is used to store functions for quick retrieval when they are called in code.
-     */
-    private final FunctionSpace functionSpace;
-
-    public SmallTimeInterpreter() {
-        symbolTable = new SymbolTable();
+    public SmallTimeInterpreter(SymbolTable symbolTable) {
+        this.symbolTable = symbolTable;
+        symbolTable.clearAllButFunctionTable();
         expressionList = new LinkedList<>();
         operandStack = new Stack<>();
-        functionSpace = new FunctionSpace();
     }
 
     @Override

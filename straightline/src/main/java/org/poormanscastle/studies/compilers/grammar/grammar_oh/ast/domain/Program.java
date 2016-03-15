@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
+
 /**
  * a program is a Statement followed by a Semicolon (;) and an EOF.
  * <p/>

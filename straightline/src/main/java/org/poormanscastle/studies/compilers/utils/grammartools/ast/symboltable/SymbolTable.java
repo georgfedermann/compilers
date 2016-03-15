@@ -51,6 +51,11 @@ public class SymbolTable {
                 function.getValueType().name(), parameterNames, parameterBindings));
     }
 
+    public void clearAllButFunctionTable() {
+        environments = new LinkedList<>();
+        newScope();
+    }
+
     public FunctionDeclaration lookupFunctionDeclaration(String functionId) {
         return functionTable.get(functionId);
     }

@@ -11,5 +11,5 @@ function double mean(double a, double b, double c){
 };
 
 int sum = sum(25, 33);
-double mean = mean(20.5, 11.4, 9.5);
+double mean = mean(10.5, 11.5, 11);
 print("The sum is ", sum, "; the mean is ", mean, ".");

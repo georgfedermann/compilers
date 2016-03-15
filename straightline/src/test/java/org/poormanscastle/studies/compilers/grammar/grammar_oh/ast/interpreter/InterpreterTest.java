@@ -80,7 +80,7 @@ public class InterpreterTest {
         Program program = TestUtils.loadTestProgram("MultipleValidFunctionsAndCalls.oh", false);
         program.accept(symbolTableCreator);
         program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
-        assertEquals("The sum is 58; the mean is 13.8.", systemOutRule.getLog());
+        assertEquals("The sum is 58; the mean is 11.0.", systemOutRule.getLog());
     }
 
 }

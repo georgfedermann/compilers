@@ -39,7 +39,7 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.FunctionDeclaration;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
-import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.SymbolAlreadyDefinedException;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.SymbolAlreadyDeclaredException;
 
 import com.google.common.collect.Lists;
 
@@ -115,15 +115,9 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         // handle symbol table management part
         try {
             symbolTable.addSymbol(declarationStatement.getId(), declarationStatement.getType().name());
-        } catch (SymbolAlreadyDefinedException e) {
+        } catch (SymbolAlreadyDeclaredException e) {
             System.err.print(StringUtils.join("Error at ", declarationStatement.getCodePosition(),
                     ": variable ", declarationStatement.getId(), " was already declared in this scope.\n"));
-            invalidateAst();
-        }
-        // handle expression validation TODO this cannot really happen, after the statement above. OK to delete it?
-        if (symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId())) == null) {
-            System.err.println(StringUtils.join("Error at ", declarationStatement.getCodePosition(),
-                    ": variable ", declarationStatement.getId(), " may not have been declared."));
             invalidateAst();
         }
     }
@@ -173,7 +167,8 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leaveReturnStatement(ReturnStatement returnStatement) {
-        if (!Type.isRhsAssignableToLhs(currentFunction.getValueType(), returnStatement.getExpression().getValueType())) {
+        Expression expr = returnStatement.getExpression();
+        if (expr.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(currentFunction.getValueType(), returnStatement.getExpression().getValueType())) {
             System.err.print(StringUtils.join("Error at ", returnStatement.getCodePosition(), ": the type ",
                     returnStatement.getExpression().getValueType(),
                     " of the return statement is incompatible with the function's declared return value type identifier ",
@@ -298,6 +293,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         if (binding == null) {
             System.err.print(StringUtils.join("Error at ", idExpression.getCodePosition(),
                     ": variable ", idExpression.getId(), " may not have been declared.\n"));
+            idExpression.setState(ExpressionState.UNDECLARED_ID);
             invalidateAst();
         } else {
             idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));

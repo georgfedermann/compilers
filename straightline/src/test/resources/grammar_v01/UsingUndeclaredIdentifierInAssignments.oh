@@ -1,0 +1,4 @@
+// UsingUndeclaredIdentifierInAssignment1.oh
+
+int a = 4;
+int b = a * a * a * c;

@@ -37,6 +37,14 @@ public final class Function extends AbstractAstItem implements Statement {
         this(functionBody.getCodePosition(), type, id, functionBody, parameterList);
     }
 
+    public ParameterList getParameterList() {
+        return parameterList;
+    }
+
+    public Statement getFunctionBody() {
+        return functionBody;
+    }
+
     public String getId() {
         return id;
     }

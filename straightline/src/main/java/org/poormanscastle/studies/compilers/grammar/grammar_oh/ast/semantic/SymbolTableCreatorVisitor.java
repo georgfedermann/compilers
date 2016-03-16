@@ -143,7 +143,26 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     @Override
     public boolean proceedWithFunction(Function function) {
-        return true;
+        // change processing order for function visits: register function header before processing
+        // function body to facilitate recursive function calls.
+        // prepare symbolTableCreator for function subtree traversal
+        this.currentFunction = function;
+        symbolTable.newScope();
+        // process parameter list
+        if (function.getParameterList().handleProceedWith(this)) {
+            function.getParameterList().accept(this);
+        }
+        // register function header
+        symbolTable.addFunctionDeclaration(function, parameters);
+        parameters.clear();
+        // process function body
+        if (function.getFunctionBody().handleProceedWith(this)) {
+            function.getFunctionBody().accept(this);
+        }
+        // clean up
+        currentFunction = null;
+        symbolTable.endScope();
+        return false;
     }
 
     @Override

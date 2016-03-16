@@ -7,6 +7,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Progra
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter.SmallTimeInterpreter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.ParseException;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.TokenMgrError;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.prettyprint.PrettyPrintVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.SymbolTableCreatorVisitor;
 
@@ -58,7 +59,7 @@ public final class GrammarTools {
                 program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
             }
             System.out.println();
-        } catch (ParseException e) {
+        } catch (ParseException | TokenMgrError e) {
             System.err.print(StringUtils.join("Parser error: ", e.getMessage()));
         }
     }
@@ -68,7 +69,7 @@ public final class GrammarTools {
             Program program = new OhAstParser(System.in).P();
             SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
             program.accept(symbolTableCreator);
-        } catch (ParseException e) {
+        } catch (ParseException | TokenMgrError e) {
             System.err.print(StringUtils.join("Parser error: ", e.getMessage()));
         }
     }

@@ -85,4 +85,12 @@ public class OhCodeTester {
         assertEquals("0 hi 1 hi 2 hi 3 hi 4 hi 5 hi 6 hi 7 hi 8 hi 9 hi a after loop 10 finished.", systemOutRule.getLog());
     }
 
+    @Test
+    public void testMultipleValidFunctionsAndCalls() throws Exception {
+        Program program = TestUtils.loadOhProgram("MultipleValidFunctionsAndCalls");
+        program.accept(symbolTableCreator);
+        program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
+        assertEquals("The sum is 58; the mean is 2.0.", systemOutRule.getLog());
+    }
+
 }

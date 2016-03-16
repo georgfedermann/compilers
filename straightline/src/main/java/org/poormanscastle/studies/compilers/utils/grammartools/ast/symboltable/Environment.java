@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
-import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.SymbolAlreadyDefinedException;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.SymbolAlreadyDeclaredException;
 
 /**
  * an environment is a collection of symbols that have been declared and are known
@@ -28,7 +28,7 @@ public final class Environment {
     public Binding addSymbol(String name, String type) {
         Symbol symbol = Symbol.getSymbol(name);
         if (bindings.containsKey(symbol)) {
-            throw new SymbolAlreadyDefinedException(StringUtils.join("Symbol already in Symboltable:", symbol));
+            throw new SymbolAlreadyDeclaredException(StringUtils.join("Symbol already in Symboltable:", symbol));
         }
         Binding binding = new Binding(type);
         bindings.put(symbol, binding);

@@ -192,4 +192,24 @@ public class SymbolTableCreatorVisitorTest {
         program.accept(symbolTableCreator);
         assertTrue(symbolTableCreator.isAstValid());
     }
+
+    @Test
+    public void testFunctionWrongReturnValueType() throws Exception {
+        Program program = TestUtils.loadTestProgram("FunctionWrongReturnValueType.oh", false);
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        String expErrMsg = "Error at begin line/column 4/10; end line/column 4/16: the type TEXT of the return statement is incompatible with the function's declared return value type identifier BOOLEAN.\n";
+        assertEquals(expErrMsg, systemErrRule.getLog());
+    }
+
+    @Test
+    public void testFunctionUndeclaredLocals() throws Exception {
+        Program program = TestUtils.loadTestProgram("FunctionUndeclaredLocals.oh", false);
+        program.accept(symbolTableCreator);
+        assertFalse(symbolTableCreator.isAstValid());
+        String expErrMsg = "Error at begin line/column 4/7; end line/column 4/7: variable c may not have been declared.\nError at begin line/column 5/18; end line/column 5/18: variable c may not have been declared.\n";
+        assertEquals(expErrMsg, systemErrRule.getLog());
+    }
+
+
 }

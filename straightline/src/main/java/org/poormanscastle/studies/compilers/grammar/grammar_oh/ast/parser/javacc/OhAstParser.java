@@ -81,7 +81,8 @@ public class OhAstParser implements OhAstParserConstants {
       break;
       }
     case FUNCTION:{
-      statement = FD();
+      /* this is bad. function definition is not a statement, must be moved to P -> FD; S or something */
+          statement = FD();
 {if ("" != null) return statement;}
       break;
       }
@@ -674,16 +675,16 @@ public class OhAstParser implements OhAstParserConstants {
     finally { jj_save(0, xla); }
   }
 
+  private boolean jj_3_1()
+ {
+    if (jj_3R_1()) return true;
+    return false;
+  }
+
   private boolean jj_3R_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1()
- {
-    if (jj_3R_1()) return true;
     return false;
   }
 

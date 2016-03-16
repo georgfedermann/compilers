@@ -1,0 +1,9 @@
+// SimpleFunction.oh
+
+function int hell(int args){
+  print("Hello, World!");
+  return 0;
+};
+
+int a = hell(0);
+print(a);

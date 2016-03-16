@@ -2,10 +2,12 @@ package org.poormanscastle.studies.compilers.utils.grammartools;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter.SmallTimeInterpreter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.OhAstParser;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.ParseException;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.parser.javacc.TokenMgrError;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.prettyprint.PrettyPrintVisitor;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.SymbolTableCreatorVisitor;
 
@@ -49,19 +51,27 @@ public final class GrammarTools {
     }
 
     private static void executeProgram() throws IOException, ParseException {
-        Program program = new OhAstParser(System.in).P();
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        program.accept(symbolTableCreator);
-        if (symbolTableCreator.isAstValid()) {
-            program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
+        try {
+            Program program = new OhAstParser(System.in).P();
+            SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+            program.accept(symbolTableCreator);
+            if (symbolTableCreator.isAstValid()) {
+                program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
+            }
+            System.out.println();
+        } catch (ParseException | TokenMgrError e) {
+            System.err.print(StringUtils.join("Parser error: ", e.getMessage()));
         }
-        System.out.println();
     }
 
-    private static void validateProgram() throws IOException, ParseException {
-        Program program = new OhAstParser(System.in).P();
-        SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
-        program.accept(symbolTableCreator);
+    private static void validateProgram() throws IOException {
+        try {
+            Program program = new OhAstParser(System.in).P();
+            SymbolTableCreatorVisitor symbolTableCreator = new SymbolTableCreatorVisitor();
+            program.accept(symbolTableCreator);
+        } catch (ParseException | TokenMgrError e) {
+            System.err.print(StringUtils.join("Parser error: ", e.getMessage()));
+        }
     }
 
     private static String createAstVisualization() throws IOException, ParseException {

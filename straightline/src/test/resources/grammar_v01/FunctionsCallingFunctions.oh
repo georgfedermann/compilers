@@ -1,0 +1,17 @@
+// FunctionsCallingFunctions.oh
+
+function double hell(int a, int b){
+  int c = 3;
+  print("Hello, hell! ", a * b * c);
+  return c;
+};
+
+function double bright(int a){
+  int b = 4; int c = 5;
+  print("; Hello, bright! ", a * b * c);
+  return hell(b, c);
+};
+
+print("Starting program: ");
+int a = bright(5);
+print("; Ending program: ", a);

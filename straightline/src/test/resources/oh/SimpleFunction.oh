@@ -1,0 +1,12 @@
+// SimpleFunction.oh
+// tests the functionality of the basic function syntax.
+
+function double product(int a, double b){
+  double product = a * b;
+  return product;
+};
+
+for(int c = 0; c < 10; c=c+1){
+  print(product(c, 10-c), " ");
+};
+

@@ -25,6 +25,10 @@ public enum ExpressionState {
      */
     OPERANDS_INVALID,
     /**
+     * the id used in an id expression has not been declared beforehand.
+     */
+    UNDECLARED_ID,
+    /**
      * the state of this expression has not been determined yet.
      * The Semantic phase has not been executed (fully), yet.
      */

@@ -41,29 +41,31 @@ TOKEN : {
 
 /* Operators */
 TOKEN : {
-    < LPAREN : "(" > |
-    < RPAREN : ")" > |
-    < NOT : "!" > |
-    < TIMES : "*" > |
+    < AND : "&" > |
+    < BOOL : "true" | "false" > |
     < DIV : "/" > |
-    < PLUS : "+" > |
-    < MINUS : "-" > |
-    < LT : "<" > |
-    < LTE : "<=" > |
+    < ELSE : "else" > |
+    < EQ : "==" > |
+    < FOR : "for" > |
+    < FUNCTION : "function" > |
     < GT : ">" > |
     < GTE : ">=" > |
-    < EQ : "==" > |
-    < NEQ : "!=" > |
-    < XOR : "^" > |
-    < AND : "&" > |
-    < OR : "|" > |
-    < LET : "=" > |
-    < TYPE : "int" | "double" | "boolean" | "text" > |
-    < BOOL : "true" | "false" > |
     < IF : "if" > |
-    < ELSE : "else" > |
-    < WHILE : "while" > |
-    < FOR : "for" >
+    < LET : "=" > |
+    < LPAREN : "(" > |
+    < LT : "<" > |
+    < LTE : "<=" > |
+    < NEQ : "!=" > |
+    < NOT : "!" > |
+    < MINUS : "-" > |
+    < OR : "|" > |
+    < PLUS : "+" > |
+    < RETURN : "return" > |
+    < RPAREN : ")" > |
+    < TIMES : "*" > |
+    < TYPE : "int" | "double" | "boolean" | "text" > |
+    < XOR : "^" > |
+    < WHILE : "while" >
 }
 
 /* Separators */
@@ -78,7 +80,7 @@ TOKEN : {
 TOKEN : {
     < NUM : (["0"-"9"])+ > |
     < DEC : (["0"-"9"])+("."(["0"-"9"])+)? | ("."(["0"-"9"])+) > |
-    < TEXT : "\""(["A"-"Z", "a"-"z", "0"-"9", " ", ",", ";", ".", "!",
+    < TEXT : "\""(["A"-"Z", "a"-"z", "0"-"9", " ", ",", ";", ":", ".", "!",
       "+", "-", "*", "/", "<", ">", "=", "&", "|", "^" ])*"\"" >
 }
 
@@ -171,20 +173,93 @@ Statement S() :
         return statement;
     }
     |
+    /* this is bad. function definition is not a statement, must be moved to P -> FD; S or something */
+    statement = FD()
+    {
+        return statement;
+    }
+    |
     statement = B()
     {
         return statement;
+    }
+    |
+    statement = RS()
+    {
+        return statement;
+    }
+}
+
+Statement RS() :
+{ Expression expression; }
+{
+    <RETURN> expression = E()
+    {
+        return new ReturnStatement(expression);
+    }
+}
+
+Statement FD() :
+{ Token typeToken, idToken; Function function; ParameterList parameterList; Statement functionBody; }
+{
+    <FUNCTION> typeToken = <TYPE> idToken = <ID> <LPAREN> parameterList = PL() <RPAREN> functionBody = B()
+    {
+        return new Function(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image,
+            functionBody, parameterList);
+    }
+}
+
+FunctionCall FC() :
+{ Token idToken; ExpressionList expressionList; }
+{
+    idToken = <ID> <LPAREN> expressionList = EL() <RPAREN>
+    {
+        return new FunctionCall(idToken.image, expressionList);
+    }
+}
+
+ParameterList PL() :
+{ Token typeToken, idToken; Parameter parameter; ParameterList parameterList; }
+{
+    (
+        parameter = PM() parameterList = PLPrime()
+        {
+            return parameterList == null ? new LastParameterList(parameter) :
+                new PairParameterList(parameter, parameterList);
+        }
+    )?
+    {
+        return null;
+    }
+}
+
+ParameterList PLPrime() :
+{ Parameter parameter; ParameterList parameterList; }
+{
+    (
+        <COMMA> parameter = PM() parameterList = PLPrime()
+        {
+            return parameterList == null ? new LastParameterList(parameter) : new PairParameterList(parameter, parameterList);
+        }
+    )? { return null; }
+}
+
+Parameter PM() :
+{ Token typeToken, idToken; }
+{
+    typeToken = <TYPE> idToken = <ID>
+    {
+        return new Parameter(CodePosition.createFromToken(typeToken), typeToken.image, idToken.image);
     }
 }
 
 Statement B() :
 { StatementList statementList; }
 {
-    (    <LBRACE> statementList = BPrime() <RBRACE>
+    <LBRACE> statementList = BPrime() <RBRACE>
         {
             return new Block(statementList);
         }
-    )?
 }
 
 StatementList BPrime() :
@@ -226,19 +301,6 @@ Statement CS() :
     {
         return new ConditionalStatement(condition, thenStatement, elseStatement);
     }
-/*
-    LOOKAHEAD(6)
-    <IF> <LPAREN> condition = E() <RPAREN> thenStatement = S() <ELSE> elseStatement = S()
-    {
-        return new ConditionalStatement(condition, thenStatement, elseStatement);
-    }
-    |
-    <IF> <LPAREN> condition = E() <RPAREN> thenStatement = S()
-    {
-        return new ConditionalStatement(condition, thenStatement);
-    }
-*/
-
 }
 
 Statement CSPrime() :
@@ -524,8 +586,13 @@ Expression T2() :
 }
 
 Expression F() :
-{ Token valueToken; Expression expression; }
+{ Token valueToken; Expression expression; FunctionCall functionCall; ExpressionList expressionList; }
 {
+    LOOKAHEAD(2) functionCall = FC()
+    {
+        return functionCall;
+    }
+    |
     valueToken = <ID>
     {
         return new IdExpression(CodePosition.createFromToken(valueToken), valueToken.image);

@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.prettyprint;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -13,27 +15,29 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Boolea
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.FunctionCall;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastParameterList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.NumExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairParameterList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Parameter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ReturnStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileBody;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileStatement;
 
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * creates a graphical view of the AST of an v0.1 grammar program using DOT syntax.
- * <p/>
+ * <p>
  * Created by 02eex612 on 18.02.2016.
  */
 public class PrettyPrintVisitor extends AstItemVisitorAdapter {
@@ -71,7 +75,7 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     public String serialize() {
         buffer.append("}");
         String result = buffer.toString();
-        StringBuffer labelDefinitions = new StringBuffer();
+        StringBuilder labelDefinitions = new StringBuilder();
         for (StackItem stackItem : stackItems) {
             labelDefinitions.append(StringUtils.join(stackItem.getId(), " [label=\"", stackItem.getLabel(), "\"];\n"));
         }
@@ -114,38 +118,6 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
-        itemStack.pop();
-    }
-
-    @Override
-    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
-        return true;
-    }
-
-    @Override
-    public void visitThenStatement(ThenStatement thenStatement) {
-        addItem("Then", "");
-        addBufferLine();
-    }
-
-    @Override
-    public void leaveThenStatement(ThenStatement thenStatement) {
-        itemStack.pop();
-    }
-
-    @Override
-    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
-        return true;
-    }
-
-    @Override
-    public void visitElseStatement(ElseStatement elseStatement) {
-        addItem("Else", "");
-        addBufferLine();
-    }
-
-    @Override
-    public void leaveElseStatement(ElseStatement elseStatement) {
         itemStack.pop();
     }
 
@@ -422,8 +394,8 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
-        itemStack.pop();
+    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        return true;
     }
 
     @Override
@@ -433,8 +405,104 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithFunction(Function function) {
         return true;
+    }
+
+    @Override
+    public void visitFunction(Function function) {
+        addItem("Func", StringUtils.join(function.getId(), "()"));
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveFunction(Function function) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return true;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+        addItem("CALL", StringUtils.join(functionCall.getFunctionId(), "()"));
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
+        return true;
+    }
+
+    @Override
+    public void visitReturnStatement(ReturnStatement returnStatement) {
+        addItem("RETURN", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithParameter(Parameter parameter) {
+        return true;
+    }
+
+    @Override
+    public void visitParameter(Parameter parameter) {
+        addItem("Param", StringUtils.join(parameter.getType(), " ", parameter.getId()));
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveParameter(Parameter parameter) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
+        return true;
+    }
+
+    @Override
+    public void visitPairParameterList(PairParameterList pairParameterList) {
+        addItem("PairParamList", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leavePairParameterList(PairParameterList pairParameterList) {
+        itemStack.pop();
+    }
+
+    @Override
+    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
+        return true;
+    }
+
+    @Override
+    public void visitLastParameterList(LastParameterList lastParameterList) {
+        addItem("LastParamList", "");
+        addBufferLine();
+    }
+
+    @Override
+    public void leaveLastParameterList(LastParameterList lastParameterList) {
+        itemStack.pop();
     }
 
     /**

@@ -478,6 +478,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
             System.err.print(StringUtils.join("Error at ", functionCall.getCodePosition(), ": the function ",
                     functionCall.getFunctionId(), " might not have been declared.\n"));
             invalidateAst();
+            ok = false;
         } else {
             if (ok) {
                 functionDeclaration = symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId());
@@ -497,6 +498,9 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
                     }
                 }
             }
+            if (ok) {
+                functionCall.setValueType(Type.valueOf(symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId()).getValueType()));
+            }
             if (!ok) {
                 StringBuilder errMsg = new StringBuilder("Error at ").append(functionCall.getCodePosition()).append(": Illegal arguments: expected (");
                 int flag = 0;
@@ -513,9 +517,11 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
                 invalidateAst();
             }
         }
+        if (!ok) {
+            functionCall.setState(ExpressionState.OPERANDS_INVALID);
+        }
         // on leaving the FunctionCall element, reset the flag on the tree walker.
         currentFunctionCall = null;
-        functionCall.setValueType(Type.valueOf(symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId()).getValueType()));
         argumentList.clear();
     }
 

@@ -17,8 +17,6 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class OhCodeTester {
 
-    SmallTimeInterpreter interpreter;
-
     SymbolTableCreatorVisitor symbolTableCreator;
 
     @Rule
@@ -47,7 +45,7 @@ public class OhCodeTester {
 
     @Test
     public void testIfConditionExpressions() throws Exception {
-        Program program = TestUtils.loadOhProgram("TestifConditionExpressions");
+        Program program = TestUtils.loadOhProgram("TestIfConditionExpressions");
         program.accept(symbolTableCreator);
         program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
         assertEquals("okokokokokokokokokokokokokok", systemOutRule.getLog());

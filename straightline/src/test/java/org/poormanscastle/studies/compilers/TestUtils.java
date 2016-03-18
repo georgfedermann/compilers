@@ -58,7 +58,7 @@ public class TestUtils {
 
 
     public static Program loadOhProgram(String fileName) throws Exception {
-        return TestUtils.loadProgram("/oh/", fileName.endsWith(".oh") ? fileName : StringUtils.join(fileName, ".oh"), true);
+        return TestUtils.loadProgram("/oh/", fileName.endsWith(".oh") ? fileName : StringUtils.join(fileName, ".oh"), false);
     }
 
     public static SymbolTable getSymbolTableForProgram(Program program) {

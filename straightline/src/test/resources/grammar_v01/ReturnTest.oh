@@ -1,0 +1,13 @@
+// ReturnTest.oh
+
+function int check(int arg){
+  if(arg==0){
+    print("switch 0; ");
+    return 0;
+  };
+  print("switch 1; ");
+  return 1;
+};
+
+print(check(0), check(1));
+

@@ -1,0 +1,6 @@
+// FunctionUndeclaredLocals.oh
+
+function int hell(int a, int b){
+  c = a / b;
+  return a * b * c;
+};

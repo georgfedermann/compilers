@@ -1,0 +1,6 @@
+// FunctionWrongReturnValueType.oh
+
+function boolean p(int a){
+  return "false";
+};
+

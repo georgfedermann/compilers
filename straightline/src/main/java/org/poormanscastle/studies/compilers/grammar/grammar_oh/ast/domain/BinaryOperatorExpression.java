@@ -1,9 +1,9 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
 /**
  * Created by 02eex612 on 17.02.2016.

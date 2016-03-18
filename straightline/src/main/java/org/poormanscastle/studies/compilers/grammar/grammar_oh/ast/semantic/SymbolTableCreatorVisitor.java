@@ -1,5 +1,11 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic;
 
+import static com.google.common.base.Preconditions.checkState;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AssignmentStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.AstItemVisitorAdapter;
@@ -8,18 +14,22 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Binary
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Block;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ExpressionState;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.FunctionCall;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.IdExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastParameterList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.LastStatementList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairExpressionList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairParameterList;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairStatementList;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Parameter;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ReturnStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperator;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
@@ -27,37 +37,62 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileB
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileStatement;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Binding;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.Symbol;
+import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.FunctionDeclaration;
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.SymbolTable;
-import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.CompilerException;
+import org.poormanscastle.studies.compilers.utils.grammartools.exceptions.SymbolAlreadyDeclaredException;
 
-import static com.google.common.base.Preconditions.checkState;
+import com.google.common.collect.Lists;
 
 /**
+ * this type takes care of the semantic analysis of an AST tree representing an Oh program. while traversing the AST
+ * tree it creates and manages the symbol table and validates all expressions, assignments and function calls for
+ * validity.
+ * <p>
  * Each new identifier declaration (variable, function name, what ever) creates a new environment.
  * A variable can only be used after it's been declared. Thus, also within a block or even within a language dialect
  * that supports no blocks at all, there are multiple environments or else the semantic analysis could not
  * clearly decide if a variable is used before it was declared.
- * <p/>
+ * <p>
  * SymbolTable management and expression validation have to be merged into one visitor, because environments will be
  * removed when they go out of scope. Validation has to take place while environments created within the symboltable
  * are still valid.
- * <p/>
+ * <p>
  * this visitor searches for expression subtrees and having found one visits all subexpressions and tests the operands
  * for compatibility.
- * <p/>
+ * <p>
  * Expressions are valid if both operands are of the same type, or the types of the operands are compatible,
  * and the types of the operands are compatible with the operator.
- * <p/>
+ * <p>
  * Expressions can only be validated after all sub expressions have been checked. Thus, the evaluation logic can only
  * be implemented in the leaveSomething-methods(). There, the state of the subexpressions will be checked, as well as
  * their respective value types. This collected information will be used for the validation logic of the current
  * expression.
- * <p/>
+ * <p>
  * Created by 02eex612 on 19.02.2016.
  */
 public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     private SymbolTable symbolTable = new SymbolTable();
+
+    /**
+     * while the SymbolTableCreator is traversing a function structure, a reference to
+     * this function is stored here for reference.
+     */
+    private Function currentFunction;
+    /**
+     * when traversing parameter lists of function definition, the parameters get
+     * stored here intermittently until the function can grep them and reset the list.
+     */
+    private List<Parameter> parameters = new LinkedList<>();
+    /**
+     * while traversing a function call the symbol table creator uses this as a flag
+     */
+    private FunctionCall currentFunctionCall;
+    /**
+     * while traversing a function call the symbol table creator can cache argument expression here
+     * for later reference.
+     */
+    private List<Expression> argumentList = new LinkedList<>();
 
     public SymbolTable getSymbolTable() {
         return symbolTable;
@@ -75,18 +110,12 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void visitDeclarationStatement(DeclarationStatement declarationStatement) {
-        // handle symboltable management part
+        // handle symbol table management part
         try {
             symbolTable.addSymbol(declarationStatement.getId(), declarationStatement.getType().name());
-        } catch (CompilerException e) {
+        } catch (SymbolAlreadyDeclaredException e) {
             System.err.print(StringUtils.join("Error at ", declarationStatement.getCodePosition(),
                     ": variable ", declarationStatement.getId(), " was already declared in this scope.\n"));
-            invalidateAst();
-        }
-        // handle expression validation TODO this cannot really happen, after the statement above. OK to delete it?
-        if (symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId())) == null) {
-            System.err.println(StringUtils.join("Error at ", declarationStatement.getCodePosition(),
-                    ": variable ", declarationStatement.getId(), " may not have been declared."));
             invalidateAst();
         }
     }
@@ -108,6 +137,143 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
                     rhs.getValueType(), " cannot be assigned to ", lhsType, ".\n"));
             invalidateAst();
         }
+    }
+
+    @Override
+    public boolean proceedWithFunction(Function function) {
+        // change processing order for function visits: register function header before processing
+        // function body to facilitate recursive function calls.
+        // prepare symbolTableCreator for function subtree traversal
+        this.currentFunction = function;
+        symbolTable.newScope();
+        // process parameter list
+        if (function.getParameterList().handleProceedWith(this)) {
+            function.getParameterList().accept(this);
+        }
+        // register function header
+        symbolTable.addFunctionDeclaration(function, parameters);
+        parameters.clear();
+        // process function body
+        if (function.getFunctionBody().handleProceedWith(this)) {
+            function.getFunctionBody().accept(this);
+        }
+        // clean up
+        currentFunction = null;
+        symbolTable.endScope();
+        return false;
+    }
+
+    @Override
+    public void visitFunction(Function function) {
+        this.currentFunction = function;
+        symbolTable.newScope();
+    }
+
+    @Override
+    public void leaveFunction(Function function) {
+        symbolTable.addFunctionDeclaration(function, parameters);
+        parameters.clear();
+        currentFunction = null;
+        symbolTable.endScope();
+    }
+
+    @Override
+    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
+        Expression expr = returnStatement.getExpression();
+        if (expr.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(currentFunction.getValueType(), returnStatement.getExpression().getValueType())) {
+            System.err.print(StringUtils.join("Error at ", returnStatement.getCodePosition(), ": the type ",
+                    returnStatement.getExpression().getValueType(),
+                    " of the return statement is incompatible with the function's declared return value type identifier ",
+                    currentFunction.getValueType(), ".\n"));
+            invalidateAst();
+        }
+    }
+
+    @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return true;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+        currentFunctionCall = functionCall;
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+        boolean ok = true;
+        List<String> parameterNames = null;
+        Map<Symbol, Binding> parameterBindings = null;
+        FunctionDeclaration functionDeclaration = null;
+        if (!symbolTable.isFunctionDeclared(functionCall.getFunctionId())) {
+            System.err.print(StringUtils.join("Error at ", functionCall.getCodePosition(), ": the function ",
+                    functionCall.getFunctionId(), " might not have been declared.\n"));
+            invalidateAst();
+        } else {
+            if (ok) {
+                functionDeclaration = symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId());
+                argumentList = Lists.reverse(argumentList);
+                parameterNames = functionDeclaration.getParameterNames();
+                parameterBindings = functionDeclaration.getParameterBindings();
+                if (argumentList.size() != parameterNames.size()) {
+                    ok = false;
+                }
+            }
+            if (ok) {
+                for (int c = 0; c < argumentList.size(); c++) {
+                    if (!Type.isRhsAssignableToLhs(Type.valueOf(parameterBindings.get(Symbol.getSymbol(parameterNames.get(c))).getDeclaredType()), argumentList.get(c).getValueType())) {
+
+                        invalidateAst();
+                        ok = false;
+                        break;
+                    }
+                }
+            }
+            if (!ok) {
+                StringBuilder errMsg = new StringBuilder("Error at ").append(functionCall.getCodePosition()).append(": Illegal arguments: expected (");
+                int flag = 0;
+                for (String parameterName : functionDeclaration.getParameterNames()) {
+                    errMsg.append(flag++ == 0 ? "" : ",").append(functionDeclaration.getParameterBindings().get(Symbol.getSymbol(parameterName)).getDeclaredType());
+                }
+                errMsg.append(") but found (");
+                flag = 0;
+                for (Expression arg : argumentList) {
+                    errMsg.append(flag++ == 0 ? "" : ",").append(arg.getValueType());
+                }
+                errMsg.append(").\n");
+                System.err.print(errMsg);
+                invalidateAst();
+            }
+        }
+        // on leaving the FunctionCall element, reset the flag on the tree walker.
+        currentFunctionCall = null;
+        argumentList.clear();
+    }
+
+    @Override
+    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithParameter(Parameter parameter) {
+        return true;
+    }
+
+    @Override
+    public void visitParameter(Parameter parameter) {
+        parameters.add(parameter);
+        symbolTable.addSymbol(parameter.getId(), parameter.getType().name());
     }
 
     @Override
@@ -144,6 +310,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         if (binding == null) {
             System.err.print(StringUtils.join("Error at ", idExpression.getCodePosition(),
                     ": variable ", idExpression.getId(), " may not have been declared.\n"));
+            idExpression.setState(ExpressionState.UNDECLARED_ID);
             invalidateAst();
         } else {
             idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));
@@ -240,16 +407,6 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
-        return true;
-    }
-
-    @Override
     public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
         return true;
     }
@@ -295,8 +452,20 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
+    public boolean proceedWithPrintStatement(PrintStatement printStatement) {
+        return true;
+    }
+
+    @Override
     public boolean proceedWithPairExpressionList(PairExpressionList pairExpressionList) {
         return true;
+    }
+
+    @Override
+    public void visitPairExpressionList(PairExpressionList pairExpressionList) {
+        if (currentFunctionCall != null) {
+            argumentList.add(pairExpressionList.getExpression());
+        }
     }
 
     @Override
@@ -305,8 +474,10 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
     }
 
     @Override
-    public boolean proceedWithPrintStatement(PrintStatement printStatement) {
-        return true;
+    public void visitLastExpressionList(LastExpressionList lastExpressionList) {
+        if (currentFunctionCall != null) {
+            argumentList.add(lastExpressionList.getExpression());
+        }
     }
 
 }

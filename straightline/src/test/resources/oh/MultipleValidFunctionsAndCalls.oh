@@ -1,0 +1,15 @@
+// MultipleValidFunctionsAndCalls.oh
+// defines multiple functions and calls them
+
+function int sum(int a, int b){
+  return a + b;
+};
+
+function double mean(double a, double b, double c){
+  double result = (a + b + c) / 3.0;
+  return result;
+};
+
+int sum = sum(25, 33);
+double mean = mean(1.9, 2.1, 2);
+print("The sum is ", sum, "; the mean is ", mean, ".");

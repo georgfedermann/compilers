@@ -25,36 +25,6 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     }
 
     @Override
-    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
-        return false;
-    }
-
-    @Override
-    public void visitThenStatement(ThenStatement thenStatement) {
-
-    }
-
-    @Override
-    public void leaveThenStatement(ThenStatement thenStatement) {
-
-    }
-
-    @Override
-    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
-        return false;
-    }
-
-    @Override
-    public void visitElseStatement(ElseStatement elseStatement) {
-
-    }
-
-    @Override
-    public void leaveElseStatement(ElseStatement elseStatement) {
-
-    }
-
-    @Override
     public boolean proceedWithBlock(Block block) {
         return false;
     }
@@ -343,5 +313,95 @@ public abstract class AstItemVisitorAdapter implements AstItemVisitor {
     @Override
     public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
         return false;
+    }
+
+    @Override
+    public boolean proceedWithFunction(Function function) {
+        return false;
+    }
+
+    @Override
+    public void visitFunction(Function function) {
+
+    }
+
+    @Override
+    public void leaveFunction(Function function) {
+
+    }
+
+    @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return false;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+
+    }
+
+    @Override
+    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
+        return false;
+    }
+
+    @Override
+    public void visitReturnStatement(ReturnStatement returnStatement) {
+
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
+
+    }
+
+    @Override
+    public boolean proceedWithParameter(Parameter parameter) {
+        return false;
+    }
+
+    @Override
+    public void visitParameter(Parameter parameter) {
+
+    }
+
+    @Override
+    public void leaveParameter(Parameter parameter) {
+
+    }
+
+    @Override
+    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
+        return false;
+    }
+
+    @Override
+    public void visitPairParameterList(PairParameterList pairParameterList) {
+
+    }
+
+    @Override
+    public void leavePairParameterList(PairParameterList pairParameterList) {
+
+    }
+
+    @Override
+    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
+        return false;
+    }
+
+    @Override
+    public void visitLastParameterList(LastParameterList lastParameterList) {
+
+    }
+
+    @Override
+    public void leaveLastParameterList(LastParameterList lastParameterList) {
+
     }
 }

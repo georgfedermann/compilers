@@ -83,4 +83,7 @@ public class InterpreterTest {
         assertEquals("The sum is 58; the mean is 11.0.", systemOutRule.getLog());
     }
 
+    @Test
+    public void testReturnStatement
+
 }

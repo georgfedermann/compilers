@@ -77,6 +77,13 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
 
     private final FunctionSpace functionSpace;
 
+    /**
+     * The interpreter uses this flag to remember a return statement fired until control arrives at the next
+     * function call. So the interpreter can use this flag to return to the call point of a function after it
+     * found a return statement.
+     */
+    private boolean returnFlag = false;
+
     public SmallTimeInterpreter(SymbolTable symbolTable) {
         this.symbolTable = symbolTable;
         symbolTable.clearAllButFunctionTable();
@@ -219,6 +226,7 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         Function function = functionSpace.lookupFunction(functionCall.getFunctionId());
         function.accept(this);
         symbolTable.endScope();
+        returnFlag = false;
     }
 
     @Override
@@ -229,6 +237,7 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
     @Override
     public void leaveReturnStatement(ReturnStatement returnStatement) {
         operandStack.push(returnStatement.getExpression().getValue());
+        returnFlag = true;
     }
 
     @Override
@@ -362,12 +371,12 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
 
     @Override
     public boolean proceedWithPairStatementList(PairStatementList pairStatementList) {
-        return true;
+        return !returnFlag;
     }
 
     @Override
     public boolean proceedWithLastStatementList(LastStatementList lastStatementList) {
-        return true;
+        return !returnFlag;
     }
 
 }

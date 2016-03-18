@@ -11,24 +11,20 @@ public class ConditionalStatement extends AbstractAstItem implements Statement {
 
     private final Expression condition;
 
-    private final ThenStatement thenStatement;
+    private final Statement thenStatement;
 
     /**
      * elseStatement may remain {@code null} if the conditional statement has no else part.
      */
-    private final ElseStatement elseStatement;
+    private final Statement elseStatement;
 
     public ConditionalStatement(CodePosition codePosition, Expression condition, Statement thenStatement, Statement elseStatement) {
         super(codePosition);
         checkNotNull(condition);
         checkNotNull(thenStatement);
         this.condition = condition;
-        this.thenStatement = new ThenStatement(this, thenStatement);
-        if (elseStatement != null) {
-            this.elseStatement = new ElseStatement(this, elseStatement);
-        } else {
-            this.elseStatement = null;
-        }
+        this.thenStatement = thenStatement;
+        this.elseStatement = elseStatement;
     }
 
     public ConditionalStatement(Expression condition, Statement thenStatement, Statement elseStatement) {

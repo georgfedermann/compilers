@@ -4,7 +4,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
  * implements algorithms and logic which handle one aspect or interpretation of an AST for grammar 3.1.
  * like e.g. an interpreter of a program written in language defined by grammar 3.1 for which an AST
  * was created by the AST parser.
- * <p/>
+ * <p>
  * Created by georg on 13.01.16.
  */
 public interface AstItemVisitor {
@@ -117,18 +117,6 @@ public interface AstItemVisitor {
     void visitBlock(Block block);
 
     void leaveBlock(Block block);
-
-    boolean proceedWithThenStatement(ThenStatement thenStatement);
-
-    void visitThenStatement(ThenStatement thenStatement);
-
-    void leaveThenStatement(ThenStatement thenStatement);
-
-    boolean proceedWithElseStatement(ElseStatement elseStatement);
-
-    void visitElseStatement(ElseStatement elseStatement);
-
-    void leaveElseStatement(ElseStatement elseStatement);
 
     boolean proceedWithWhileStatement(WhileStatement whileStatement);
 

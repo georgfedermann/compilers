@@ -1,5 +1,8 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -12,7 +15,7 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Boolea
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Expression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.FunctionCall;
@@ -25,8 +28,8 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PairSt
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ReturnStatement;
+import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Statement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Type;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileBody;
@@ -40,20 +43,17 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.symboltable.S
 
 import com.google.common.collect.Lists;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * SmallTimeInterpreter sits directly on the semantic analysis phase of the compiler and uses the symboltable's
  * environments to manage its variables and scopes.
- * <p/>
+ * <p>
  * when a function
  * gets called, a new environment will be added to the symbol table,
  * the function definition will be looked up in the function space, its parameters will
  * be assigned the values from the argument expressions and added to the function's environment.
  * after function execution, the function's environment will be discarded and control will return
  * to the call point.
- * <p/>
+ * <p>
  * Created by 02eex612 on 02.03.2016.
  */
 public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
@@ -66,7 +66,8 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
      * it's sufficient to hold one single List<Expression> which can be reset or initialized anew within
      * visitPrintStatement() and can be consumed within leavePrintStatement().
      */
-    private final List<Object> expressionList;
+    // private final List<Object> expressionList;
+    private final Stack<List<Object>> expressionListStack;
 
     /**
      * The SmallTimeInterpreter mimicks the behavior of the compiler's semantic phase's SymbolTableCreator to keep
@@ -88,10 +89,50 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         this.symbolTable = symbolTable;
         symbolTable.clearAllButFunctionTable();
         functionSpace = new FunctionSpace();
-        expressionList = new LinkedList<>();
+        // expressionList = new LinkedList<>();
+        expressionListStack = new Stack<>();
         operandStack = new Stack<>();
     }
 
+    /*
+     * The program.
+     */
+    @Override
+    public boolean proceedWithProgramImpl(ProgramImpl program) {
+        return true;
+    }
+
+    /*
+     * Statements and blocks.
+     */
+    @Override
+    public boolean proceedWithPairStatementList(PairStatementList pairStatementList) {
+        return !returnFlag;
+    }
+
+    @Override
+    public boolean proceedWithLastStatementList(LastStatementList lastStatementList) {
+        return !returnFlag;
+    }
+
+    @Override
+    public boolean proceedWithBlock(Block block) {
+        return true;
+    }
+
+    @Override
+    public void visitBlock(Block block) {
+        symbolTable.newScope();
+    }
+
+    @Override
+    public void leaveBlock(Block block) {
+        symbolTable.endScope();
+    }
+
+    /*
+     * The print statement.
+     */
     @Override
     public boolean proceedWithPrintStatement(PrintStatement printStatement) {
         return true;
@@ -99,36 +140,20 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
 
     @Override
     public void visitPrintStatement(PrintStatement printStatement) {
-        expressionList.clear();
+        // expressionList.clear();
+        expressionListStack.push(new LinkedList<Object>());
     }
 
     @Override
     public void leavePrintStatement(PrintStatement printStatement) {
-        for (Object expression : Lists.reverse(expressionList)) {
+        for (Object expression : Lists.reverse(expressionListStack.pop())) {
             System.out.print(expression);
         }
     }
 
-    @Override
-    public boolean proceedWithPairExpressionList(PairExpressionList pairExpressionList) {
-        return true;
-    }
-
-    @Override
-    public void leavePairExpressionList(PairExpressionList pairExpressionList) {
-        expressionList.add(operandStack.pop());
-    }
-
-    @Override
-    public boolean proceedWithLastExpressionList(LastExpressionList lastExpressionList) {
-        return true;
-    }
-
-    @Override
-    public void leaveLastExpressionList(LastExpressionList lastExpressionList) {
-        expressionList.add(operandStack.pop());
-    }
-
+    /*
+     * The declaration statement.
+     */
     @Override
     public boolean proceedWithDeclarationStatement(DeclarationStatement declarationStatement) {
         return true;
@@ -148,6 +173,9 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         }
     }
 
+    /*
+     * The assignment statement.
+     */
     @Override
     public boolean proceedWithAssignmentStatement(AssignmentStatement assignmentStatement) {
         return true;
@@ -159,155 +187,33 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId())).setValue(operandStack.pop());
     }
 
+    /*
+     * The conditional statement
+     */
     @Override
-    public boolean proceedWithBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
-        return true;
-    }
+    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
+        Expression condition = conditionalStatement.getCondition();
+        Statement thenStatement = conditionalStatement.getThenStatement();
+        Statement elseStatement = conditionalStatement.getElseStatement();
 
-    @Override
-    public void leaveBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
-        // interpreter part:
-        Object rhsValue = operandStack.pop();
-        Object lhsValue = operandStack.pop();
-        Object result = ExecBinaryOperator.getExecOperator(binaryOperatorExpression.getOperator(),
-                binaryOperatorExpression.getLhs(), binaryOperatorExpression.getRhs()).execute(lhsValue, rhsValue);
-        checkNotNull(result);
-        operandStack.push(result);
-        binaryOperatorExpression.setValue(result);
-    }
+        if (conditionalStatement.getCondition().handleProceedWith(this)) {
+            condition.accept(this);
+        }
+        operandStack.pop();
 
-    @Override
-    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
-        return true;
-    }
-
-    @Override
-    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
-        // interpreter part:
-        Object result = ExecUnaryOperator.getExecUnaryOperator(unaryOperatorExpression.getOperator(),
-                unaryOperatorExpression.getExpression()).execute(operandStack.pop());
-        operandStack.push(result);
-        unaryOperatorExpression.setValue(result);
-    }
-
-    @Override
-    public boolean proceedWithFunction(Function function) {
-        functionSpace.addFunction(function);
+        // the cast is safe or the program would not have passed expression validation.
+        if ((Boolean) condition.getValue() && thenStatement.handleProceedWith(this)) {
+            thenStatement.accept(this);
+        } else if (elseStatement != null && elseStatement.handleProceedWith(this)) {
+            elseStatement.accept(this);
+        }
+        // conditional statement is handled, so return false.
         return false;
     }
 
-    @Override
-    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
-        return true;
-    }
-
-    @Override
-    public void visitFunctionCall(FunctionCall functionCall) {
-        expressionList.clear();
-    }
-
-    @Override
-    public void leaveFunctionCall(FunctionCall functionCall) {
-        // when a function gets called, a new environment will be added to the symbol table,
-        // the function definition will be looked up in the function space, its parameters will
-        // be assigned the values from the argument expressions and added to the function's environment.
-        // after function execution, the function's environment will be discarded and control will return
-        // to the call point.
-        List<Object> args = Lists.reverse(expressionList);
-        symbolTable.newScope();
-        FunctionDeclaration funcDecl = symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId());
-        List<String> params = funcDecl.getParameterNames();
-        checkState(args.size() == params.size());
-        for (int c = 0; c < params.size(); c++) {
-            String param = params.get(c);
-            symbolTable.addSymbol(param, funcDecl.getParameterBindings().get(Symbol.getSymbol(param)).getDeclaredType());
-            symbolTable.getBinding(Symbol.getSymbol(param)).setValue(args.get(c));
-        }
-        Function function = functionSpace.lookupFunction(functionCall.getFunctionId());
-        function.accept(this);
-        symbolTable.endScope();
-        returnFlag = false;
-    }
-
-    @Override
-    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
-        return true;
-    }
-
-    @Override
-    public void leaveReturnStatement(ReturnStatement returnStatement) {
-        operandStack.push(returnStatement.getExpression().getValue());
-        returnFlag = true;
-    }
-
-    @Override
-    public boolean proceedWithBooleanExpression(BooleanExpression booleanExpression) {
-        return true;
-    }
-
-    @Override
-    public void visitBooleanExpression(BooleanExpression booleanExpression) {
-        operandStack.push(booleanExpression.getValue());
-    }
-
-    @Override
-    public boolean proceedWithDecimalExpression(DecimalExpression decimalExpression) {
-        return true;
-    }
-
-    @Override
-    public void visitDecimalExpression(DecimalExpression decimalExpression) {
-        operandStack.push(decimalExpression.getValue());
-    }
-
-    @Override
-    public boolean proceedWithIdExpression(IdExpression idExpression) {
-        return true;
-    }
-
-    @Override
-    public void visitIdExpression(IdExpression idExpression) {
-        // symbolTable management
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId()));
-        idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));
-        // interpreter part:
-        Object value = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId())).getValue();
-        operandStack.push(value);
-        idExpression.setValue(value);
-    }
-
-    @Override
-    public boolean proceedWithBlock(Block block) {
-        return true;
-    }
-
-    @Override
-    public void visitBlock(Block block) {
-        symbolTable.newScope();
-    }
-
-    @Override
-    public void leaveBlock(Block block) {
-        symbolTable.endScope();
-    }
-
-    @Override
-    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
-        // the cast is safe or the program would not have passed expression validation.
-        return (Boolean) thenStatement.getParentStatement().getCondition().getValue();
-    }
-
-    @Override
-    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
-        // the cast is safe or the program would not have passed expression validation.
-        return !(Boolean) elseStatement.getParentStatement().getCondition().getValue();
-    }
-
+    /*
+     * The while loop
+     */
     @Override
     public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
         return true;
@@ -322,6 +228,9 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         return false;
     }
 
+    /*
+     * The for loop
+     */
     @Override
     public boolean proceedWithForStatement(ForStatement forStatement) {
         forStatement.getInitializationStatement().accept(this);
@@ -344,6 +253,72 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         super.leaveForStatement(forStatement);
     }
 
+    /*
+     * Expressions: The binary operator expression.
+     */
+    @Override
+    public boolean proceedWithBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
+        return true;
+    }
+
+    @Override
+    public void leaveBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
+        // interpreter part:
+        Object rhsValue = operandStack.pop();
+        Object lhsValue = operandStack.pop();
+        Object result = ExecBinaryOperator.getExecOperator(binaryOperatorExpression.getOperator(),
+                binaryOperatorExpression.getLhs(), binaryOperatorExpression.getRhs()).execute(lhsValue, rhsValue);
+        checkNotNull(result);
+        operandStack.push(result);
+        binaryOperatorExpression.setValue(result);
+    }
+
+    /*
+     * Expression: The unary operator expression.
+     */
+    @Override
+    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        return true;
+    }
+
+    @Override
+    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        // interpreter part:
+        Object result = ExecUnaryOperator.getExecUnaryOperator(unaryOperatorExpression.getOperator(),
+                unaryOperatorExpression.getExpression()).execute(operandStack.pop());
+        operandStack.push(result);
+        unaryOperatorExpression.setValue(result);
+    }
+
+    /*
+     * Expressions: The elementary expressions.
+     */
+    @Override
+    public boolean proceedWithIdExpression(IdExpression idExpression) {
+        return true;
+    }
+
+    @Override
+    public void visitIdExpression(IdExpression idExpression) {
+        // symbolTable management
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId()));
+        idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));
+        // interpreter part:
+        Object value = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId())).getValue();
+        operandStack.push(value);
+        idExpression.setValue(value);
+    }
+
+    @Override
+    public boolean proceedWithBooleanExpression(BooleanExpression booleanExpression) {
+        return true;
+    }
+
+    @Override
+    public void visitBooleanExpression(BooleanExpression booleanExpression) {
+        operandStack.push(booleanExpression.getValue());
+    }
+
     @Override
     public boolean proceedWithNumExpression(NumExpression numExpression) {
         return true;
@@ -352,6 +327,16 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
     @Override
     public void visitNumExpression(NumExpression numExpression) {
         operandStack.push(numExpression.getValue());
+    }
+
+    @Override
+    public boolean proceedWithDecimalExpression(DecimalExpression decimalExpression) {
+        return true;
+    }
+
+    @Override
+    public void visitDecimalExpression(DecimalExpression decimalExpression) {
+        operandStack.push(decimalExpression.getValue());
     }
 
     @Override
@@ -364,19 +349,83 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         operandStack.push(textExpression.getValue());
     }
 
+    /*
+     * Expression lists.
+     */
     @Override
-    public boolean proceedWithProgramImpl(ProgramImpl program) {
+    public boolean proceedWithPairExpressionList(PairExpressionList pairExpressionList) {
         return true;
     }
 
     @Override
-    public boolean proceedWithPairStatementList(PairStatementList pairStatementList) {
-        return !returnFlag;
+    public void leavePairExpressionList(PairExpressionList pairExpressionList) {
+        // expressionList.add(operandStack.pop());
+        expressionListStack.peek().add(operandStack.pop());
     }
 
     @Override
-    public boolean proceedWithLastStatementList(LastStatementList lastStatementList) {
-        return !returnFlag;
+    public boolean proceedWithLastExpressionList(LastExpressionList lastExpressionList) {
+        return true;
+    }
+
+    @Override
+    public void leaveLastExpressionList(LastExpressionList lastExpressionList) {
+        // expressionList.add(operandStack.pop());
+        expressionListStack.peek().add(operandStack.pop());
+    }
+
+    /*
+     * FUNCTIONS
+     */
+    @Override
+    public boolean proceedWithFunction(Function function) {
+        functionSpace.addFunction(function);
+        return false;
+    }
+
+    @Override
+    public boolean proceedWithFunctionCall(FunctionCall functionCall) {
+        return true;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+        // expressionList.clear();
+        expressionListStack.push(new LinkedList<>());
+    }
+
+    @Override
+    public void leaveFunctionCall(FunctionCall functionCall) {
+        // when a function gets called, a new environment will be added to the symbol table,
+        // the function definition will be looked up in the function space, its parameters will
+        // be assigned the values from the argument expressions and added to the function's environment.
+        // after function execution, the function's environment will be discarded and control will return
+        // to the call point.
+        List<Object> args = Lists.reverse(expressionListStack.pop());
+        symbolTable.newScope();
+        FunctionDeclaration funcDecl = symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId());
+        List<String> params = funcDecl.getParameterNames();
+        checkState(args.size() == params.size());
+        for (int c = 0; c < params.size(); c++) {
+            String param = params.get(c);
+            symbolTable.addSymbol(param, funcDecl.getParameterBindings().get(Symbol.getSymbol(param)).getDeclaredType());
+            symbolTable.getBinding(Symbol.getSymbol(param)).setValue(args.get(c));
+        }
+        Function function = functionSpace.lookupFunction(functionCall.getFunctionId());
+        function.accept(this);
+        symbolTable.endScope();
+        returnFlag = false;
+    }
+
+    @Override
+    public boolean proceedWithReturnStatement(ReturnStatement returnStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveReturnStatement(ReturnStatement returnStatement) {
+        // operandStack.push(returnStatement.getExpression().getValue());
+        returnFlag = true;
     }
 
 }

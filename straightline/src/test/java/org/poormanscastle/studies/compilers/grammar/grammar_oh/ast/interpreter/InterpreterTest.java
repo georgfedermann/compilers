@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.interpreter;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -7,8 +9,6 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.poormanscastle.studies.compilers.TestUtils;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Program;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.semantic.SymbolTableCreatorVisitor;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by 02eex612 on 23.02.2016.
@@ -84,6 +84,11 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testReturnStatement
+    public void testReturnStatement() throws Exception {
+        Program program = TestUtils.loadTestProgram("ReturnTest.oh", false);
+        program.accept(symbolTableCreator);
+        program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
+        assertEquals("switch 0; switch 1; 01", systemOutRule.getLog());
+    }
 
 }

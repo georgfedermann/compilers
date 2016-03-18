@@ -1,5 +1,7 @@
 package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.prettyprint;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -13,7 +15,6 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Boolea
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ConditionalStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DecimalExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.DeclarationStatement;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ElseStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ForStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.Function;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.FunctionCall;
@@ -30,16 +31,13 @@ import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.PrintS
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ProgramImpl;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ReturnStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.TextExpression;
-import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.ThenStatement;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.UnaryOperatorExpression;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileBody;
 import org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain.WhileStatement;
 
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * creates a graphical view of the AST of an v0.1 grammar program using DOT syntax.
- * <p/>
+ * <p>
  * Created by 02eex612 on 18.02.2016.
  */
 public class PrettyPrintVisitor extends AstItemVisitorAdapter {
@@ -120,38 +118,6 @@ public class PrettyPrintVisitor extends AstItemVisitorAdapter {
 
     @Override
     public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
-        itemStack.pop();
-    }
-
-    @Override
-    public boolean proceedWithThenStatement(ThenStatement thenStatement) {
-        return true;
-    }
-
-    @Override
-    public void visitThenStatement(ThenStatement thenStatement) {
-        addItem("Then", "");
-        addBufferLine();
-    }
-
-    @Override
-    public void leaveThenStatement(ThenStatement thenStatement) {
-        itemStack.pop();
-    }
-
-    @Override
-    public boolean proceedWithElseStatement(ElseStatement elseStatement) {
-        return true;
-    }
-
-    @Override
-    public void visitElseStatement(ElseStatement elseStatement) {
-        addItem("Else", "");
-        addBufferLine();
-    }
-
-    @Override
-    public void leaveElseStatement(ElseStatement elseStatement) {
         itemStack.pop();
     }
 

@@ -98,11 +98,53 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         return symbolTable;
     }
 
+    /*
+     * The program.
+     */
     @Override
     public boolean proceedWithProgramImpl(ProgramImpl program) {
         return true;
     }
 
+    /*
+     * Statements and blocks.
+     */
+    @Override
+    public boolean proceedWithPairStatementList(PairStatementList pairStatementList) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithLastStatementList(LastStatementList lastStatementList) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithBlock(Block block) {
+        return true;
+    }
+
+    @Override
+    public void visitBlock(Block block) {
+        symbolTable.newScope();
+    }
+
+    @Override
+    public void leaveBlock(Block block) {
+        symbolTable.endScope();
+    }
+
+    /*
+     * The print statement.
+     */
+    @Override
+    public boolean proceedWithPrintStatement(PrintStatement printStatement) {
+        return true;
+    }
+
+    /*
+     * The declaration statement.
+     */
     @Override
     public boolean proceedWithDeclarationStatement(DeclarationStatement declarationStatement) {
         return true;
@@ -128,8 +170,7 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         // if the rhs is not null, than it can be invalid or the types can be incompatible.
         // Otherwise this DeclStm is valid.
 
-        // the next statement must work because this line was recognized as a DeclStm. If we run into an Exception here
-        // the bug must be fixed somewhere else, e.g. SymbolTableCreatorVisitor.
+        // the next statement must work because this line was recognized as a DeclStm.
         Type lhsType = Type.valueOf(symbolTable.getBinding(Symbol.getSymbol(declarationStatement.getId())).getDeclaredType());
         // if rhs.getState() != ExpressionState.VALID the error was reported when the expression was invalidated. skip it here.
         if (rhs != null && rhs.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(lhsType, rhs.getValueType())) {
@@ -139,6 +180,229 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         }
     }
 
+    /*
+     * The assignment statement.
+     */
+    @Override
+    public boolean proceedWithAssignmentStatement(AssignmentStatement assignmentStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveAssignmentStatement(AssignmentStatement assignmentStatement) {
+        Expression rhs = assignmentStatement.getExpression();
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
+        Type lhsType = binding == null ? Type.UNDEFINED : Type.valueOf(binding.getDeclaredType());
+        // rhs.getState() != ExpressionState.VALID has been delt with when the expression was invalidated. Skip it here.
+        if (lhsType == Type.UNDEFINED || lhsType == null) {
+            System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
+                    ": variable ", assignmentStatement.getId(), " may not have been declared.\n"));
+            invalidateAst();
+        } else if (!Type.isRhsAssignableToLhs(lhsType, rhs.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": the type ",
+                    rhs.getValueType(), " cannot be assigned to ", lhsType, ".\n"));
+            invalidateAst();
+        }
+    }
+
+    /*
+     * The conditional statement.
+     */
+    @Override
+    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
+        Expression condition = conditionalStatement.getCondition();
+        if (condition.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
+                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
+            invalidateAst();
+        }
+    }
+
+    /*
+     * The while loop.
+     */
+    @Override
+    public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveWhileStatement(WhileStatement whileStatement) {
+        Expression condition = whileStatement.getCondition();
+        if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
+                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
+            invalidateAst();
+        }
+    }
+
+    @Override
+    public boolean proceedWithWhileBody(WhileBody whileBody) {
+        return true;
+    }
+
+    /*
+     * The for loop.
+     */
+    @Override
+    public boolean proceedWithForStatement(ForStatement forStatement) {
+        return true;
+    }
+
+    @Override
+    public void leaveForStatement(ForStatement forStatement) {
+        Expression condition = forStatement.getCondition();
+        if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
+            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
+                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
+            invalidateAst();
+        }
+    }
+
+    /*
+     * Expressions: The binary operator expression.
+     */
+    @Override
+    public boolean proceedWithBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
+        return true;
+    }
+
+    @Override
+    public void leaveBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
+        checkState(binaryOperatorExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
+        Expression lhs = binaryOperatorExpression.getLhs(), rhs = binaryOperatorExpression.getRhs();
+        BinaryOperator operator = binaryOperatorExpression.getOperator();
+
+        if (lhs.getState() != ExpressionState.VALID || rhs.getState() != ExpressionState.VALID) {
+            binaryOperatorExpression.setState(ExpressionState.OPERANDS_INVALID);
+            invalidateAst();
+        } else if (!Type.areTypesCompatible(lhs.getValueType(), rhs.getValueType())) {
+            binaryOperatorExpression.setState(ExpressionState.OPERANDS_INCOMPATIBLE);
+            System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
+                    ": the operand types ", lhs.getValueType(), " and ", rhs.getValueType(), " are incompatible.\n"));
+            invalidateAst();
+        } else if (!operator.supportsType(lhs.getValueType())) {
+            binaryOperatorExpression.setState(ExpressionState.OPERATOR_INCOMPATIBLE);
+            System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
+                    ": operator ", operator.getLabel(), " is incompatible with operand types ", lhs.getValueType(),
+                    " and ", rhs.getValueType(), ".\n"));
+            invalidateAst();
+        } else {
+            binaryOperatorExpression.setState(ExpressionState.VALID);
+        }
+    }
+
+    /*
+     * Expressions: The unary operator expression.
+     */
+    @Override
+    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        return true;
+    }
+
+    @Override
+    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
+        checkState(unaryOperatorExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
+        Expression expression = unaryOperatorExpression.getExpression();
+        UnaryOperator operator = unaryOperatorExpression.getOperator();
+
+        if (expression.getState() != ExpressionState.VALID) {
+            unaryOperatorExpression.setState(ExpressionState.OPERANDS_INVALID);
+            System.err.print(StringUtils.join("Error at ", unaryOperatorExpression.getCodePosition(),
+                    ": sub expression is invalid.\n"));
+            invalidateAst();
+        } else if (!operator.supportsType(expression.getValueType())) {
+            unaryOperatorExpression.setState(ExpressionState.OPERATOR_INCOMPATIBLE);
+            System.err.print(StringUtils.join("Error at ", unaryOperatorExpression.getCodePosition(),
+                    ": operator ", operator.getLabel(), " is incompatible with operand type ", expression.getValueType(), ".\n"));
+            invalidateAst();
+        } else {
+            unaryOperatorExpression.setState(ExpressionState.VALID);
+        }
+    }
+
+    /*
+     * Expressions: The elementary expressions.
+     */
+    @Override
+    public boolean proceedWithIdExpression(IdExpression idExpression) {
+        return true;
+    }
+
+    @Override
+    public void visitIdExpression(IdExpression idExpression) {
+        checkState(idExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
+        Binding binding = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId()));
+        if (binding == null) {
+            System.err.print(StringUtils.join("Error at ", idExpression.getCodePosition(),
+                    ": variable ", idExpression.getId(), " may not have been declared.\n"));
+            idExpression.setState(ExpressionState.UNDECLARED_ID);
+            invalidateAst();
+        } else {
+            idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));
+            idExpression.setState(ExpressionState.VALID);
+        }
+    }
+
+    /*
+     * Expression lists.
+     */
+    @Override
+    public boolean proceedWithPairExpressionList(PairExpressionList pairExpressionList) {
+        return true;
+    }
+
+    @Override
+    public void visitPairExpressionList(PairExpressionList pairExpressionList) {
+        if (currentFunctionCall != null) {
+            argumentList.add(pairExpressionList.getExpression());
+        }
+    }
+
+    @Override
+    public boolean proceedWithLastExpressionList(LastExpressionList lastExpressionList) {
+        return true;
+    }
+
+    @Override
+    public void visitLastExpressionList(LastExpressionList lastExpressionList) {
+        if (currentFunctionCall != null) {
+            argumentList.add(lastExpressionList.getExpression());
+        }
+    }
+
+    /*
+     * Parameter lists.
+     */
+    @Override
+    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
+        return true;
+    }
+
+    @Override
+    public boolean proceedWithParameter(Parameter parameter) {
+        return true;
+    }
+
+    @Override
+    public void visitParameter(Parameter parameter) {
+        parameters.add(parameter);
+        symbolTable.addSymbol(parameter.getId(), parameter.getType().name());
+    }
+
+    /*
+     * FUNCTIONS.
+     */
     @Override
     public boolean proceedWithFunction(Function function) {
         // change processing order for function visits: register function header before processing
@@ -227,7 +491,6 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
             if (ok) {
                 for (int c = 0; c < argumentList.size(); c++) {
                     if (!Type.isRhsAssignableToLhs(Type.valueOf(parameterBindings.get(Symbol.getSymbol(parameterNames.get(c))).getDeclaredType()), argumentList.get(c).getValueType())) {
-
                         invalidateAst();
                         ok = false;
                         break;
@@ -252,232 +515,8 @@ public class SymbolTableCreatorVisitor extends AstItemVisitorAdapter {
         }
         // on leaving the FunctionCall element, reset the flag on the tree walker.
         currentFunctionCall = null;
+        functionCall.setValueType(Type.valueOf(symbolTable.lookupFunctionDeclaration(functionCall.getFunctionId()).getValueType()));
         argumentList.clear();
-    }
-
-    @Override
-    public boolean proceedWithPairParameterList(PairParameterList pairParameterList) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithLastParameterList(LastParameterList lastParameterList) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithParameter(Parameter parameter) {
-        return true;
-    }
-
-    @Override
-    public void visitParameter(Parameter parameter) {
-        parameters.add(parameter);
-        symbolTable.addSymbol(parameter.getId(), parameter.getType().name());
-    }
-
-    @Override
-    public boolean proceedWithAssignmentStatement(AssignmentStatement assignmentStatement) {
-        return true;
-    }
-
-    @Override
-    public void leaveAssignmentStatement(AssignmentStatement assignmentStatement) {
-        Expression rhs = assignmentStatement.getExpression();
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(assignmentStatement.getId()));
-        Type lhsType = binding == null ? Type.UNDEFINED : Type.valueOf(binding.getDeclaredType());
-        // rhs.getState() != ExpressionState.VALID has been delt with when the expression was invalidated. Skip it here.
-        if (lhsType == Type.UNDEFINED || lhsType == null) {
-            System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(),
-                    ": variable ", assignmentStatement.getId(), " may not have been declared.\n"));
-            invalidateAst();
-        } else if (!Type.isRhsAssignableToLhs(lhsType, rhs.getValueType())) {
-            System.err.print(StringUtils.join("Error at ", assignmentStatement.getCodePosition(), ": the type ",
-                    rhs.getValueType(), " cannot be assigned to ", lhsType, ".\n"));
-            invalidateAst();
-        }
-    }
-
-    @Override
-    public boolean proceedWithIdExpression(IdExpression idExpression) {
-        return true;
-    }
-
-    @Override
-    public void visitIdExpression(IdExpression idExpression) {
-        checkState(idExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
-        Binding binding = symbolTable.getBinding(Symbol.getSymbol(idExpression.getId()));
-        if (binding == null) {
-            System.err.print(StringUtils.join("Error at ", idExpression.getCodePosition(),
-                    ": variable ", idExpression.getId(), " may not have been declared.\n"));
-            idExpression.setState(ExpressionState.UNDECLARED_ID);
-            invalidateAst();
-        } else {
-            idExpression.setValueType(Type.valueOf(binding.getDeclaredType()));
-            idExpression.setState(ExpressionState.VALID);
-        }
-    }
-
-    @Override
-    public boolean proceedWithUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
-        return true;
-    }
-
-    @Override
-    public void leaveUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression) {
-        checkState(unaryOperatorExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
-        Expression expression = unaryOperatorExpression.getExpression();
-        UnaryOperator operator = unaryOperatorExpression.getOperator();
-
-        if (expression.getState() != ExpressionState.VALID) {
-            unaryOperatorExpression.setState(ExpressionState.OPERANDS_INVALID);
-            System.err.print(StringUtils.join("Error at ", unaryOperatorExpression.getCodePosition(),
-                    ": sub expression is invalid.\n"));
-            invalidateAst();
-        } else if (!operator.supportsType(expression.getValueType())) {
-            unaryOperatorExpression.setState(ExpressionState.OPERATOR_INCOMPATIBLE);
-            System.err.print(StringUtils.join("Error at ", unaryOperatorExpression.getCodePosition(),
-                    ": operator ", operator.getLabel(), " is incompatible with operand type ", expression.getValueType(), ".\n"));
-            invalidateAst();
-        } else {
-            unaryOperatorExpression.setState(ExpressionState.VALID);
-        }
-    }
-
-    @Override
-    public boolean proceedWithBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
-        return true;
-    }
-
-    @Override
-    public void leaveBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression) {
-        checkState(binaryOperatorExpression.getState() == ExpressionState.NOT_DETERMINED_YET);
-        Expression lhs = binaryOperatorExpression.getLhs(), rhs = binaryOperatorExpression.getRhs();
-        BinaryOperator operator = binaryOperatorExpression.getOperator();
-
-        if (lhs.getState() != ExpressionState.VALID || rhs.getState() != ExpressionState.VALID) {
-            binaryOperatorExpression.setState(ExpressionState.OPERANDS_INVALID);
-            invalidateAst();
-            // this errMsg just vaguely repeats what was earlier reported more specifically for the sub expression
-            // errMsg = StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(), ": One or more sub expressions are invalid.");
-        } else if (!Type.areTypesCompatible(lhs.getValueType(), rhs.getValueType())) {
-            binaryOperatorExpression.setState(ExpressionState.OPERANDS_INCOMPATIBLE);
-            System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
-                    ": the operand types ", lhs.getValueType(), " and ", rhs.getValueType(), " are incompatible.\n"));
-            invalidateAst();
-        } else if (!operator.supportsType(lhs.getValueType())) {
-            binaryOperatorExpression.setState(ExpressionState.OPERATOR_INCOMPATIBLE);
-            System.err.print(StringUtils.join("Error at ", binaryOperatorExpression.getCodePosition(),
-                    ": operator ", operator.getLabel(), " is incompatible with operand types ", lhs.getValueType(),
-                    " and ", rhs.getValueType(), ".\n"));
-            invalidateAst();
-        } else {
-            binaryOperatorExpression.setState(ExpressionState.VALID);
-        }
-    }
-
-    @Override
-    public boolean proceedWithBlock(Block block) {
-        return true;
-    }
-
-    @Override
-    public void visitBlock(Block block) {
-        symbolTable.newScope();
-    }
-
-    @Override
-    public void leaveBlock(Block block) {
-        symbolTable.endScope();
-    }
-
-    @Override
-    public boolean proceedWithConditionalStatement(ConditionalStatement conditionalStatement) {
-        return true;
-    }
-
-    @Override
-    public void leaveConditionalStatement(ConditionalStatement conditionalStatement) {
-        Expression condition = conditionalStatement.getCondition();
-        if (condition.getState() == ExpressionState.VALID && !Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
-            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
-                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
-            invalidateAst();
-        }
-    }
-
-    @Override
-    public boolean proceedWithWhileStatement(WhileStatement whileStatement) {
-        return true;
-    }
-
-    @Override
-    public void leaveWhileStatement(WhileStatement whileStatement) {
-        Expression condition = whileStatement.getCondition();
-        if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
-            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
-                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
-            invalidateAst();
-        }
-    }
-
-    @Override
-    public boolean proceedWithForStatement(ForStatement forStatement) {
-        return true;
-    }
-
-    @Override
-    public void leaveForStatement(ForStatement forStatement) {
-        Expression condition = forStatement.getCondition();
-        if (!Type.isRhsAssignableToLhs(Type.BOOLEAN, condition.getValueType())) {
-            System.err.print(StringUtils.join("Error at ", condition.getCodePosition(),
-                    ": expected expression type BOOLEAN but found ", condition.getValueType(), "."));
-            invalidateAst();
-        }
-    }
-
-    @Override
-    public boolean proceedWithWhileBody(WhileBody whileBody) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithPairStatementList(PairStatementList pairStatementList) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithLastStatementList(LastStatementList lastStatementList) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithPrintStatement(PrintStatement printStatement) {
-        return true;
-    }
-
-    @Override
-    public boolean proceedWithPairExpressionList(PairExpressionList pairExpressionList) {
-        return true;
-    }
-
-    @Override
-    public void visitPairExpressionList(PairExpressionList pairExpressionList) {
-        if (currentFunctionCall != null) {
-            argumentList.add(pairExpressionList.getExpression());
-        }
-    }
-
-    @Override
-    public boolean proceedWithLastExpressionList(LastExpressionList lastExpressionList) {
-        return true;
-    }
-
-    @Override
-    public void visitLastExpressionList(LastExpressionList lastExpressionList) {
-        if (currentFunctionCall != null) {
-            argumentList.add(lastExpressionList.getExpression());
-        }
     }
 
 }

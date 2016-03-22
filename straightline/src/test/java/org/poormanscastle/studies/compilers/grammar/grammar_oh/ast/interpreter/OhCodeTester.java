@@ -91,4 +91,12 @@ public class OhCodeTester {
         assertEquals("The sum is 58; the mean is 2.0.", systemOutRule.getLog());
     }
 
+    @Test
+    public void testFibonacciRecursive() throws Exception {
+        Program program = TestUtils.loadOhProgram("FibonacciRecursive");
+        program.accept(symbolTableCreator);
+        program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
+        assertEquals("This are the Fibonacci numbers from 0 through 10: 0->1; 1->1; 2->1; 3->2; 4->3; 5->5; 6->8; 7->13; 8->21; 9->34; 10->55; ", systemOutRule.getLog());
+    }
+
 }

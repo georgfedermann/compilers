@@ -17,7 +17,7 @@ public enum Type {
 
     private final static List<Integer> compatibiltyChart = Arrays.asList(1, 2, 4, 6, 8, 9, 10, 12);
 
-    private Type(int id) {
+    Type(int id) {
         this.id = id;
     }
 

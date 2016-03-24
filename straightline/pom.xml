@@ -134,4 +134,17 @@
             </plugin>
         </plugins>
     </reporting>
+    <developers>
+        <developer>
+            <id>georg.federmann</id>
+            <name>Georg Federmann</name>
+            <email>georg.federmann@gmail.com</email>
+            <organization>poormanscastle</organization>
+            <organizationUrl>http://www.poormanscastle.com</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
 </project>

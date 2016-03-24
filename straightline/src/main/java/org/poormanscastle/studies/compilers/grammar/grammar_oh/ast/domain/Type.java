@@ -22,7 +22,7 @@ public enum Type {
     }
 
     public static boolean areTypesCompatible(Type lhsType, Type rhsType) {
-        return compatibiltyChart.contains(new Integer(lhsType.id | rhsType.id));
+        return compatibiltyChart.contains(Integer.valueOf(lhsType.id | rhsType.id));
     }
 
     /**

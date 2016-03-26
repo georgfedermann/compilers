@@ -1,7 +1,6 @@
 package org.poormanscastle.studies.compilers.ch01;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.poormanscastle.studies.compilers.ch01.Exp;
 
 /**
  * represents an expression in the grammar of a simple straight-line language.

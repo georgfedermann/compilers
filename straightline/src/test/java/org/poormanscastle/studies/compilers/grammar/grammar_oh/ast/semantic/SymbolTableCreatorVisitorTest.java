@@ -211,5 +211,12 @@ public class SymbolTableCreatorVisitorTest {
         assertEquals(expErrMsg, systemErrRule.getLog());
     }
 
+    @Test
+    public void testRecursion() throws Exception{
+        Program program = TestUtils.loadTestProgram("Recursion.oh", false);
+        program.accept(symbolTableCreator);
+        assertTrue(symbolTableCreator.isAstValid());
+    }
+
 
 }

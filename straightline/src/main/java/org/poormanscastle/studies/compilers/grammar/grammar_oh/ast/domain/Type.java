@@ -17,12 +17,12 @@ public enum Type {
 
     private final static List<Integer> compatibiltyChart = Arrays.asList(1, 2, 4, 6, 8, 9, 10, 12);
 
-    private Type(int id) {
+    Type(int id) {
         this.id = id;
     }
 
     public static boolean areTypesCompatible(Type lhsType, Type rhsType) {
-        return compatibiltyChart.contains(new Integer(lhsType.id | rhsType.id));
+        return compatibiltyChart.contains(Integer.valueOf(lhsType.id | rhsType.id));
     }
 
     /**

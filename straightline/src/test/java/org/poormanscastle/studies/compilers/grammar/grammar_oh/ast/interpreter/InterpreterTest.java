@@ -91,4 +91,12 @@ public class InterpreterTest {
         assertEquals("switch 0; switch 1; 01", systemOutRule.getLog());
     }
 
+    @Test
+    public void testRecursion() throws Exception {
+        Program program = TestUtils.loadTestProgram("Recursion.oh", false);
+        program.accept(symbolTableCreator);
+        program.accept(new SmallTimeInterpreter(symbolTableCreator.getSymbolTable()));
+        assertEquals("55", systemOutRule.getLog());
+    }
+
 }

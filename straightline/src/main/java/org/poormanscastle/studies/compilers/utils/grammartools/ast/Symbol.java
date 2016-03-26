@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import com.google.common.base.Objects;
+
 /**
  * this is a language symbol, that is managed in a symbol table.
  * <p/>
@@ -43,6 +45,19 @@ public class Symbol {
             symbols.put(u, result);
         }
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Symbol symbol = (Symbol) o;
+        return Objects.equal(name, symbol.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 
     @Override

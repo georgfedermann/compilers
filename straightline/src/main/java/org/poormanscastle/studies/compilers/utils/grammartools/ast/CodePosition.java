@@ -62,7 +62,6 @@ public final class CodePosition {
             int beginColumn = (Integer) token.getClass().getDeclaredField("beginColumn").get(token);
             int endLine = (Integer) token.getClass().getDeclaredField("endLine").get(token);
             int endColumn = (Integer) token.getClass().getDeclaredField("endColumn").get(token);
-            String image = (String) token.getClass().getDeclaredField("image").get(token);
             return new CodePosition(beginLine, beginColumn, endLine, endColumn);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);

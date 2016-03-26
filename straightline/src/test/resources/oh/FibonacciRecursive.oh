@@ -1,0 +1,16 @@
+// FibonacciRecursive.oh
+// implements a recursive algorithm to calculate the Fibonacci numbers
+
+function int fibonacci(int index){
+  if(index < 0) return 0;
+  if(index<=2){
+    return 1;
+  } else {
+    return fibonacci(index-1) + fibonacci(index-2);
+  };
+};
+
+print("This are the Fibonacci numbers from 0 through 10: ");
+for(int c = 0; c <= 10; c=c+1){
+  print(c, "->", fibonacci(c), "; ");
+};

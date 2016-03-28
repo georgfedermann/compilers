@@ -19,5 +19,6 @@ public class Accept01Test {
         assertFalse(probe.accept("11111"));
         assertFalse(probe.accept(""));
         assertTrue(probe.accept("01"));
+        assertTrue(probe.accept("010101"));
     }
 }

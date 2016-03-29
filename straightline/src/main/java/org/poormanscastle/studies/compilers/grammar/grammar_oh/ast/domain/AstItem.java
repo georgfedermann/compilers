@@ -17,7 +17,6 @@ import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 public interface AstItem extends Serializable {
 
     /**
-     * delegates the decision whether the given visitor shall visit this object to the host object.
      * this method can decide what to do in case a visitor comes knocking, how to point the visitor
      * to child elements in the tree hierarchy, or choose to remain empty.
      *

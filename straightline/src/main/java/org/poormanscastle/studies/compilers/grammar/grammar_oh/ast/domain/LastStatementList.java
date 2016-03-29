@@ -2,7 +2,7 @@ package org.poormanscastle.studies.compilers.grammar.grammar_oh.ast.domain;
 
 import org.poormanscastle.studies.compilers.utils.grammartools.ast.CodePosition;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by 02eex612 on 17.02.2016.
@@ -13,7 +13,7 @@ public final class LastStatementList extends AbstractAstItem implements Statemen
 
     public LastStatementList(CodePosition codePosition, Statement statement) {
         super(codePosition);
-        checkArgument(statement != null);
+        checkNotNull(statement);
         this.statement = statement;
     }
 

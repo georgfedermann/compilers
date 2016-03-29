@@ -41,5 +41,11 @@ public interface AstItem extends Serializable {
      */
     boolean handleProceedWith(AstItemVisitor visitor);
 
+    /**
+     * to facilitate enhanced parser error messages during semantic checks etc. an AST item
+     * knows the locations of the tokens within the source code from which it was inferred.
+     *
+     * @return this AstItem's code position
+     */
     CodePosition getCodePosition();
 }

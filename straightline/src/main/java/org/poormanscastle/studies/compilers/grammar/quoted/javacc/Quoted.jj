@@ -1,0 +1,49 @@
+
+options{
+    LOOKAHEAD = 1;
+    BUILD_PARSER = true;
+    BUILD_TOKEN_MANAGER = true;
+    CHOICE_AMBIGUITY_CHECK = 2;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_PARSER = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    FORCE_LA_CHECK = false;
+    IGNORE_CASE = false;
+    JAVA_UNICODE_ESCAPE = false;
+    OTHER_AMBIGUITY_CHECK = 1;
+    SANITY_CHECK = true;
+    STATIC = false; /* changed */
+    UNICODE_INPUT = false;
+    USER_CHAR_STREAM = false;
+    USER_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(Quoted)
+package org.poormanscastle.studies.compilers.grammar.quoted.javacc;
+
+public class Quoted{
+    public static void main(String[] args) throws ParseException{
+        Quoted parser = new Quoted(System.in);
+        parser.MT();
+    }
+}
+PARSER_END(Quoted)
+
+TOKEN : {
+    < TEXT : "\""
+        (
+            "\\" ~[]
+        |
+            ~["\""]
+        )*"\"" >
+}
+
+String MT() :
+{ Token token; }
+{
+    token = <TEXT>
+    {
+        return new String(token.image);
+    }
+}

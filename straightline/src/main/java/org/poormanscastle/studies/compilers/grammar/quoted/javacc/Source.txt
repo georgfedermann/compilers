@@ -1,1 +1,1 @@
-"A string literal with \"quoted\ passages."
+"A string literal with \"quoted\" passages."

@@ -1,0 +1,8 @@
+"ZL BEARB
+               #^ \"ABS FORMAT\"
+               #^ \"RETURN\"
+               #^ \"VERSTÄRKER\"
+               #^ \"A UNTEN\"
+               #^ \"A OBEN\"
+               #^ \"A UNTEN\"
+               #^ \"RETURN\""

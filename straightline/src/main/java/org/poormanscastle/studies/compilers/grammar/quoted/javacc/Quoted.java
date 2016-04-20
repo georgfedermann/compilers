@@ -9,7 +9,7 @@ public class Quoted implements QuotedConstants {
     public static void main(String[] args) throws Exception{
         Quoted parser = new Quoted(new BufferedInputStream(new FileInputStream("/home/georg/pmc/projects/AT/pmc/compilers/sources/compilers/straightline/src/main/java/org/poormanscastle/studies/compilers/grammar/quoted/javacc/Source.txt")));
         String result = parser.MT();
-        if(!"A string literal with \"quoted\" passages.".equals(result)){
+        if(!"\"A string literal with \\\"quoted\\\" passages.\"".equals(result)){
           throw new RuntimeException();
         }
     }

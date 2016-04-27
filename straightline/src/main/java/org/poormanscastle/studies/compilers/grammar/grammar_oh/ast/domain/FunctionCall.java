@@ -26,6 +26,11 @@ public class FunctionCall extends AbstractExpression<Object> {
         checkArgument(!StringUtils.isBlank(functionId));
         this.functionId = functionId;
         this.argumentList = argumentList;
+        // a function call is valid if the given arguments satisfy the function's parameter list.
+        // if not, the AST will be invalidated during the argument match. so it should be safe
+        // to set the state to valid here, so if a function call is used as sub-expression, the
+        // respective super expression can go on being validated.
+        setState(ExpressionState.VALID);
     }
 
     public FunctionCall(String functionId, ExpressionList expressionList) {

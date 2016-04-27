@@ -243,16 +243,6 @@ public final class SmallTimeInterpreter extends AstItemVisitorAdapter {
         return false;
     }
 
-    @Override
-    public void visitForStatement(ForStatement forStatement) {
-        super.visitForStatement(forStatement);
-    }
-
-    @Override
-    public void leaveForStatement(ForStatement forStatement) {
-        super.leaveForStatement(forStatement);
-    }
-
     /*
      * Expressions: The binary operator expression.
      */

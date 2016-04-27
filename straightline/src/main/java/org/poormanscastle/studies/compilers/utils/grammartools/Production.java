@@ -17,7 +17,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class Production {
 
-    private final String MAPPING_ARROW = "->";
+    private final static String MAPPING_ARROW = "->";
 
     /**
      * the left-hand-side symbol (short lhs)
@@ -76,7 +76,7 @@ public class Production {
         this.startProduction = startProduction;
 
         // for further proceedings, the mapping arrow -> is not needed any more
-        StringTokenizer tokenizer = new StringTokenizer(definitionString.replace(MAPPING_ARROW, " "));
+        StringTokenizer tokenizer = new StringTokenizer(definitionString.replace(Production.MAPPING_ARROW, " "));
         lhs = getNextSymbol(tokenizer, grammar);
         while (tokenizer.hasMoreTokens()) {
             rhs.add(getNextSymbol(tokenizer, grammar));

@@ -10,7 +10,7 @@ function int fibonacci(int index){
   };
 };
 
-print("This are the Fibonacci numbers from 0 through 10: ");
+print("These are the Fibonacci numbers from 0 through 10: ");
 for(int c = 0; c <= 10; c=c+1){
   print(c, "->", fibonacci(c), "; ");
 };

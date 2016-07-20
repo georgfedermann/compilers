@@ -1,0 +1,67 @@
+/*
+This parser shall help understand how JavaCC handles wildcards in expansions.
+This question arose when working with indexed variables, as in names[5].
+Here names is a symbol refering to a non-scalar, field like variable.
+Given between brackets is an index that identifies the element within the field.
+Now, such fields could be multi-dimensional, thus resulting in expressions like this:
+employees[5][2], where (god forbid) 5 is the 5th employee and 2 is the last name of
+the 5th employee.
+*/
+
+options{
+    LOOKAHEAD = 1;
+    BUILD_PARSER = true;
+    BUILD_TOKEN_MANAGER = true;
+    CHOICE_AMBIGUITY_CHECK = 2;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_PARSER = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    FORCE_LA_CHECK = false;
+    IGNORE_CASE = false;
+    JAVA_UNICODE_ESCAPE = false;
+    OTHER_AMBIGUITY_CHECK = 1;
+    SANITY_CHECK = true;
+    STATIC = false; /* changed */
+    UNICODE_INPUT = false;
+    USER_CHAR_STREAM = false;
+    USER_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(IndexParser)
+package org.poormanscastle.studies.compilers.grammar.grammar_indices.parser.javacc;
+
+import org.apache.commons.lang3.StringUtils;
+
+public class IndexParser{
+    public static void main(String[] args) throws ParseException{
+        IndexParser parser = new IndexParser(System.in);
+        parser.index();
+    }
+}
+
+
+PARSER_END(IndexParser)
+
+
+/* Lexer */
+/* Literals: numerals */
+TOKEN : {
+    < NUM : (["0"-"9"])+ >
+}
+/* Grouping symbols: brackets */
+TOKEN : {
+    < LBRACKET : "[" > |
+    < RBRACKET : "]" >
+}
+
+/* Parser */
+void index() :
+{ Token lbracketToken, rbracketToken, valueToken; }
+{
+    ( lbracketToken = <LBRACKET> valueToken = <NUM> rbracketToken = <RBRACKET>
+    {
+        System.out.println(StringUtils.join(lbracketToken.image, valueToken.image, rbracketToken.image));
+    }
+    )+<EOF>
+}
